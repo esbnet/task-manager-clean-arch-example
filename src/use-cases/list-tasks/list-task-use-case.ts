@@ -1,0 +1,14 @@
+import type { ListTasksOutput } from "./list-task-dto";
+import type { TaskRepository } from "@/domain/repositories/task-repository";
+
+export class ListTasksUseCase {
+	constructor(private readonly taskRepository: TaskRepository) {}
+
+	async execute(): Promise<ListTasksOutput> {
+		const tasks = await this.taskRepository.list();
+
+		return {
+			tasks,
+		};
+	}
+}

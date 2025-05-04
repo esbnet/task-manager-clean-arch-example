@@ -1,103 +1,175 @@
-import Image from "next/image";
+"use client";
+
+import {
+	FcHighPriority,
+	FcLowPriority,
+	FcMediumPriority,
+} from "react-icons/fc";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { useEffect, useState } from "react";
+
+import { ApiTaskRepository } from "@/infra/repositories/api-task-repository";
+import { Button } from "@/components/ui/button";
+import { CreateTaskUseCase } from "@/use-cases/create-task/create-task-use-case";
+import { Input } from "@/components/ui/input";
+import { ListTasksUseCase } from "@/use-cases/list-tasks/list-task-use-case";
+import type { Task } from "@/domain/entities/task";
+import { TaskCard } from "@/components/task-card";
+
+// const taskRepository = new InMemoryTaskRepository();
+const taskRepository = new ApiTaskRepository();
+const listTasks = new ListTasksUseCase(taskRepository);
+const createTask = new CreateTaskUseCase(taskRepository);
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+	const [tasks, setTasks] = useState<Task[]>([]);
+	const [title, setTitle] = useState("");
+	const [category, setCategory] = useState("");
+	const [priority, setPriority] = useState("");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+	async function loadTasks() {
+		const result = await listTasks.execute();
+		setTasks(result.tasks);
+	}
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		loadTasks();
+	}, []);
+
+	async function handleAddTask() {
+		if (!title.trim()) return;
+		await createTask.execute({ title, category, priority });
+		setTitle("");
+		setCategory("");
+		setPriority("");
+		await loadTasks();
+	}
+
+	async function handleToggle(id: string) {
+		const task = tasks.find((t) => t.id === id);
+		if (!task) return;
+
+		await taskRepository.toggleComplete(id);
+		await loadTasks();
+	}
+
+	async function handleDelete(id: string) {
+		await taskRepository.delete(id);
+		await loadTasks();
+	}
+
+	function handleChangeCategory(value: string) {
+		setCategory(value);
+	}
+
+	return (
+		<main className="mx-auto p-8 max-w-6xl">
+			<h1 className="mb-4 font-bold text-4xl">Gerenciador de Tarefas</h1>
+
+			<div className="flex gap-2 bg-zinc-100 mb-4 p-2 border rounded-lg">
+				<Input
+					value={title}
+					onChange={(e) => setTitle(e.target.value)}
+					placeholder="Nova tarefa"
+				/>
+
+				<Select required onValueChange={handleChangeCategory}>
+					<SelectTrigger className="w-[180px]">
+						<SelectValue placeholder="Categoria" />
+					</SelectTrigger>
+					<SelectContent className="w-[180px]">
+						<SelectItem value="hábitos">Hábitos</SelectItem>
+						<SelectItem value="diárias">Diárias</SelectItem>
+						<SelectItem value="afazeres">Afazeres</SelectItem>
+					</SelectContent>
+				</Select>
+
+				<Select required onValueChange={(e) => setPriority(e)}>
+					<SelectTrigger className="w-[180px]">
+						<SelectValue placeholder="Prioridade" />
+					</SelectTrigger>
+					<SelectContent className="w-[180px]">
+						<SelectItem value="baixa">
+							{" "}
+							<FcLowPriority size={24} /> Baixa
+						</SelectItem>
+						<SelectItem value="média">
+							{" "}
+							<FcMediumPriority size={24} /> Média
+						</SelectItem>
+						<SelectItem value="alta">
+							{" "}
+							<FcHighPriority size={24} /> Alta
+						</SelectItem>
+					</SelectContent>
+				</Select>
+
+				<Button onClick={handleAddTask}>Adicionar</Button>
+			</div>
+
+			<div className="gap-3 grid grid-cols-3">
+				<div className="space-y-2 bg-green-300/20 p-2 border rounded-lg h-[20rem]">
+					<h1 className="bg-zinc-300 p-2 rounded-lg text-center">
+						Tarefas Hábitos
+					</h1>
+					<div className="flex flex-col gap-2">
+						{tasks
+							.filter((task) => task.category === "hábitos")
+							.map((task) => (
+								<TaskCard
+									key={task.id}
+									task={task}
+									onToggle={() => handleToggle(task.id)}
+									onDelete={() => handleDelete(task.id)}
+								/>
+							))}
+					</div>
+				</div>
+
+				<div className="space-y-2 bg-red-300/20 p-2 border rounded-lg">
+					<h1 className="bg-zinc-300 p-2 rounded-lg text-center">
+						Tarefas Diárias
+					</h1>
+					<div className="flex flex-col gap-2">
+						{tasks
+							.filter((task) => task.category === "diárias")
+							.map((task) => (
+								<TaskCard
+									key={task.id}
+									task={task}
+									onToggle={() => handleToggle(task.id)}
+									onDelete={() => handleDelete(task.id)}
+								/>
+							))}
+					</div>
+				</div>
+
+				<div className="space-y-2 bg-yellow-300/20 p-2 border rounded-lg">
+					<h1 className="bg-zinc-300 p-2 rounded-lg text-center">Afazeres</h1>
+					<div className="flex flex-col gap-2">
+						{tasks
+							.filter((task) => task.category === "afazeres")
+							.map(
+								(task) =>
+									task.category === "afazeres" && (
+										<TaskCard
+											key={task.id}
+											task={task}
+											onToggle={() => handleToggle(task.id)}
+											onDelete={() => handleDelete(task.id)}
+										/>
+									),
+							)}
+					</div>
+				</div>
+			</div>
+		</main>
+	);
 }
