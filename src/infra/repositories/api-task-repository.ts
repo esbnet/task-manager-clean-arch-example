@@ -21,6 +21,17 @@ export class ApiTaskRepository implements TaskRepository {
 		return json.task;
 	}
 
+	async update(task: Task): Promise<Task> {
+		const res = await fetch(`${this.baseUrl}`, {
+			method: "PATCH",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ task }),
+		});
+
+		const json = await res.json();
+		return json.task;
+	}
+
 	async toggleComplete(id: string): Promise<Task> {
 		await fetch(this.baseUrl, {
 			method: "PATCH",

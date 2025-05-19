@@ -4,8 +4,8 @@ export type ListTasksOutput = {
 		title: string;
 		completed: boolean;
 		createdAt: Date;
-		category: "hábitos" | "diárias" | "afazeres";
-		priority: "baixa" | "média" | "alta";
+		category: "HABITOS" | "DIARIAS" | "AFAZERES";
+		priority: "BAIXA" | "MEDIA" | "ALTA";
 	}[];
 };
 export type ListTasksInput = {
