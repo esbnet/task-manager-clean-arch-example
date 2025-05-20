@@ -44,17 +44,33 @@
       "id": "2j0g",
       "title": "Fazer compras",
       "completed": false,
-      "category": "HABITOS",
-      "priority": "ALTA",
+      "category": "DIARIAS",
+      "priority": "BAIXA",
       "createdAt": "2025-05-08T01:44:04.489Z"
     },
     {
       "id": "2j0d",
       "title": "Ir ao dentista",
       "completed": false,
-      "category": "DIARIAS",
-      "priority": "ALTA",
+      "category": "AFAZERES",
+      "priority": "BAIXA",
       "createdAt": "2025-05-08T01:44:04.489Z"
+    },
+    {
+      "id": "fow0m5",
+      "title": "Parar de roer a unha",
+      "completed": false,
+      "category": "DIARIAS",
+      "priority": "MEDIA",
+      "createdAt": "2025-05-20T03:40:56.270Z"
+    },
+    {
+      "id": "cwktk",
+      "title": "Estudar Testes",
+      "completed": false,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-05-20T04:03:32.141Z"
     }
   ]
 }

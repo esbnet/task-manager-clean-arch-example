@@ -16,6 +16,7 @@
     "@dnd-kit/react": "^0.1.12",
     "@dnd-kit/sortable": "^10.0.0",
     "@radix-ui/react-checkbox": "^1.2.3",
+    "@radix-ui/react-dialog": "^1.1.13",
     "@radix-ui/react-label": "^2.1.6",
     "@radix-ui/react-popover": "^1.1.13",
     "@radix-ui/react-scroll-area": "^1.2.6",

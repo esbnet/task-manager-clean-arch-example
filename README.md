@@ -15,6 +15,7 @@ Apesar da simplicidade do caso de uso, ela é uma aplicação full stack com Nex
 - Desenvolver uma aplicação para gerenciar tarefas.
 - Utilizar o padrão arquitetural Clean Arch.
 - Utilizar princípios SOLID.
+- Persistir os dados em um arquivo json.
 
 ## Recursos
 

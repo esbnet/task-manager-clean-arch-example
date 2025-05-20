@@ -1,16 +1,18 @@
+import { Edit2, GripVertical, Trash2 } from "lucide-react";
 import {
 	FcHighPriority,
 	FcLowPriority,
 	FcMediumPriority,
 } from "react-icons/fc";
-import { GripVertical, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { CSS } from "@dnd-kit/utilities";
 import { Checkbox } from "@/components/ui/checkbox";
 import type { Task } from "./types";
+import { TaskForm } from "./task-form";
 import { useDraggable } from "@dnd-kit/core";
 import { useRef } from "react";
+import { useTaskContext } from "@/contexts/TaskContext";
 
 type Props = {
 	task: Task;
@@ -24,21 +26,15 @@ export function TaskItem({ task }: Props) {
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
 		id: task.id,
 	});
+
+	const { deleteTask } = useTaskContext();
+
 	const style = {
 		transform: CSS.Translate.toString(transform),
 	};
 
 	const onDelete = async () => {
-		try {
-			await fetch("/api/tasks", {
-				method: "DELETE",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ id: task.id }),
-			});
-			window.location.reload();
-		} catch (error) {
-			console.error("Erro ao deletar tarefa:", error);
-		}
+		await deleteTask(task.id);
 	};
 
 	const renderCount = useRef(0);
@@ -49,6 +45,8 @@ export function TaskItem({ task }: Props) {
 		"vezes",
 	);
 
+	// Função para atualizar a tarefa
+
 	return (
 		<div
 			ref={setNodeRef}
@@ -56,12 +54,19 @@ export function TaskItem({ task }: Props) {
 			{...attributes}
 			className="flex justify-between items-center gap-2 bg-white/30 shadow-sm hover:shadow-md p-1 border border-slate-300 rounded-sm transition-all duration-200 ease-in-out"
 		>
+			<div
+				className="hover:bg-slate-500/10 px-1 py-2 rounded-sm cursor-grab"
+				{...listeners}
+				title="Arraste para mover a tarefa"
+			>
+				<GripVertical size={16} className="text-slate-400" />
+			</div>
 			<div className="flex justify-between items-center gap-1 w-full">
 				<div className="flex items-center gap-2">
 					<Checkbox
 						checked={task.completed}
 						// onCheckedChange={onToggle}
-						className="hover:bg-slate-950/10 focus-visible:ring-0 focus-visible:ring-slate-950/10 focus-visible:ring-offset-0 w-5 h-5 hover:cursor-pointer"
+						className="hover:bg-slate-950/10 border-zinc-500 dark:border-zinc-400 focus-visible:ring-0 focus-visible:ring-slate-950/10 focus-visible:ring-offset-0 w-5 h-5 hover:cursor-pointer"
 					/>
 					<span
 						className={
@@ -92,6 +97,8 @@ export function TaskItem({ task }: Props) {
 			</div>
 
 			<div className="flex items-center h-full">
+				<TaskForm task={task} icon={<Edit2 size={16} />} />
+
 				<Button
 					variant="ghost"
 					size="sm"
@@ -101,13 +108,6 @@ export function TaskItem({ task }: Props) {
 				>
 					<Trash2 size={16} />
 				</Button>
-				<div
-					className="hover:bg-slate-500/10 px-1 py-2 rounded-sm cursor-grab"
-					{...listeners}
-					title="Arraste para mover a tarefa"
-				>
-					<GripVertical size={16} className="text-slate-400" />
-				</div>
 			</div>
 		</div>
 	);
