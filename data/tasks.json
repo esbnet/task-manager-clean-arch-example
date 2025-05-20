@@ -2,10 +2,10 @@
   "tasks": [
     {
       "id": "2nh1g",
-      "title": "Ler notícias ",
+      "title": "Ler notícias",
       "completed": false,
       "category": "HABITOS",
-      "priority": "BAIXA",
+      "priority": "MEDIA",
       "createdAt": "2025-05-06T01:58:34.129Z"
     },
     {
@@ -25,17 +25,9 @@
       "createdAt": "2025-05-08T01:44:04.489Z"
     },
     {
-      "id": "s2j0g",
-      "title": "Consultar dentista",
-      "completed": false,
-      "category": "AFAZERES",
-      "priority": "ALTA",
-      "createdAt": "2025-05-08T01:44:04.489Z"
-    },
-    {
       "id": "dl0xyc",
       "title": "Execícios",
-      "completed": false,
+      "completed": true,
       "category": "HABITOS",
       "priority": "ALTA",
       "createdAt": "2025-05-08T01:43:57.489Z"
@@ -63,14 +55,6 @@
       "category": "DIARIAS",
       "priority": "MEDIA",
       "createdAt": "2025-05-20T03:40:56.270Z"
-    },
-    {
-      "id": "cwktk",
-      "title": "Estudar Testes",
-      "completed": false,
-      "category": "HABITOS",
-      "priority": "BAIXA",
-      "createdAt": "2025-05-20T04:03:32.141Z"
     }
   ]
 }

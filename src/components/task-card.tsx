@@ -4,15 +4,25 @@ import {
 	FcLowPriority,
 	FcMediumPriority,
 } from "react-icons/fc";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "./ui/dialog";
 
-import { Button } from "@/components/ui/button";
-import { CSS } from "@dnd-kit/utilities";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { Task } from "./types";
-import { TaskForm } from "./task-form";
-import { useDraggable } from "@dnd-kit/core";
-import { useRef } from "react";
 import { useTaskContext } from "@/contexts/TaskContext";
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { toast } from "sonner";
+import { TaskForm } from "./task-form";
+import type { Task } from "./types";
+import { Button } from "./ui/button";
 
 type Props = {
 	task: Task;
@@ -26,53 +36,44 @@ export function TaskItem({ task }: Props) {
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
 		id: task.id,
 	});
+	const { updateTask } = useTaskContext();
 
-	const { deleteTask } = useTaskContext();
+	const onToggle = (checked: boolean | "indeterminate") => {
+		task.completed = checked as boolean;
+
+		updateTask({ ...task });
+	};
 
 	const style = {
 		transform: CSS.Translate.toString(transform),
 	};
-
-	const onDelete = async () => {
-		await deleteTask(task.id);
-	};
-
-	const renderCount = useRef(0);
-	renderCount.current += 1;
-	console.log(
-		"Draggable - esse componente re-renderizou",
-		renderCount.current,
-		"vezes",
-	);
-
-	// Função para atualizar a tarefa
 
 	return (
 		<div
 			ref={setNodeRef}
 			style={style}
 			{...attributes}
-			className="flex justify-between items-center gap-2 bg-white/30 shadow-sm hover:shadow-md p-1 border border-slate-300 rounded-sm transition-all duration-200 ease-in-out"
+			className="flex justify-between items-center gap-2 bg-background/30 shadow-sm hover:shadow-md p-1 rounded-sm transition-all duration-200 ease-in-out"
 		>
 			<div
-				className="hover:bg-slate-500/10 px-1 py-2 rounded-sm cursor-grab"
+				className="hover:bg-background/10 px-1 py-2 rounded-sm cursor-grab"
 				{...listeners}
 				title="Arraste para mover a tarefa"
 			>
-				<GripVertical size={16} className="text-slate-400" />
+				<GripVertical size={16} className="text-foreground" />
 			</div>
 			<div className="flex justify-between items-center gap-1 w-full">
 				<div className="flex items-center gap-2">
 					<Checkbox
 						checked={task.completed}
-						// onCheckedChange={onToggle}
-						className="hover:bg-slate-950/10 border-zinc-500 dark:border-zinc-400 focus-visible:ring-0 focus-visible:ring-slate-950/10 focus-visible:ring-offset-0 w-5 h-5 hover:cursor-pointer"
+						onCheckedChange={onToggle}
+						className="hover:bg-foreground/10 border-foreground/30 focus-visible:ring-0 focus-visible:ring-offset-0 w-5 h-5 focus-visible:bg-accent-foreground hover:cursor-pointer"
 					/>
 					<span
 						className={
 							task.completed
-								? "line-through text-gray-500"
-								: " text-slate-600 text-justify "
+								? "line-through text-foreground/30 "
+								: " text-foreground/60 text-justify "
 						}
 					>
 						{task.title}
@@ -98,17 +99,46 @@ export function TaskItem({ task }: Props) {
 
 			<div className="flex items-center h-full">
 				<TaskForm task={task} icon={<Edit2 size={16} />} />
+				<DialogConfirmDelete id={task.id} />
+			</div>
+		</div>
+	);
+}
 
+function DialogConfirmDelete({ id }: { id: string }) {
+	const { deleteTask } = useTaskContext();
+	const onDelete = async () => {
+		await deleteTask(id);
+		toast.success("Tarefa excluída com sucesso!");
+	};
+
+	return (
+		<Dialog>
+			<DialogTrigger asChild>
 				<Button
 					variant="ghost"
 					size="sm"
-					onClick={onDelete}
-					className="hover:bg-slate-500/10 w-6 h-6 cursor-pointer"
-					title="Deletar tarefa"
+					className="flex justify-center items-center hover:bg-background/20 rounded-lg w-6 h-6 cursor-pointer"
 				>
 					<Trash2 size={16} />
 				</Button>
-			</div>
-		</div>
+			</DialogTrigger>
+			<DialogContent className="sm:max-w-[425px]">
+				<DialogHeader>
+					<DialogTitle>Você tem certeza?</DialogTitle>
+					<DialogDescription>
+						Confirmando a exclusão, você não poderá desfazer essa ação.
+					</DialogDescription>
+				</DialogHeader>
+				<DialogFooter>
+					<Button type="submit" variant={"destructive"} onClick={onDelete}>
+						Excluir
+					</Button>
+					<DialogClose asChild>
+						<Button variant="outline">Cancel</Button>
+					</DialogClose>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
 	);
 }
