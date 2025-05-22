@@ -91,7 +91,9 @@ export function TaskProvider({ children }: TaskProviderProps) {
 		try {
 			const updatedTask = await updateTaskUseCase.execute(task);
 			setTasks((prevTasks) =>
-				prevTasks.map((t) => (t.id === updatedTask.id ? updatedTask : t)),
+				prevTasks.map((t) =>
+					t.id === updatedTask.id ? updatedTask : t,
+				),
 			);
 		} catch (err) {
 			setError("Failed to update task");
@@ -116,7 +118,7 @@ export function TaskProvider({ children }: TaskProviderProps) {
 				prevTasks.map((task) => (task.id === id ? updatedTask : task)),
 			);
 		} catch (err) {
-			setError("Failed to toggle task completion");
+			setError("Falha ao completar tarefa");
 			console.error(err);
 		}
 	};
@@ -136,7 +138,9 @@ export function TaskProvider({ children }: TaskProviderProps) {
 		getTask,
 	};
 
-	return <TaskContext.Provider value={value}>{children}</TaskContext.Provider>;
+	return (
+		<TaskContext.Provider value={value}>{children}</TaskContext.Provider>
+	);
 }
 
 // Custom hook to use the TaskContext

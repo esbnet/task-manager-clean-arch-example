@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.27.1",
+    "@biomejs/biome": "1.9.4",
     "@eslint/eslintrc": "^3",
     "@jest/globals": "^29.7.0",
     "@tailwindcss/postcss": "^4",

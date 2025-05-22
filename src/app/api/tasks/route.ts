@@ -1,10 +1,10 @@
+import { InJsonFileTaskRepository } from "@/infra/repositories/json-file-task-repository";
 import { CreateTaskUseCase } from "@/use-cases/create-task/create-task-use-case";
 import { DeleteTaskUseCase } from "@/use-cases/delete-task/toggle-delete-use-case";
-import { InJsonFileTaskRepository } from "@/infra/repositories/json-file-task-repository";
 import { ListTasksUseCase } from "@/use-cases/list-tasks/list-task-use-case";
-import type { NextRequest } from "next/server";
 import { ToggleCompleteUseCase } from "@/use-cases/toggle-complete-task/toggle-complete-use-case";
 import { UpdateTaskUseCase } from "@/use-cases/update-task/update-task-use-case";
+import type { NextRequest } from "next/server";
 
 // Instância única do repositório
 const taskRepo = new InJsonFileTaskRepository();

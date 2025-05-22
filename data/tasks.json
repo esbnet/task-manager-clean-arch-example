@@ -3,7 +3,7 @@
     {
       "id": "2nh1g",
       "title": "Ler notícias",
-      "completed": false,
+      "completed": true,
       "category": "HABITOS",
       "priority": "MEDIA",
       "createdAt": "2025-05-06T01:58:34.129Z"
@@ -11,7 +11,7 @@
     {
       "id": "9jxlpl",
       "title": "Checar email",
-      "completed": true,
+      "completed": false,
       "category": "HABITOS",
       "priority": "MEDIA",
       "createdAt": "2025-05-08T00:05:24.249Z"
@@ -19,8 +19,8 @@
     {
       "id": "2jd0g",
       "title": "Ler livro",
-      "completed": false,
-      "category": "AFAZERES",
+      "completed": true,
+      "category": "DIARIAS",
       "priority": "MEDIA",
       "createdAt": "2025-05-08T01:44:04.489Z"
     },
@@ -28,15 +28,15 @@
       "id": "dl0xyc",
       "title": "Execícios",
       "completed": true,
-      "category": "HABITOS",
+      "category": "DIARIAS",
       "priority": "ALTA",
       "createdAt": "2025-05-08T01:43:57.489Z"
     },
     {
       "id": "2j0g",
       "title": "Fazer compras",
-      "completed": false,
-      "category": "DIARIAS",
+      "completed": true,
+      "category": "AFAZERES",
       "priority": "BAIXA",
       "createdAt": "2025-05-08T01:44:04.489Z"
     },
@@ -44,17 +44,25 @@
       "id": "2j0d",
       "title": "Ir ao dentista",
       "completed": false,
-      "category": "AFAZERES",
-      "priority": "BAIXA",
+      "category": "DIARIAS",
+      "priority": "MEDIA",
       "createdAt": "2025-05-08T01:44:04.489Z"
     },
     {
       "id": "fow0m5",
       "title": "Parar de roer a unha",
       "completed": false,
-      "category": "DIARIAS",
+      "category": "HABITOS",
       "priority": "MEDIA",
       "createdAt": "2025-05-20T03:40:56.270Z"
+    },
+    {
+      "id": "lhu3gf",
+      "title": "Ver notícias",
+      "completed": false,
+      "category": "DIARIAS",
+      "priority": "BAIXA",
+      "createdAt": "2025-05-22T03:24:23.908Z"
     }
   ]
 }

@@ -10,8 +10,10 @@ export class CreateTaskUseCase {
 			title: inputTask.title,
 			completed: false,
 			category:
-				(inputTask.category as "HABITOS" | "DIARIAS" | "AFAZERES") || "HABITOS",
-			priority: (inputTask.priority as "BAIXA" | "MEDIA" | "ALTA") || "BAIXA",
+				(inputTask.category as "HABITOS" | "DIARIAS" | "AFAZERES") ||
+				"HABITOS",
+			priority:
+				(inputTask.priority as "BAIXA" | "MEDIA" | "ALTA") || "BAIXA",
 		});
 
 		return {

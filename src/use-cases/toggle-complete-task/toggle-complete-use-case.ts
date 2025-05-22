@@ -1,5 +1,5 @@
-import type { TaskOutput } from "./list-task-dto";
 import type { TaskRepository } from "@/domain/repositories/task-repository";
+import type { TaskOutput } from "./list-task-dto";
 
 export class ToggleCompleteUseCase {
 	constructor(private readonly taskRepository: TaskRepository) {}

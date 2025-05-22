@@ -1,13 +1,13 @@
 "use client";
 
-import type { Column as ColumnType, Task } from "@/components/types";
+import type { Column as ColumnType, TaskCategory } from "@/components/types";
 import { useRef, useState } from "react";
 
 import { Column } from "@/components/column";
 
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
-import { ModeToggle } from "@/components/mode-toggle";
+import { ModeToggleButton } from "@/components/mode-toggle-button";
 import { TaskForm } from "@/components/task-form";
 import { useTaskContext } from "@/contexts/TaskContext";
 import {
@@ -55,15 +55,13 @@ export default function Home() {
 		if (!over) return;
 
 		const taskId = active.id as string;
-		const newCategory = over.id as Task["category"];
+		const newCategory = over.id as TaskCategory;
 
-		tasks.map((task) => {
+		tasks.map(async (task) => {
 			if (task.id === taskId) {
 				const newTask = { ...task, category: newCategory };
-				updateTask(newTask);
-				return newTask;
+				await updateTask(newTask);
 			}
-			return task;
 		});
 	}
 
@@ -107,13 +105,15 @@ export default function Home() {
 							<Column
 								key={column.id}
 								column={column}
-								tasks={tasks.filter((task) => task.category === column.id)}
+								tasks={tasks.filter(
+									(task) => task.category === column.id,
+								)}
 							/>
 						);
 					})}
 				</div>
 			</DndContext>
-			<ModeToggle />
+			<ModeToggleButton />
 		</main>
 	);
 }

@@ -1,5 +1,5 @@
-import type { ListTasksOutput } from "./list-task-dto";
 import type { TaskRepository } from "@/domain/repositories/task-repository";
+import type { ListTasksOutput } from "./list-task-dto";
 
 export class ListTasksUseCase {
 	constructor(private readonly taskRepository: TaskRepository) {}

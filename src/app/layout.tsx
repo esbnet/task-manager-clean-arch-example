@@ -2,10 +2,10 @@ import "./globals.css";
 
 import { Lobster, Syne_Mono } from "next/font/google";
 
-import type { Metadata } from "next";
-import { TaskProvider } from "@/contexts/TaskContext";
-import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
+import { TaskProvider } from "@/contexts/TaskContext";
+import type { Metadata } from "next";
+import { ThemeProvider } from "next-themes";
 
 const lobster = Lobster({
 	subsets: ["latin"],
@@ -24,7 +24,6 @@ export const metadata: Metadata = {
 	description: "Gerenciador de Tarefas",
 };
 
-
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -34,13 +33,13 @@ export default function RootLayout({
 		<html lang="pt-BR">
 			<body
 				className={` ${lobster.className}  ${syneMono.className}   antialiased`}
-		>
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-        >
+			>
+				<ThemeProvider
+					attribute="class"
+					defaultTheme="system"
+					enableSystem
+					disableTransitionOnChange
+				>
 					<TaskProvider>{children}</TaskProvider>
 				</ThemeProvider>
 				<Toaster richColors />

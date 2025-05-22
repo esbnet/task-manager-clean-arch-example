@@ -1,9 +1,3 @@
-import { Edit2, GripVertical, Trash2 } from "lucide-react";
-import {
-	FcHighPriority,
-	FcLowPriority,
-	FcMediumPriority,
-} from "react-icons/fc";
 import {
 	Dialog,
 	DialogContent,
@@ -13,16 +7,22 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "./ui/dialog";
+import { Edit2, GripVertical, Trash2 } from "lucide-react";
+import {
+	FcHighPriority,
+	FcLowPriority,
+	FcMediumPriority,
+} from "react-icons/fc";
 
-import { Checkbox } from "@/components/ui/checkbox";
-import { useTaskContext } from "@/contexts/TaskContext";
-import { useDraggable } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { toast } from "sonner";
-import { TaskForm } from "./task-form";
-import type { Task } from "./types";
 import { Button } from "./ui/button";
+import { CSS } from "@dnd-kit/utilities";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DialogClose } from "@radix-ui/react-dialog";
+import type { Task } from "./types";
+import { TaskForm } from "./task-form";
+import { toast } from "sonner";
+import { useDraggable } from "@dnd-kit/core";
+import { useTaskContext } from "@/contexts/TaskContext";
 
 type Props = {
 	task: Task;
@@ -36,12 +36,14 @@ export function TaskItem({ task }: Props) {
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
 		id: task.id,
 	});
+
 	const { updateTask } = useTaskContext();
 
-	const onToggle = (checked: boolean | "indeterminate") => {
-		task.completed = checked as boolean;
-
-		updateTask({ ...task });
+	const onToggle = async (checked: boolean) => {
+		await updateTask({ ...task, completed: checked });
+		toast.success(
+			`Tarefa ${checked ? "concluída" : "desfeita"} com sucesso!`,
+		);
 	};
 
 	const style = {
@@ -127,11 +129,16 @@ function DialogConfirmDelete({ id }: { id: string }) {
 				<DialogHeader>
 					<DialogTitle>Você tem certeza?</DialogTitle>
 					<DialogDescription>
-						Confirmando a exclusão, você não poderá desfazer essa ação.
+						Confirmando a exclusão, você não poderá desfazer essa
+						ação.
 					</DialogDescription>
 				</DialogHeader>
 				<DialogFooter>
-					<Button type="submit" variant={"destructive"} onClick={onDelete}>
+					<Button
+						type="submit"
+						variant={"destructive"}
+						onClick={onDelete}
+					>
 						Excluir
 					</Button>
 					<DialogClose asChild>

@@ -3,11 +3,11 @@ export type TaskPriority = "BAIXA" | "MEDIA" | "ALTA";
 
 export type Task = {
 	id: string;
-	createdAt: Date;
 	title: string;
 	completed: boolean;
 	category: TaskCategory;
 	priority: TaskPriority;
+	createdAt: Date;
 };
 
 export type Column = {

@@ -7,24 +7,24 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-	FcHighPriority,
-	FcLowPriority,
-	FcMediumPriority,
-} from "react-icons/fc";
-import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import {
+	FcHighPriority,
+	FcLowPriority,
+	FcMediumPriority,
+} from "react-icons/fc";
 import type { Task, TaskCategory, TaskPriority } from "./types";
 
+import { useTaskContext } from "@/contexts/TaskContext";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { toast } from "sonner";
-import { useState } from "react";
-import { useTaskContext } from "@/contexts/TaskContext";
 
 interface TaskFormProps {
 	task: Partial<Task> & Pick<Task, "category" | "priority" | "title">;
@@ -100,14 +100,22 @@ export function TaskForm({ task, icon }: TaskFormProps) {
 					/>
 					<Select
 						onValueChange={(value) =>
-							setCategory(value as "DIARIAS" | "HABITOS" | "AFAZERES")
+							setCategory(
+								value as "DIARIAS" | "HABITOS" | "AFAZERES",
+							)
 						}
 						value={category}
 					>
 						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Categoria" className="text-zinc-300" />
+							<SelectValue
+								placeholder="Categoria"
+								className="text-zinc-300"
+							/>
 						</SelectTrigger>
-						<SelectContent className="w-[180px]" defaultValue={category}>
+						<SelectContent
+							className="w-[180px]"
+							defaultValue={category}
+						>
 							<SelectItem value="HABITOS">Hábitos</SelectItem>
 							<SelectItem value="DIARIAS">Diárias</SelectItem>
 							<SelectItem value="AFAZERES">Afazeres</SelectItem>
@@ -136,7 +144,9 @@ export function TaskForm({ task, icon }: TaskFormProps) {
 						</SelectContent>
 					</Select>
 
-					<Button onClick={task.id ? handleUpdateTask : handleAddTask}>
+					<Button
+						onClick={task.id ? handleUpdateTask : handleAddTask}
+					>
 						{task.id ? "Atualizar" : "Adicionar"}
 					</Button>
 				</div>

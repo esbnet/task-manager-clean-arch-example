@@ -10,11 +10,13 @@ function Vidro() {
 
 			{/* Conteúdo Principal com Animação */}
 			<main className="bg-white/20 opacity-0 shadow-xl backdrop-blur-md mb-6 p-8 rounded-xl w-full max-w-4xl text-white animate-[slideUp_1s_ease-in-out_forwards]">
-				<h1 className="mb-4 font-bold text-2xl">Bem-vindo à Tela com Vidro</h1>
+				<h1 className="mb-4 font-bold text-2xl">
+					Bem-vindo à Tela com Vidro
+				</h1>
 				<p className="opacity-90 text-sm">
-					Este é um exemplo de layout com efeito de vidro (glassmorphism) usando
-					React e Tailwind CSS. Você pode personalizar o conteúdo aqui dentro
-					como quiser!
+					Este é um exemplo de layout com efeito de vidro
+					(glassmorphism) usando React e Tailwind CSS. Você pode
+					personalizar o conteúdo aqui dentro como quiser!
 				</p>
 			</main>
 
