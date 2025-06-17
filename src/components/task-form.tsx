@@ -18,9 +18,9 @@ import {
 	FcLowPriority,
 	FcMediumPriority,
 } from "react-icons/fc";
-import type { Task, TaskCategory, TaskPriority } from "./types";
+import type { Task, TaskCategory, TaskPriority } from "../types";
 
-import { useTaskContext } from "@/contexts/TaskContext";
+import { useTaskContext } from "@/contexts/task-context";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "./ui/button";
@@ -53,7 +53,8 @@ export function TaskForm({ task, icon }: TaskFormProps) {
 			toast.success("Tarefa atualizada com sucesso!");
 			setOpen(false);
 		} catch (error) {
-			toast.error("Erro ao atualizar tarefa");
+			toast.error(`Erro ao atualizar tarefa${error}`);
+			console.error("Erro ao atualizar tarefa", error);
 		}
 	}
 
@@ -71,13 +72,14 @@ export function TaskForm({ task, icon }: TaskFormProps) {
 			toast.success("Tarefa criada com sucesso!");
 			setOpen(false);
 		} catch (error) {
-			toast.error("Erro ao criar tarefa");
+			toast.error(`Erro ao criar tarefa${error}`);
+			console.error("Erro ao criar tarefa", error);
 		}
 	}
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger>
+			<DialogTrigger className="outline-none">
 				{icon}
 				<span className="sr-only">Edit task</span>
 			</DialogTrigger>

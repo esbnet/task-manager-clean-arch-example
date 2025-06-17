@@ -3,7 +3,7 @@ import "./globals.css";
 import { Lobster, Syne_Mono } from "next/font/google";
 
 import { Toaster } from "@/components/ui/sonner";
-import { TaskProvider } from "@/contexts/TaskContext";
+import { HabitProvider } from "@/contexts/habit-context";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 
@@ -32,7 +32,7 @@ export default function RootLayout({
 	return (
 		<html lang="pt-BR">
 			<body
-				className={` ${lobster.className}  ${syneMono.className}   antialiased`}
+				className={` ${lobster.className}  ${syneMono.className}   antialiased `}
 			>
 				<ThemeProvider
 					attribute="class"
@@ -40,9 +40,13 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					<TaskProvider>{children}</TaskProvider>
+					{/* <TaskProvider> */}
+					<HabitProvider>
+						{children}
+						<Toaster richColors />
+					</HabitProvider>
+					{/* </TaskProvider> */}
 				</ThemeProvider>
-				<Toaster richColors />
 			</body>
 		</html>
 	);

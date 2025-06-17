@@ -1,0 +1,52 @@
+{
+  "habits": [
+    {
+      "id": "habit1",
+      "title": "Drink Water",
+      "observations": "Aim for 2 liters a day.",
+      "difficulty": "Easy",
+      "tags": [
+        "health",
+        "hydration"
+      ],
+      "reset": "Daily",
+      "createdAt": "2023-10-01T00:00:00Z"
+    },
+    {
+      "id": "habit2",
+      "title": "Exercise",
+      "observations": "30 minutes of activity daily.",
+      "difficulty": "Medium",
+      "tags": [
+        "fitness",
+        "health"
+      ],
+      "reset": "Weekly",
+      "createdAt": "2023-10-02T00:00:00Z"
+    },
+    {
+      "id": "habit3",
+      "title": "Read a Book",
+      "observations": "At least 20 pages a day.",
+      "difficulty": "Easy",
+      "tags": [
+        "reading",
+        "knowledge"
+      ],
+      "reset": "Daily",
+      "createdAt": "2023-10-03T00:00:00Z"
+    },
+    {
+      "id": "habit4",
+      "title": "Meditate",
+      "observations": "10 minutes of mindfulness.",
+      "difficulty": "Medium",
+      "tags": [
+        "mental health",
+        "relaxation"
+      ],
+      "reset": "Daily",
+      "createdAt": "2023-10-04T00:00:00Z"
+    }
+  ]
+}

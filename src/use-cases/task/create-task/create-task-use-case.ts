@@ -1,3 +1,4 @@
+import type { TaskCategory, TaskPriority } from "@/types";
 import type { CreateTaskInput, CreateTaskOutput } from "./create-task-dto";
 
 import type { TaskRepository } from "@/domain/repositories/task-repository";
@@ -9,11 +10,8 @@ export class CreateTaskUseCase {
 		const task = await this.taskRepository.create({
 			title: inputTask.title,
 			completed: false,
-			category:
-				(inputTask.category as "HABITOS" | "DIARIAS" | "AFAZERES") ||
-				"HABITOS",
-			priority:
-				(inputTask.priority as "BAIXA" | "MEDIA" | "ALTA") || "BAIXA",
+			category: (inputTask.category as TaskCategory) ?? "HABITOS",
+			priority: (inputTask.priority as TaskPriority) ?? "BAIXA",
 		});
 
 		return {

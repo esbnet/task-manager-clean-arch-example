@@ -7,28 +7,33 @@ let tasks: Task[] = [
 		title: "Estudar Clean Arch",
 		completed: false,
 		createdAt: new Date(),
-		category: "diárias",
-		priority: "baixa",
+		category: "DIARIAS",
+		priority: "BAIXA",
 	},
 	{
 		id: "2",
 		title: "Estudar TypeScript",
 		completed: false,
 		createdAt: new Date(),
-		category: "hábitos",
-		priority: "alta",
+		category: "HABITOS",
+		priority: "ALTA",
 	},
 	{
 		id: "3",
 		title: "Estudar Next.js",
 		completed: false,
 		createdAt: new Date(),
-		category: "afazeres",
-		priority: "média",
+		category: "AFAZERES",
+		priority: "ALTA",
 	},
 ];
 
 export class InMemoryTaskRepository implements TaskRepository {
+	update(task: Task): Promise<Task> {
+		console.log("update", task);
+		throw new Error("Method not implemented."); // TODO: Implement this method
+	}
+
 	async list(): Promise<Task[]> {
 		return [...tasks];
 	}

@@ -1,0 +1,268 @@
+{
+  "tasks": [
+    {
+      "id": "2nh1g",
+      "title": "Ler notícias",
+      "completed": true,
+      "category": "DIARIAS",
+      "priority": "MEDIA",
+      "createdAt": "2025-05-06T01:58:34.129Z"
+    },
+    {
+      "id": "9jxlpl",
+      "title": "Checar email",
+      "completed": false,
+      "category": "DIARIAS",
+      "priority": "MEDIA",
+      "createdAt": "2025-05-08T00:05:24.249Z"
+    },
+    {
+      "id": "2jd0g",
+      "title": "Ler livro",
+      "completed": true,
+      "category": "DIARIAS",
+      "priority": "MEDIA",
+      "createdAt": "2025-05-08T01:44:04.489Z"
+    },
+    {
+      "id": "dl0xyc",
+      "title": "Execícios",
+      "completed": true,
+      "category": "DIARIAS",
+      "priority": "ALTA",
+      "createdAt": "2025-05-08T01:43:57.489Z"
+    },
+    {
+      "id": "2j0g",
+      "title": "Fazer compras",
+      "completed": true,
+      "category": "DIARIAS",
+      "priority": "BAIXA",
+      "createdAt": "2025-05-08T01:44:04.489Z"
+    },
+    {
+      "id": "2j0d",
+      "title": "Ir ao dentista",
+      "completed": false,
+      "category": "DIARIAS",
+      "priority": "MEDIA",
+      "createdAt": "2025-05-08T01:44:04.489Z"
+    },
+    {
+      "id": "lhu3gf",
+      "title": "Ver notícias",
+      "completed": true,
+      "category": "DIARIAS",
+      "priority": "ALTA",
+      "createdAt": "2025-05-22T03:24:23.908Z"
+    },
+    {
+      "id": "v7byik",
+      "title": "Estudas Engenharia de Software",
+      "completed": false,
+      "category": "DIARIAS",
+      "priority": "MEDIA",
+      "createdAt": "2025-05-22T19:30:39.477Z"
+    },
+    {
+      "id": "dhynip",
+      "title": "asdfaf",
+      "completed": false,
+      "category": "DIARIAS",
+      "priority": "BAIXA",
+      "createdAt": "2025-05-23T15:13:10.062Z"
+    },
+    {
+      "id": "on377k",
+      "title": "qwfdfsfsd",
+      "completed": false,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-05-23T15:21:25.536Z"
+    },
+    {
+      "id": "ma66hw",
+      "title": "fasdfasff",
+      "completed": false,
+      "category": "DIARIAS",
+      "priority": "BAIXA",
+      "createdAt": "2025-05-23T15:41:43.033Z"
+    },
+    {
+      "id": "ins4cp",
+      "title": "asdfasdfaf",
+      "completed": false,
+      "category": "DIARIAS",
+      "priority": "BAIXA",
+      "createdAt": "2025-05-23T15:41:46.868Z"
+    },
+    {
+      "id": "ys70k",
+      "title": "asdfafasdf",
+      "completed": false,
+      "category": "DIARIAS",
+      "priority": "BAIXA",
+      "createdAt": "2025-05-23T15:41:50.682Z"
+    },
+    {
+      "id": "s3fko1i",
+      "title": "asdfafdasdf",
+      "completed": false,
+      "category": "DIARIAS",
+      "priority": "BAIXA",
+      "createdAt": "2025-05-23T15:41:54.406Z"
+    },
+    {
+      "id": "ib00c",
+      "title": "asdfasdfas",
+      "completed": false,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-05-23T15:44:56.125Z"
+    },
+    {
+      "id": "v172d",
+      "title": "Tarefa 1",
+      "completed": false,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:42:04.523Z"
+    },
+    {
+      "id": "dk4cuh",
+      "title": "Tarefa 2",
+      "completed": true,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:42:04.529Z"
+    },
+    {
+      "id": "2bw4q6i",
+      "title": "Tarefa 1",
+      "completed": false,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:42:27.520Z"
+    },
+    {
+      "id": "1g24o9",
+      "title": "Tarefa 2",
+      "completed": true,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:42:27.528Z"
+    },
+    {
+      "id": "vo1min",
+      "title": "Tarefa 1",
+      "completed": false,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:42:39.774Z"
+    },
+    {
+      "id": "saxoqe",
+      "title": "Tarefa 2",
+      "completed": true,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:42:39.775Z"
+    },
+    {
+      "id": "zels3l",
+      "title": "Tarefa 1",
+      "completed": false,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:44:05.082Z"
+    },
+    {
+      "id": "20xy6s",
+      "title": "Tarefa 2",
+      "completed": true,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:44:05.084Z"
+    },
+    {
+      "id": "kjpdhq",
+      "title": "Tarefa 1",
+      "completed": false,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:44:24.893Z"
+    },
+    {
+      "id": "26ujkp",
+      "title": "Tarefa 2",
+      "completed": true,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:44:24.894Z"
+    },
+    {
+      "id": "kw1nxy",
+      "title": "Tarefa 1",
+      "completed": false,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:49:45.453Z"
+    },
+    {
+      "id": "ny1s2u",
+      "title": "Tarefa 2",
+      "completed": true,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:49:45.459Z"
+    },
+    {
+      "id": "o303m",
+      "title": "Tarefa 1",
+      "completed": false,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:50:48.317Z"
+    },
+    {
+      "id": "ancw1v",
+      "title": "Tarefa 2",
+      "completed": true,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:50:48.318Z"
+    },
+    {
+      "id": "80ii07",
+      "title": "Tarefa 1",
+      "completed": false,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:51:00.499Z"
+    },
+    {
+      "id": "wds3xh",
+      "title": "Tarefa 2",
+      "completed": true,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-01T18:51:00.499Z"
+    },
+    {
+      "id": "0tywu",
+      "title": "Tarefa 1",
+      "completed": false,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-09T05:22:34.449Z"
+    },
+    {
+      "id": "ewhif",
+      "title": "Tarefa 2",
+      "completed": true,
+      "category": "HABITOS",
+      "priority": "BAIXA",
+      "createdAt": "2025-06-09T05:22:34.450Z"
+    }
+  ]
+}

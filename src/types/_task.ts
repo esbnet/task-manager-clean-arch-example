@@ -14,3 +14,9 @@ export type Column = {
 	id: TaskCategory;
 	title: string;
 };
+
+export type ColumnType = [
+	{ id: "DIARIAS"; title: "Díarios" },
+	{ id: "HABITOS"; title: "Hábitos" },
+	{ id: "AFAZERES"; title: "Afarezer" },
+];

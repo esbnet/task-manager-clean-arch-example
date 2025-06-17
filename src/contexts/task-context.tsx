@@ -8,11 +8,11 @@ import {
 	useState,
 } from "react";
 
-import type { Task, TaskCategory, TaskPriority } from "@/components/types";
+import type { Task, TaskCategory, TaskPriority } from "@/types";
 
-import { ApiTaskRepository } from "@/infra/repositories/api-task-repository";
-import { CreateTaskUseCase } from "@/use-cases/create-task/create-task-use-case";
-import { UpdateTaskUseCase } from "@/use-cases/update-task/update-task-use-case";
+import { ApiTaskRepository } from "@/infra/repositories/backend/api-task-repository";
+import { CreateTaskUseCase } from "@/use-cases/task/create-task/create-task-use-case";
+import { UpdateTaskUseCase } from "@/use-cases/task/update-task/update-task-use-case";
 
 interface TaskContextType {
 	tasks: Task[];
@@ -44,10 +44,6 @@ export function TaskProvider({ children }: TaskProviderProps) {
 	const createTaskUseCase = new CreateTaskUseCase(taskRepository);
 	const updateTaskUseCase = new UpdateTaskUseCase(taskRepository);
 
-	useEffect(() => {
-		fetchTasks();
-	}, []);
-
 	const fetchTasks = async () => {
 		try {
 			setLoading(true);
@@ -61,6 +57,11 @@ export function TaskProvider({ children }: TaskProviderProps) {
 			setLoading(false);
 		}
 	};
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		fetchTasks();
+	}, []);
 
 	const addTask = async (
 		title: string,

@@ -1,3 +1,9 @@
+import { Edit2, GripVertical, Trash2 } from "lucide-react";
+import {
+	FcHighPriority,
+	FcLowPriority,
+	FcMediumPriority,
+} from "react-icons/fc";
 import {
 	Dialog,
 	DialogContent,
@@ -7,22 +13,16 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "./ui/dialog";
-import { Edit2, GripVertical, Trash2 } from "lucide-react";
-import {
-	FcHighPriority,
-	FcLowPriority,
-	FcMediumPriority,
-} from "react-icons/fc";
 
-import { Button } from "./ui/button";
-import { CSS } from "@dnd-kit/utilities";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DialogClose } from "@radix-ui/react-dialog";
-import type { Task } from "./types";
-import { TaskForm } from "./task-form";
-import { toast } from "sonner";
+import { useTaskContext } from "@/contexts/task-context";
 import { useDraggable } from "@dnd-kit/core";
-import { useTaskContext } from "@/contexts/TaskContext";
+import { CSS } from "@dnd-kit/utilities";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { toast } from "sonner";
+import type { Task } from "../types";
+import { TaskForm } from "./task-form";
+import { Button } from "./ui/button";
 
 type Props = {
 	task: Task;
