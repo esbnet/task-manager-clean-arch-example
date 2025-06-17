@@ -11,12 +11,14 @@ import {
 } from "@dnd-kit/core";
 
 import { DailyColumn } from "@/components/daily/daily-column";
-import { HabitColumn } from "@/components/habit/habit-column";
-import { ModeToggleButton } from "@/components/mode-toggle-button";
 import { DailyProvider } from "@/contexts/daily-context";
+import { HabitColumn } from "@/components/habit/habit-column";
 import { HabitProvider } from "@/contexts/habit-context";
-import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { ModeToggleButton } from "@/components/mode-toggle-button";
 import { PlusCircle } from "lucide-react";
+import { TodoColumn } from "@/components/todo/todo-column";
+import { TodoProvider } from "@/contexts/todo-context";
+import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { useState } from "react";
 
 export default function Home() {
@@ -86,6 +88,9 @@ export default function Home() {
 				<DailyProvider>
 					<DailyColumn />
 				</DailyProvider>
+				<TodoProvider>
+					<TodoColumn />
+				</TodoProvider>
 			</DndContext>
 			<ModeToggleButton />
 		</main>

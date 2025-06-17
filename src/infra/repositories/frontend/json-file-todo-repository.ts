@@ -1,10 +1,10 @@
 import type { Todo } from "@/domain/entities/todo";
-import type { TodoRepository } from "@/domain/repositories/todo-repository";
+import type { TodoRepository } from "@/domain/repositories/all-repository";
 import fs from "node:fs";
 import path from "node:path";
 
 let todos: Todo[] = [];
-const dataPath = path.join(process.cwd(), "data", "todos.json");
+const dataPath = path.join(process.cwd(), "src", "data", "todos.json");
 
 export class InJsonFileTodoRepository implements TodoRepository {
 	async list(): Promise<Todo[]> {

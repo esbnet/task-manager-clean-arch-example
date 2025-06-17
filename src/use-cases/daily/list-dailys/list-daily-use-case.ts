@@ -1,4 +1,4 @@
-import type { DailyRepository } from "@/domain/repositories/daily-repository";
+import type { DailyRepository } from "@/domain/repositories/all-repository";
 import type { ListDailyOutput } from "./list-daily-dto";
 
 export class ListDailysUseCase {

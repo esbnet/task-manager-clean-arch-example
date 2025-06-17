@@ -13,7 +13,7 @@ export class CreateTodoUseCase {
 		const todo = await this.todoRepository.create({
 			title: inputTodo.title,
 			observations: inputTodo.observations,
-			taskList: inputTodo.taskList,
+			tasks: inputTodo.tasks,
 			difficulty: inputTodo.difficulty as TodoDificult,
 			startDate: inputTodo.startDate,
 			tags: inputTodo.tags,

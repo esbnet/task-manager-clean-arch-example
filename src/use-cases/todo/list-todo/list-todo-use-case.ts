@@ -1,12 +1,12 @@
-import type { HabitRepository } from "@/domain/repositories/habit-repository";
-import type { ListHabitsOutput } from "./list-todo-dto";
+import type { ListTodosOutput } from "./list-todo-dto";
+import type { TodoRepository } from "@/domain/repositories/all-repository";
 
-export class ListHabitsUseCase {
-	constructor(private readonly habitRepository: HabitRepository) {}
+export class ListTodosUseCase {
+	constructor(private readonly todoRepository: TodoRepository) {}
 
-	async execute(): Promise<ListHabitsOutput> {
-		const habits = await this.habitRepository.list();
+	async execute(): Promise<ListTodosOutput> {
+		const todos = await this.todoRepository.list();
 
-		return { habits };
+		return { todos };
 	}
 }

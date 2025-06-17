@@ -6,7 +6,7 @@ export type UpdateTodoInput = {
 	id: string;
 	title: string;
 	observations: string;
-	taskList: string[];
+	tasks: string[];
 	difficulty: TodoDificult;
 	startDate: Date;
 	tags: string[];
@@ -17,7 +17,7 @@ export type UpdateTodoOutput = {
 	id: string;
 	title: string;
 	observations: string;
-	taskList: string[];
+	tasks: string[];
 	difficulty: TodoDificult;
 	startDate: Date;
 	tags: string[];

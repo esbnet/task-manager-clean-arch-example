@@ -1,20 +1,19 @@
-export type HabitDificult = "Trivial" | "Fácil" | "Médio" | "Difícil";
+export type TodoDificult = "Trivial" | "Fácil" | "Médio" | "Difícil";
 
-export type HabitReset = "Diária" | "Semanal" | "Mensal";
-
-export type ListHabitsOutput = {
-	habits: {
+export type ListTodosOutput = {
+	todos: {
 		id: string;
 		title: string;
 		observations: string;
-		difficulty: HabitDificult;
+		tasks: string[];
+		startDate: Date;
+		difficulty: TodoDificult;
 		tags: string[];
-		reset: HabitReset;
 		createdAt: Date;
 	}[];
 };
 
-export type ListHabitsInput = {
+export type ListTodosInput = {
 	page: number;
 	limit: number;
 };

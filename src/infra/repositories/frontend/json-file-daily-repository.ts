@@ -12,8 +12,6 @@ export class InJsonFileDailyRepository implements DailyRepository {
 		const parsedData = JSON.parse(data);
 		const dailys = parsedData.dailys || [];
 
-		console.log("DAILYS ======================> ", dailys);
-
 		return [...dailys];
 	}
 

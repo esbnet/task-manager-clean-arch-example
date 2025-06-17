@@ -5,7 +5,7 @@ export type TodoReset = "Diária" | "Semanal" | "Mensal";
 export type CreateTodoInput = {
 	title: string;
 	observations: string;
-	taskList: string[];
+	tasks: string[];
 	difficulty: TodoDificult;
 	startDate: Date;
 	tags: string[];
@@ -17,7 +17,7 @@ export type CreateTodoOutput = {
 		id: string;
 		title: string;
 		observations: string;
-		taskList: string[];
+		tasks: string[];
 		difficulty: TodoDificult;
 		startDate: Date;
 		tags: string[];
