@@ -7,27 +7,28 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-	FcHighPriority,
-	FcLowPriority,
-	FcMediumPriority,
-} from "react-icons/fc";
-import type { Habit, HabitDificult, HabitReset, } from "../../types";
-import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import {
+	FcHighPriority,
+	FcLowPriority,
+	FcMediumPriority,
+} from "react-icons/fc";
+import type { Habit, HabitDificult, HabitReset } from "../../types";
 
-import { Button } from ".././ui/button";
-import { Input } from ".././ui/input";
-import { toast } from "sonner";
 import { useHabitContext } from "@/contexts/habit-context";
 import { useState } from "react";
+import { toast } from "sonner";
+import { Button } from ".././ui/button";
+import { Input } from ".././ui/input";
 
 interface HabitFormProps {
-	habit: Partial<Habit> & Pick<Habit, "observations" | "reset" | "tags" | "difficulty" | "title">;
+	habit: Partial<Habit> &
+		Pick<Habit, "observations" | "reset" | "tags" | "difficulty" | "title">;
 	icon: React.ReactNode;
 }
 
@@ -37,11 +38,10 @@ export function HabitForm({ habit, icon }: HabitFormProps) {
 	const [title, setTitle] = useState(habit.title || "");
 
 	const [dificulty, setDifficulty] = useState<HabitDificult>(
-		habit.difficulty || "Fácil")
-	const [reset, setReset] = useState<HabitReset>(
-		habit.reset || "Diária",)
+		habit.difficulty || "Fácil",
+	);
+	const [reset, setReset] = useState<HabitReset>(habit.reset || "Diária");
 	const [tags, setTags] = useState<string[]>(habit.tags || []);
-
 
 	const [open, setOpen] = useState(false);
 
@@ -118,9 +118,7 @@ export function HabitForm({ habit, icon }: HabitFormProps) {
 					/>
 					<Select
 						onValueChange={(value) =>
-							setDifficulty(
-								value as HabitDificult
-							)
+							setDifficulty(value as HabitDificult)
 						}
 						value={dificulty}
 					>
@@ -142,10 +140,7 @@ export function HabitForm({ habit, icon }: HabitFormProps) {
 					</Select>
 
 					<Select
-						onValueChange={(value) =>
-							setTags(
-								value.split(","))
-						}
+						onValueChange={(value) => setTags(value.split(","))}
 						value={tags.join(",") || ""}
 					>
 						<SelectTrigger className="w-[180px]">

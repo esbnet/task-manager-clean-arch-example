@@ -7,27 +7,28 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-	FcHighPriority,
-	FcLowPriority,
-	FcMediumPriority,
-} from "react-icons/fc";
-import {
 	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import {
+	FcHighPriority,
+	FcLowPriority,
+	FcMediumPriority,
+} from "react-icons/fc";
 import type { Todo, TodoDificult } from "../../types";
 
+import { useTodoContext } from "@/contexts/todo-context";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { toast } from "sonner";
-import { useState } from "react";
-import { useTodoContext } from "@/contexts/todo-context";
 
 interface TodoFormProps {
-	todo: Partial<Todo> & Pick<Todo, "observations" | "tags" | "difficulty" | "title">;
+	todo: Partial<Todo> &
+		Pick<Todo, "observations" | "tags" | "difficulty" | "title">;
 	icon: React.ReactNode;
 }
 
@@ -37,9 +38,9 @@ export function TodoForm({ todo, icon }: TodoFormProps) {
 	const [title, setTitle] = useState(todo.title || "");
 
 	const [dificulty, setDifficulty] = useState<TodoDificult>(
-		todo.difficulty || "Fácil")
+		todo.difficulty || "Fácil",
+	);
 	const [tags, setTags] = useState<string[]>(todo.tags || []);
-
 
 	const [open, setOpen] = useState(false);
 
@@ -116,9 +117,7 @@ export function TodoForm({ todo, icon }: TodoFormProps) {
 					/>
 					<Select
 						onValueChange={(value) =>
-							setDifficulty(
-								value as TodoDificult
-							)
+							setDifficulty(value as TodoDificult)
 						}
 						value={dificulty}
 					>
@@ -140,10 +139,7 @@ export function TodoForm({ todo, icon }: TodoFormProps) {
 					</Select>
 
 					<Select
-						onValueChange={(value) =>
-							setTags(
-								value.split(","))
-						}
+						onValueChange={(value) => setTags(value.split(","))}
 						value={tags.join(",") || ""}
 					>
 						<SelectTrigger className="w-[180px]">

@@ -18,8 +18,7 @@ interface DailyContextType {
 	dailys: Daily[];
 	loading: boolean;
 	error: string | null;
-	addDaily: (daily: Omit<Daily, "id" | "createdAt">
-	) => Promise<void>,
+	addDaily: (daily: Omit<Daily, "id" | "createdAt">) => Promise<void>;
 	updateDaily: (daily: Daily) => Promise<void>;
 	deleteDaily: (id: string) => Promise<void>;
 	toggleComplete: (id: string) => Promise<void>;
@@ -71,10 +70,7 @@ export function DailyProvider({ children }: DailyProviderProps) {
 				tags: daily.tags || [],
 				createdAt: new Date(),
 			});
-			setDailys((prevDailys) => [
-				...prevDailys,
-				result.daily as Daily,
-			]);
+			setDailys((prevDailys) => [...prevDailys, result.daily as Daily]);
 		} catch (err) {
 			setError("Failed to add daily");
 			console.error(err);
@@ -102,7 +98,9 @@ export function DailyProvider({ children }: DailyProviderProps) {
 	const deleteDaily = async (id: string) => {
 		try {
 			await dailyRepository.delete(id);
-			setDailys((prevDailys) => prevDailys.filter((daily) => daily.id !== id));
+			setDailys((prevDailys) =>
+				prevDailys.filter((daily) => daily.id !== id),
+			);
 		} catch (err) {
 			setError("Failed to delete daily");
 			console.error(err);
@@ -111,15 +109,17 @@ export function DailyProvider({ children }: DailyProviderProps) {
 
 	const toggleComplete = async (id: string) => {
 		try {
-			const updatedDailyFromRepo = await dailyRepository.toggleComplete(id);
-
+			const updatedDailyFromRepo =
+				await dailyRepository.toggleComplete(id);
 
 			const updatedDaily: Daily = {
 				...updatedDailyFromRepo,
 			} as Daily;
 
 			setDailys((prevDailys) =>
-				prevDailys.map((daily) => (daily.id === id ? updatedDaily : daily)),
+				prevDailys.map((daily) =>
+					daily.id === id ? updatedDaily : daily,
+				),
 			);
 		} catch (err) {
 			setError("Falha ao completar tarefa");

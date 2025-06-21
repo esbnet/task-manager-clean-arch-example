@@ -1,10 +1,10 @@
 export type DailyDificult = "Trivial" | "Fácil" | "Médio" | "Difícil";
 
 export type DailyRepeatType =
-	| "Diária"
+	| "Diariamente"
 	| "Semanalmente"
 	| "Mensalmente"
-	| "Anualemente";
+	| "Anualmente";
 
 export type DailyRepeat = {
 	type: DailyRepeatType;

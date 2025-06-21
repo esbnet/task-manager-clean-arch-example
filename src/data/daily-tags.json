@@ -1,28 +1,28 @@
 {
-  "daily-tags": [
-    {
-      "name": "Saúde"
-    },
-    {
-      "name": "Estudo"
-    },
-    {
-      "name": "Trabalho"
-    },
-    {
-      "name": "Lazer"
-    },
-    {
-      "name": "Outros"
-    },
-    {
-      "name": "Bem-estar"
-    },
-    {
-      "name": "Produtividade"
-    },
-    {
-      "name": "Relacionamento"
-    }
-  ]
+	"daily-tags": [
+		{
+			"name": "Saúde"
+		},
+		{
+			"name": "Estudo"
+		},
+		{
+			"name": "Trabalho"
+		},
+		{
+			"name": "Lazer"
+		},
+		{
+			"name": "Outros"
+		},
+		{
+			"name": "Bem-estar"
+		},
+		{
+			"name": "Produtividade"
+		},
+		{
+			"name": "Relacionamento"
+		}
+	]
 }

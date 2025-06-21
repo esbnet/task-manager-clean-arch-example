@@ -18,8 +18,7 @@ interface HabitContextType {
 	habits: Habit[];
 	loading: boolean;
 	error: string | null;
-	addHabit: (habit: Omit<Habit, "id">
-	) => Promise<void>,
+	addHabit: (habit: Omit<Habit, "id">) => Promise<void>;
 	updateHabit: (habit: Habit) => Promise<void>;
 	deleteHabit: (id: string) => Promise<void>;
 	toggleComplete: (id: string) => Promise<void>;
@@ -60,8 +59,7 @@ export function HabitProvider({ children }: HabitProviderProps) {
 		fetchHabits();
 	}, []);
 
-	const addHabit = async (habit: Omit<Habit, "id">
-	) => {
+	const addHabit = async (habit: Omit<Habit, "id">) => {
 		try {
 			const result = await createHabitUseCase.execute({
 				title: habit.title,
@@ -102,7 +100,9 @@ export function HabitProvider({ children }: HabitProviderProps) {
 	const deleteHabit = async (id: string) => {
 		try {
 			await habitRepository.delete(id);
-			setHabits((prevHabits) => prevHabits.filter((habit) => habit.id !== id));
+			setHabits((prevHabits) =>
+				prevHabits.filter((habit) => habit.id !== id),
+			);
 		} catch (err) {
 			setError("Failed to delete habit");
 			console.error(err);
@@ -113,7 +113,9 @@ export function HabitProvider({ children }: HabitProviderProps) {
 		try {
 			const updatedHabit = await habitRepository.toggleComplete(id);
 			setHabits((prevHabits) =>
-				prevHabits.map((habit) => (habit.id === id ? updatedHabit : habit)),
+				prevHabits.map((habit) =>
+					habit.id === id ? updatedHabit : habit,
+				),
 			);
 		} catch (err) {
 			setError("Falha ao completar tarefa");

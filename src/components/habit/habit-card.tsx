@@ -1,7 +1,5 @@
 import { Edit2, GripVertical, Trash2 } from "lucide-react";
-import {
-	FcLowPriority
-} from "react-icons/fc";
+import { FcLowPriority } from "react-icons/fc";
 import {
 	Dialog,
 	DialogContent,
@@ -70,7 +68,8 @@ export function HabitItem({ habit }: Props) {
 						className="hover:bg-foreground/10 border-foreground/30 focus-visible:ring-0 focus-visible:ring-offset-0 w-5 h-5 focus-visible:bg-accent-foreground hover:cursor-pointer"
 					/>
 					<span
-						className={" line-through text-foreground/30 "
+						className={
+							" line-through text-foreground/30 "
 							// habit.completed
 							// 	? "line-through text-foreground/30 "
 							// 	: " text-foreground/60 text-justify "

@@ -40,12 +40,8 @@ export default function RootLayout({
 					enableSystem
 					disableTransitionOnChange
 				>
-					{/* <TaskProvider> */}
-					<HabitProvider>
-						{children}
-						<Toaster richColors />
-					</HabitProvider>
-					{/* </TaskProvider> */}
+					{children}
+					<Toaster richColors />
 				</ThemeProvider>
 			</body>
 		</html>

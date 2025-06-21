@@ -1,3 +1,4 @@
+import { Edit2, GripVertical, Trash2 } from "lucide-react";
 import {
 	Dialog,
 	DialogContent,
@@ -7,20 +8,17 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "../ui/dialog";
-import { Edit2, GripVertical, Trash2 } from "lucide-react";
 
-import { Button } from "../ui/button";
-import { CSS } from "@dnd-kit/utilities";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DialogClose } from "@radix-ui/react-dialog";
-import {
-	FcLowPriority
-} from "react-icons/fc";
-import type { Todo } from "../../types";
-import { TodoForm } from "./todo-form";
-import { toast } from "sonner";
-import { useDraggable } from "@dnd-kit/core";
 import { useTodoContext } from "@/contexts/todo-context";
+import { useDraggable } from "@dnd-kit/core";
+import { CSS } from "@dnd-kit/utilities";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { FcLowPriority } from "react-icons/fc";
+import { toast } from "sonner";
+import type { Todo } from "../../types";
+import { Button } from "../ui/button";
+import { TodoForm } from "./todo-form";
 
 type Props = {
 	todo: Todo;
@@ -70,7 +68,8 @@ export function TodoItem({ todo }: Props) {
 						className="hover:bg-foreground/10 border-foreground/30 focus-visible:ring-0 focus-visible:ring-offset-0 w-5 h-5 focus-visible:bg-accent-foreground hover:cursor-pointer"
 					/>
 					<span
-						className={" line-through text-foreground/30 "
+						className={
+							" line-through text-foreground/30 "
 							// todo.completed
 							// 	? "line-through text-foreground/30 "
 							// 	: " text-foreground/60 text-justify "

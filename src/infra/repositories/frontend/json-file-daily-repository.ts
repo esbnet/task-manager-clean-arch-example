@@ -1,7 +1,7 @@
-import type { Daily } from "@/domain/entities/daily";
-import type { DailyRepository } from "@/domain/repositories/all-repository";
 import fs from "node:fs";
 import path from "node:path";
+import type { Daily } from "@/domain/entities/daily";
+import type { DailyRepository } from "@/domain/repositories/all-repository";
 
 let dailys: Daily[] = [];
 const dataPath = path.join(process.cwd(), "src", "data", "dailys.json");

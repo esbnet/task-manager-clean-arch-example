@@ -1,7 +1,7 @@
-import type { Todo } from "@/domain/entities/todo";
-import type { TodoRepository } from "@/domain/repositories/all-repository";
 import fs from "node:fs";
 import path from "node:path";
+import type { Todo } from "@/domain/entities/todo";
+import type { TodoRepository } from "@/domain/repositories/all-repository";
 
 let todos: Todo[] = [];
 const dataPath = path.join(process.cwd(), "src", "data", "todos.json");

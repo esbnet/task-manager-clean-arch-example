@@ -18,8 +18,7 @@ interface TodoContextType {
 	todos: Todo[];
 	loading: boolean;
 	error: string | null;
-	addTodo: (todo: Omit<Todo, "id" | "createdAt">
-	) => Promise<void>,
+	addTodo: (todo: Omit<Todo, "id" | "createdAt">) => Promise<void>;
 	updateTodo: (todo: Todo) => Promise<void>;
 	deleteTodo: (id: string) => Promise<void>;
 	toggleComplete: (id: string) => Promise<void>;
@@ -65,16 +64,13 @@ export function TodoProvider({ children }: TodoProviderProps) {
 			const result = await createTodoUseCase.execute({
 				title: todo.title,
 				observations: todo.observations || "",
-				tasks: todo.tasks || [] as string[],
+				tasks: todo.tasks || ([] as string[]),
 				difficulty: todo.difficulty || "Fácil",
 				startDate: todo.startDate || new Date(),
 				tags: todo.tags || [],
 				createdAt: new Date(),
 			});
-			setTodos((prevTodos) => [
-				...prevTodos,
-				result.todo as Todo,
-			]);
+			setTodos((prevTodos) => [...prevTodos, result.todo as Todo]);
 		} catch (err) {
 			setError("Failed to add todo");
 			console.error(err);
@@ -112,7 +108,6 @@ export function TodoProvider({ children }: TodoProviderProps) {
 	const toggleComplete = async (id: string) => {
 		try {
 			const updatedTodoFromRepo = await todoRepository.toggleComplete(id);
-
 
 			const updatedTodo: Todo = {
 				...updatedTodoFromRepo,

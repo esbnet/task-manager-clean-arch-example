@@ -1,7 +1,7 @@
-import type { Habit } from "@/domain/entities/habit";
-import type { HabitRepository } from "@/domain/repositories/all-repository";
 import fs from "node:fs";
 import path from "node:path";
+import type { Habit } from "@/domain/entities/habit";
+import type { HabitRepository } from "@/domain/repositories/all-repository";
 
 let habits: Habit[] = [];
 const dataPath = path.join(process.cwd(), "src", "data", "habits.json");

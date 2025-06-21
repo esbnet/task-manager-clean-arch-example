@@ -9,8 +9,8 @@ export type CreateEntityData<T extends BaseEntity> = Omit<
 >;
 
 export interface GenericRepository<T extends BaseEntity> {
-	list(): Promise<T[]>;
 	create(data: CreateEntityData<T>): Promise<T>;
+	list(): Promise<T[]>;
 	update(entity: T): Promise<T>;
 	toggleComplete(id: string): Promise<T>;
 	delete(id: string): Promise<void>;

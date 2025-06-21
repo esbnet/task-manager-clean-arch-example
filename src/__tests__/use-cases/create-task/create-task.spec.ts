@@ -2,7 +2,7 @@ import { InMemoryTaskRepository } from "@/infra/repositories/in-memory-task-repo
 import type { CreateTaskInput } from "@/use-cases/task/create-task/create-task-dto";
 import { CreateTaskUseCase } from "@/use-cases/task/create-task/create-task-use-case";
 
-describe("CreateTaskUseCase", () => {
+describe("shold be able to create a task", () => {
 	let useCase: CreateTaskUseCase;
 	let taskRepository: InMemoryTaskRepository;
 

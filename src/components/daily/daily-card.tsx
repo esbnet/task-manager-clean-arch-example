@@ -14,9 +14,7 @@ import { useDailyContext } from "@/contexts/daily-context";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { DialogClose } from "@radix-ui/react-dialog";
-import {
-	FcLowPriority
-} from "react-icons/fc";
+import { FcLowPriority } from "react-icons/fc";
 import { toast } from "sonner";
 import type { Daily } from "../../types";
 import { Button } from "../ui/button";
@@ -70,7 +68,8 @@ export function DailyItem({ daily }: Props) {
 						className="hover:bg-foreground/10 border-foreground/30 focus-visible:ring-0 focus-visible:ring-offset-0 w-5 h-5 focus-visible:bg-accent-foreground hover:cursor-pointer"
 					/>
 					<span
-						className={" line-through text-foreground/30 "
+						className={
+							" line-through text-foreground/30 "
 							// daily.completed
 							// 	? "line-through text-foreground/30 "
 							// 	: " text-foreground/60 text-justify "

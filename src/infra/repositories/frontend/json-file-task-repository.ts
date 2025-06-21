@@ -1,7 +1,7 @@
-import type { Task } from "@/domain/entities/task";
-import type { TaskRepository } from "@/domain/repositories/all-repository";
 import fs from "node:fs";
 import path from "node:path";
+import type { Task } from "@/domain/entities/task";
+import type { TaskRepository } from "@/domain/repositories/all-repository";
 
 let tasks: Task[] = [];
 const dataPath = path.join(process.cwd(), "src", "data", "tasks.json");

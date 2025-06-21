@@ -1,7 +1,7 @@
 import type { CreateDailyInput, CreateDailyOutput } from "./create-daily-dto";
 
-import type { DailyDificult } from "@/types/daily";
 import type { DailyRepository } from "@/domain/repositories/all-repository";
+import type { DailyDificult } from "@/types/daily";
 
 export class CreateDailyUseCase {
 	constructor(private readonly dailyRepository: DailyRepository) {}
