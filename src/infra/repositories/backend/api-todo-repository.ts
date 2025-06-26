@@ -7,7 +7,7 @@ export class ApiTodoRepository implements TodoRepository {
 	async list(): Promise<Todo[]> {
 		const res = await fetch(this.baseUrl);
 		const json = await res.json();
-		return json.todos || [];
+		return json.todos;
 	}
 
 	async create(data: Omit<Todo, "id" | "createdAt">): Promise<Todo> {

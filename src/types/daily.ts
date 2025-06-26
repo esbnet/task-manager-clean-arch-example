@@ -6,12 +6,12 @@ export type DailyRepeatType =
 	| "Mensalmente"
 	| "Anualmente";
 
-export type DailyRepeat = {
+export interface DailyRepeat {
 	type: DailyRepeatType;
 	frequency: number;
-};
+}
 
-export type Daily = {
+export interface Daily {
 	id: string;
 	title: string;
 	observations: string;
@@ -21,4 +21,4 @@ export type Daily = {
 	repeat: DailyRepeat;
 	tags: string[];
 	createdAt: Date;
-};
+}

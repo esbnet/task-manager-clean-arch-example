@@ -1,4 +1,4 @@
-import type { HabitRepository } from "@/domain/repositories/habit-repository";
+import type { HabitRepository } from "@/domain/repositories/all-repository";
 
 export class DeleteHabitUseCase {
 	constructor(private readonly habitRepository: HabitRepository) {}

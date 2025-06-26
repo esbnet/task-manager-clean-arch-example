@@ -1,5 +1,4 @@
 import { Edit2, GripVertical, Trash2 } from "lucide-react";
-import { FcLowPriority } from "react-icons/fc";
 import {
 	Dialog,
 	DialogContent,
@@ -28,7 +27,7 @@ export function HabitCard({ habit }: Props) {
 	return <HabitItem habit={habit} />;
 }
 
-export function HabitItem({ habit }: Props) {
+function HabitItem({ habit }: Props) {
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
 		id: habit.id,
 	});
@@ -69,7 +68,7 @@ export function HabitItem({ habit }: Props) {
 					/>
 					<span
 						className={
-							" line-through text-foreground/30 "
+							" text-foreground/60 text-justify "
 							// habit.completed
 							// 	? "line-through text-foreground/30 "
 							// 	: " text-foreground/60 text-justify "
@@ -78,12 +77,6 @@ export function HabitItem({ habit }: Props) {
 						{habit.title}
 					</span>
 				</div>
-
-				<span>
-					{habit.difficulty === "Trivial" && (
-						<FcLowPriority size={16} title="fazer depois" />
-					)}
-				</span>
 			</div>
 
 			<div className="flex items-center h-full">

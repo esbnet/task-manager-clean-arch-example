@@ -1,6 +1,6 @@
 export type HabitDificult = "Trivial" | "Fácil" | "Médio" | "Difícil";
 
-export type HabitReset = "Diária" | "Semanal" | "Mensal";
+export type HabitReset = "Diariamente" | "Semanalmente" | "Mensalmente";
 
 export type UpdateHabitInput = {
 	id: string;

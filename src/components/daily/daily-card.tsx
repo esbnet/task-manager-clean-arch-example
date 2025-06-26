@@ -69,7 +69,7 @@ export function DailyItem({ daily }: Props) {
 					/>
 					<span
 						className={
-							" line-through text-foreground/30 "
+							" text-foreground/60 text-justify "
 							// daily.completed
 							// 	? "line-through text-foreground/30 "
 							// 	: " text-foreground/60 text-justify "

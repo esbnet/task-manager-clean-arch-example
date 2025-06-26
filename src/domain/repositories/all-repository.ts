@@ -3,6 +3,6 @@ import type { Habit } from "../entities/habit";
 import type { Todo } from "../entities/todo";
 import type { GenericRepository } from "./generic-repository";
 
-export type DailyRepository = GenericRepository<Daily>;
-export type HabitRepository = GenericRepository<Habit>;
-export type TodoRepository = GenericRepository<Todo>;
+export interface DailyRepository extends GenericRepository<Daily> {}
+export interface HabitRepository extends GenericRepository<Habit> {}
+export interface TodoRepository extends GenericRepository<Todo> {}

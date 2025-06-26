@@ -1,5 +1,5 @@
 import type { Daily } from "@/domain/entities/daily";
-import type { DailyRepository } from "@/domain/repositories/daily-repository";
+import type { DailyRepository } from "@/domain/repositories/all-repository";
 
 export class ApiDailyRepository implements DailyRepository {
 	private baseUrl = "/api/dailys";

@@ -1,4 +1,4 @@
-import type { HabitRepository } from "@/domain/repositories/habit-repository";
+import type { HabitRepository } from "@/domain/repositories/all-repository";
 import type { ListHabitsOutput } from "./list-habit-dto";
 
 export class ListHabitsUseCase {

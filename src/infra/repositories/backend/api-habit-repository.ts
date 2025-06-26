@@ -1,5 +1,5 @@
 import type { Habit } from "@/domain/entities/habit";
-import type { HabitRepository } from "@/domain/repositories/habit-repository";
+import type { HabitRepository } from "@/domain/repositories/all-repository";
 
 export class ApiHabitRepository implements HabitRepository {
 	private baseUrl = "/api/habits";

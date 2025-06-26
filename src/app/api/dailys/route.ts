@@ -15,7 +15,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-	const { title, observations, tasks, difficulty, startDate, repeat, tags } =
+	const { title, observations, tasks, difficulty, repeat, tags } =
 		await request.json();
 	const useCase = new CreateDailyUseCase(dailyRepo);
 	const result = await useCase.execute({
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 			type: repeat.type || "Diária",
 			frequency: 1, // Default value
 		},
-		tags: [], // Default value
+		tags: tags || [], // Default value
 		createdAt: new Date(),
 	});
 	return Response.json(result, { status: 201 });

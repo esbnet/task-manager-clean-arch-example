@@ -69,7 +69,7 @@ export function TodoItem({ todo }: Props) {
 					/>
 					<span
 						className={
-							" line-through text-foreground/30 "
+							" text-foreground/60 text-justify "
 							// todo.completed
 							// 	? "line-through text-foreground/30 "
 							// 	: " text-foreground/60 text-justify "

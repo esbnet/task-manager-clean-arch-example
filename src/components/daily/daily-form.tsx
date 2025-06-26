@@ -138,6 +138,7 @@ export function DailyForm({ daily, icon }: DailyFormProps) {
 						onChange={(e) => setObservations(e.target.value)}
 						placeholder="Adicionar observações"
 					/>
+
 					<Label>Lista de tarefas</Label>
 					<Input
 						value={tasks.join(",") || ""}
@@ -254,22 +255,11 @@ export function DailyForm({ daily, icon }: DailyFormProps) {
 	);
 }
 
-const tagsNew =
+export const tagsNew =
 	[
-		{
-			value: "Trabalho", label: "Trabalho"
-		},
-		{
-			value: "Exercício", label: "Exercício"
-		},
-		{
-			value: "Saúde e bem-estar", label: "Saúde e bem-estar"
-		},
-		{
-			value: "Escola", label: "Escola"
-		},
-		{
-			value: "Times", label: "Times"
-		}
-
+		{ value: "Trabalho", label: "Trabalho" },
+		{ value: "Exercício", label: "Exercício" },
+		{ value: "Saúde e bem-estar", label: "Saúde e bem-estar" },
+		{ value: "Escola", label: "Escola" },
+		{ value: "Times", label: "Times" }
 	];

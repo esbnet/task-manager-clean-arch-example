@@ -16,7 +16,7 @@ import { UpdateTodoUseCase } from "@/use-cases/todo/update-todo/update-todo-use-
 
 interface TodoContextType {
 	todos: Todo[];
-	loading: boolean;
+	isloading: boolean;
 	error: string | null;
 	addTodo: (todo: Omit<Todo, "id" | "createdAt">) => Promise<void>;
 	updateTodo: (todo: Todo) => Promise<void>;
@@ -33,7 +33,7 @@ interface TodoProviderProps {
 
 export function TodoProvider({ children }: TodoProviderProps) {
 	const [todos, setTodos] = useState<Todo[]>([]);
-	const [loading, setLoading] = useState<boolean>(true);
+	const [isloading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
 	const todoRepository = new ApiTodoRepository();
@@ -42,15 +42,15 @@ export function TodoProvider({ children }: TodoProviderProps) {
 
 	const fetchTodos = async () => {
 		try {
-			setLoading(true);
+			setIsLoading(true);
 			const fetchedTodos = await todoRepository.list();
-			setTodos(fetchedTodos as Todo[]);
+			setTodos(fetchedTodos as unknown as Todo[]);
 			setError(null);
 		} catch (err) {
 			setError("Failed to fetch todos");
 			console.error(err);
 		} finally {
-			setLoading(false);
+			setIsLoading(false);
 		}
 	};
 
@@ -128,7 +128,7 @@ export function TodoProvider({ children }: TodoProviderProps) {
 
 	const value = {
 		todos,
-		loading,
+		isloading,
 		error,
 		addTodo,
 		updateTodo,

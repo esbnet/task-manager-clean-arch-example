@@ -16,7 +16,7 @@ export class CreateDailyUseCase {
 			difficulty: (inputDaily.difficulty as DailyDificult) ?? "Fácil",
 			startDate: new Date(),
 			repeat: {
-				type: "Diária",
+				type: "Diariamente",
 				frequency: 1,
 			},
 			tags: [],

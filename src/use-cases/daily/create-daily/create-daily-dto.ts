@@ -1,17 +1,17 @@
 export type DailyDificult = "Trivial" | "Fácil" | "Médio" | "Difícil";
 
 type DailyRepeatType =
-	| "Diária"
+	| "Diariamente"
 	| "Semanalmente"
 	| "Mensalmente"
-	| "Anualemente";
+	| "Anualmente";
 
-type DailyRepeat = {
+interface DailyRepeat {
 	type: DailyRepeatType;
 	frequency: number;
-};
+}
 
-export type CreateDailyInput = {
+export interface CreateDailyInput {
 	id: string;
 	title: string;
 	observations: string;
@@ -21,9 +21,9 @@ export type CreateDailyInput = {
 	repeat?: DailyRepeat;
 	tags: string[];
 	createdAt: Date;
-};
+}
 
-export type CreateDailyOutput = {
+export interface CreateDailyOutput {
 	daily: {
 		id: string;
 		title: string;
@@ -35,4 +35,4 @@ export type CreateDailyOutput = {
 		tags?: string[];
 		createdAt: Date;
 	};
-};
+}

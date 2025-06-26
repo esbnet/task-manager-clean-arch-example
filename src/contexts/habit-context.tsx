@@ -16,7 +16,7 @@ import { UpdateHabitUseCase } from "@/use-cases/habit/update-habit/update-habit-
 
 interface HabitContextType {
 	habits: Habit[];
-	loading: boolean;
+	isloading: boolean;
 	error: string | null;
 	addHabit: (habit: Omit<Habit, "id">) => Promise<void>;
 	updateHabit: (habit: Habit) => Promise<void>;
@@ -33,7 +33,7 @@ interface HabitProviderProps {
 
 export function HabitProvider({ children }: HabitProviderProps) {
 	const [habits, setHabits] = useState<Habit[]>([]);
-	const [loading, setLoading] = useState<boolean>(true);
+	const [isloading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
 	const habitRepository = new ApiHabitRepository();
@@ -42,7 +42,7 @@ export function HabitProvider({ children }: HabitProviderProps) {
 
 	const fetchHabits = async () => {
 		try {
-			setLoading(true);
+			setIsLoading(true);
 			const fetchedHabits = await habitRepository.list();
 			setHabits(fetchedHabits);
 			setError(null);
@@ -50,7 +50,7 @@ export function HabitProvider({ children }: HabitProviderProps) {
 			setError("Failed to fetch habits");
 			console.error(err);
 		} finally {
-			setLoading(false);
+			setIsLoading(false);
 		}
 	};
 
@@ -129,7 +129,7 @@ export function HabitProvider({ children }: HabitProviderProps) {
 
 	const value = {
 		habits,
-		loading,
+		isloading,
 		error,
 		addHabit,
 		updateHabit,

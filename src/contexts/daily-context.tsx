@@ -11,12 +11,13 @@ import {
 import type { Daily, DailyDificult } from "@/types";
 
 import { ApiDailyRepository } from "@/infra/repositories/backend/api-daily-repository";
+import type { DailyRepeatType } from "@/types/daily";
 import { CreateDailyUseCase } from "@/use-cases/daily/create-daily/create-daily-use-case";
 import { UpdateDailyUseCase } from "@/use-cases/daily/update-daily/update-daily-use-case";
 
 interface DailyContextType {
 	dailys: Daily[];
-	loading: boolean;
+	isLoading: boolean;
 	error: string | null;
 	addDaily: (daily: Omit<Daily, "id" | "createdAt">) => Promise<void>;
 	updateDaily: (daily: Daily) => Promise<void>;
@@ -33,7 +34,7 @@ interface DailyProviderProps {
 
 export function DailyProvider({ children }: DailyProviderProps) {
 	const [dailys, setDailys] = useState<Daily[]>([]);
-	const [loading, setLoading] = useState<boolean>(true);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
 	const dailyRepository = new ApiDailyRepository();
@@ -42,7 +43,7 @@ export function DailyProvider({ children }: DailyProviderProps) {
 
 	const fetchDailys = async () => {
 		try {
-			setLoading(true);
+			setIsLoading(true);
 			const fetchedDailys = await dailyRepository.list();
 			setDailys(fetchedDailys as Daily[]);
 			setError(null);
@@ -50,7 +51,7 @@ export function DailyProvider({ children }: DailyProviderProps) {
 			setError("Failed to fetch dailys");
 			console.error(err);
 		} finally {
-			setLoading(false);
+			setIsLoading(false);
 		}
 	};
 
@@ -65,10 +66,14 @@ export function DailyProvider({ children }: DailyProviderProps) {
 				title: daily.title,
 				observations: daily.observations || "",
 				tasks: daily.tasks || [],
-				difficulty: daily.difficulty as DailyDificult,
+				difficulty: (daily.difficulty as DailyDificult) || "Fácil",
 				startDate: daily.startDate || new Date(),
 				tags: daily.tags || [],
 				createdAt: new Date(),
+				repeat: {
+					type: (daily.repeat?.type as DailyRepeatType) || "Diariamente",
+					frequency: 1,
+				}
 			});
 			setDailys((prevDailys) => [...prevDailys, result.daily as Daily]);
 		} catch (err) {
@@ -133,7 +138,7 @@ export function DailyProvider({ children }: DailyProviderProps) {
 
 	const value = {
 		dailys,
-		loading,
+		isLoading,
 		error,
 		addDaily,
 		updateDaily,

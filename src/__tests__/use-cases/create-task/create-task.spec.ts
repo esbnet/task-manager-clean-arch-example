@@ -1,45 +1,48 @@
-import { InMemoryTaskRepository } from "@/infra/repositories/in-memory-task-repository";
-import type { CreateTaskInput } from "@/use-cases/task/create-task/create-task-dto";
-import { CreateTaskUseCase } from "@/use-cases/task/create-task/create-task-use-case";
+import { InJsonFileTodoRepository } from "@/infra/repositories/frontend/json-file-todo-repository";
+import type { CreateTodoInput } from "@/use-cases/todo/create-todo/create-todo-dto";
+import { CreateTodoUseCase } from "@/use-cases/todo/create-todo/create-todo-use-case";
 
-describe("shold be able to create a task", () => {
-	let useCase: CreateTaskUseCase;
-	let taskRepository: InMemoryTaskRepository;
+describe("shold be able to create a todo", () => {
+	let useCase: CreateTodoUseCase;
+	let todoRepository: InJsonFileTodoRepository;
 
 	beforeEach(() => {
-		taskRepository = new InMemoryTaskRepository();
-		useCase = new CreateTaskUseCase(taskRepository);
+		todoRepository = new InJsonFileTodoRepository();
+		useCase = new CreateTodoUseCase(todoRepository);
 	});
 
 	it("deve criar uma tarefa", async () => {
-		const inputTask: CreateTaskInput = {
+		const inputTodo: CreateTodoInput = {
 			title: "Tarefa 1",
-			category: "HABITOS",
-			priority: "BAIXA",
+			observations: "",
+			tasks: ["Tarefa 1", "Tarefa 2"],
+			tags: ["Tag 1", "Tag 2"],
+			createdAt: new Date(),
+			startDate: new Date(),
+			difficulty: "Fácil",
 		};
 
-		const result = await useCase.execute(inputTask);
+		const result = await useCase.execute(inputTodo);
 
-		expect(result.task).toBeDefined();
-		expect(result.task.title).toBe(inputTask.title);
-		expect(result.task.completed).toBe(false);
-		expect(result.task.category).toBe(inputTask.category);
-		expect(result.task.priority).toBe(inputTask.priority);
+		expect(result.todo).toBeDefined();
+		expect(result.todo.title).toBe(inputTodo.title);
+		expect(result.todo.observations).toBe(inputTodo.observations);
 	});
 
 	it("deve criar uma tarefa com categoria e prioridade padrão", async () => {
-		const inputTask: CreateTaskInput = {
-			title: "Tarefa 1",
-			category: "HABITOS",
-			priority: "BAIXA",
+		const inputTodo: CreateTodoInput = {
+			title: "Tarefa 2",
+			observations: "Observações",
+			tasks: ["Tarefa 1", "Tarefa 2"],
+			tags: ["Tag 1", "Tag 2"],
+			createdAt: new Date(),
+			startDate: new Date(),
+			difficulty: "Fácil",
 		};
 
-		const result = await useCase.execute(inputTask);
+		const result = await useCase.execute(inputTodo);
 
-		expect(result.task).toBeDefined();
-		expect(result.task.title).toBe(inputTask.title);
-		expect(result.task.completed).toBe(false);
-		expect(result.task.category).toBe("HABITOS");
-		expect(result.task.priority).toBe("BAIXA");
+		expect(result.todo).toBeDefined();
+		expect(result.todo.title).toBe(inputTodo.title);
 	});
 });

@@ -5,7 +5,7 @@ import type {
 	HabitReset,
 } from "./create-habit-dto";
 
-import type { HabitRepository } from "@/domain/repositories/habit-repository";
+import type { HabitRepository } from "@/domain/repositories/all-repository";
 
 export class CreateHabitUseCase {
 	constructor(private readonly habitRepository: HabitRepository) {}

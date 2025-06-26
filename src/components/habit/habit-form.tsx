@@ -1,7 +1,9 @@
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
@@ -21,14 +23,17 @@ import {
 import type { Habit, HabitDificult, HabitReset } from "../../types";
 
 import { useHabitContext } from "@/contexts/habit-context";
+import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from ".././ui/button";
 import { Input } from ".././ui/input";
+import { tagsNew } from "../daily/daily-form";
+import { Label } from "../ui/label";
+import { MultiSelect } from "../ui/multi-select";
 
 interface HabitFormProps {
-	habit: Partial<Habit> &
-		Pick<Habit, "observations" | "reset" | "tags" | "difficulty" | "title">;
+	habit: Habit;
 	icon: React.ReactNode;
 }
 
@@ -36,13 +41,14 @@ export function HabitForm({ habit, icon }: HabitFormProps) {
 	const { updateHabit, addHabit } = useHabitContext();
 
 	const [title, setTitle] = useState(habit.title || "");
-
-	const [dificulty, setDifficulty] = useState<HabitDificult>(
-		habit.difficulty || "Fácil",
+	const [observations, setObservations] = useState(habit.observations || "");
+	const [difficult, setDifficult] = useState<HabitDificult>(
+		habit.difficult || "Fácil",
 	);
-	const [reset, setReset] = useState<HabitReset>(habit.reset || "Diária");
 	const [tags, setTags] = useState<string[]>(habit.tags || []);
+	const [reset, setReset] = useState<HabitReset>(habit.reset || "Diariamente");
 
+	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [open, setOpen] = useState(false);
 
 	async function handleUpdateHabit() {
@@ -53,22 +59,22 @@ export function HabitForm({ habit, icon }: HabitFormProps) {
 				...habit,
 				title,
 				observations: habit.observations || "",
-				difficulty: dificulty,
+				difficult: difficult,
 				tags,
 				reset,
 			} as Habit);
 
-			toast.success("Tarefa atualizada com sucesso!");
+			toast.success("Hábito atualizado com sucesso!");
 			setOpen(false);
 		} catch (error) {
-			toast.error(`Erro ao atualizar tarefa${error}`);
-			console.error("Erro ao atualizar tarefa", error);
+			toast.error(`Erro ao atualizar hábito${error}`);
+			console.error("Erro ao atualizar hábito", error);
 		}
 	}
 
 	async function handleAddHabit() {
 		if (!title.trim()) {
-			toast.warning("Título da tarefa é obrigatório");
+			toast.warning("Título do hábito é obrigatório");
 			return;
 		}
 
@@ -76,16 +82,16 @@ export function HabitForm({ habit, icon }: HabitFormProps) {
 			await addHabit({
 				title,
 				observations: habit.observations || "",
-				difficulty: dificulty,
+				difficult: difficult,
 				tags,
 				reset,
 				createdAt: new Date(),
 			});
 			setTitle("");
-			setDifficulty(dificulty);
+			setDifficult(difficult);
 			setReset(reset);
 			setTags(tags);
-			toast.success("Hábito criada com sucesso!");
+			toast.success("Hábito criado com sucesso!");
 			setOpen(false);
 		} catch (error) {
 			toast.error(`Erro ao criar hábito ${error}`);
@@ -99,72 +105,153 @@ export function HabitForm({ habit, icon }: HabitFormProps) {
 				{icon}
 				<span className="sr-only">Edit habit</span>
 			</DialogTrigger>
-			<DialogContent className="flex flex-col gap-2 bg-transparent backdrop-blur-sm">
-				<DialogHeader>
-					<DialogTitle>Editar Tarefa</DialogTitle>
+			<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
+				<DialogHeader className="flex flex-col gap-1">
+					<DialogTitle className="font-bold text-foreground text-2xl" >
+						{habit.id ? "Editar" : "Adicionar"} Hábito
+					</DialogTitle>
 					<DialogDescription className="text-zinc-400 text-sm">
 						{habit.id
-							? "Edite os detalhes da tarefa"
-							: "Adicione uma nova tarefa"}
+							? "Edite os detalhes do hábito"
+							: "Adicione um novo hábito"}
 					</DialogDescription>
 				</DialogHeader>
 
-				<div className="flex flex-col gap-2 bg-zinc-100/30 opacity-0 shadow-xl backdrop-blur-md p-4 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]">
-					<Input
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-						placeholder="Nova tarefa"
-						required
-					/>
-					<Select
-						onValueChange={(value) =>
-							setDifficulty(value as HabitDificult)
-						}
-						value={dificulty}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue
-								placeholder="Dificuldade"
-								className="text-zinc-300"
-							/>
-						</SelectTrigger>
-						<SelectContent
-							className="w-[180px]"
-							defaultValue={dificulty}
+				<div className="flex flex-col gap-4 bg-gray-100/20 p-2 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]">
+					<div className="flex flex-col gap-1">
+						<Label className="font-bold">Título</Label>
+						<Input
+							value={title}
+							onChange={(e) => setTitle(e.target.value)}
+							placeholder="Nova hábito"
+							required
+						/>
+					</div>
+					<div className="flex flex-col gap-1">
+						<Label className="font-bold">Observação</Label>
+						<Input
+							value={observations}
+							onChange={(e) => setObservations(e.target.value)}
+							placeholder="Adicionar observações"
+						/>
+					</div>
+
+					<div className="flex flex-col gap-1">
+						<Label className="font-bold">Dificuldade</Label>
+						<Select
+							onValueChange={(value) =>
+								setDifficult(value as HabitDificult)
+							}
+							value={difficult}
 						>
-							<SelectItem value="Trivial">Trival</SelectItem>
-							<SelectItem value="Fácil">Fácil</SelectItem>
-							<SelectItem value="Média">Média</SelectItem>
-							<SelectItem value="Difícil">Difícil</SelectItem>
-						</SelectContent>
-					</Select>
+							<SelectTrigger className="w-[180px]">
+								<SelectValue
+									placeholder="Dificuldade"
+									className="text-zinc-300"
+								/>
+							</SelectTrigger>
+							<SelectContent
+								className="w-[180px]"
+								defaultValue={difficult}
+							>
+								<SelectItem value="Trivial">Trival</SelectItem>
+								<SelectItem value="Fácil">Fácil</SelectItem>
+								<SelectItem value="Média">Média</SelectItem>
+								<SelectItem value="Difícil">Difícil</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
 
-					<Select
-						onValueChange={(value) => setTags(value.split(","))}
-						value={tags.join(",") || ""}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Prioridade" />
-						</SelectTrigger>
-						<SelectContent className="w-[180px]">
-							<SelectItem value="BAIXA">
-								<FcLowPriority size={24} /> Baixa
-							</SelectItem>
-							<SelectItem value="MEDIA">
-								<FcMediumPriority size={24} /> Média
-							</SelectItem>
-							<SelectItem value="ALTA">
-								<FcHighPriority size={24} /> Alta
-							</SelectItem>
-						</SelectContent>
-					</Select>
+					<div className="flex flex-col gap-1">
+						<Label className="font-bold">Etiquetas</Label>
+						<MultiSelect
+							options={tagsNew}
+							onValueChange={setSelectedTags}
+							defaultValue={selectedTags}
+							placeholder="Adicionar etiquetas"
+							variant="inverted"
+							maxCount={3}
+						/>
+					</div>
 
-					<Button
-						onClick={habit.id ? handleUpdateHabit : handleAddHabit}
-					>
-						{habit.id ? "Atualizar" : "Adicionar"}
-					</Button>
+					<div className="flex flex-col gap-1">
+						<Label className="font-bold">Resetar Contador</Label>
+						<Select
+							onValueChange={(value) =>
+								setReset(value as HabitReset)
+							}
+							value={difficult}
+						>
+							<SelectTrigger className="w-[180px]">
+								<SelectValue
+									placeholder="Dificuldade"
+									className="text-zinc-300"
+								/>
+							</SelectTrigger>
+							<SelectContent
+								className="w-[180px]"
+								defaultValue={reset}
+							>
+								<SelectItem value="Trivial">Diariamente</SelectItem>
+								<SelectItem value="Fácil">Semanalmente</SelectItem>
+								<SelectItem value="Média">Mensalmente</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
+
+					<div className="flex justify-end gap-2">
+						<Button
+							onClick={habit.id ? handleUpdateHabit : handleAddHabit}
+						>
+							{habit.id ? "Atualizar" : "Adicionar"}
+						</Button>
+						{habit.id && <DialogConfirmDelete id={habit.id} />}
+
+					</div>
+
 				</div>
+			</DialogContent>
+		</Dialog>
+	);
+}
+
+function DialogConfirmDelete({ id }: { id: string }) {
+	const { deleteHabit } = useHabitContext();
+	const onDelete = async () => {
+		await deleteHabit(id);
+		toast.success("Tarefa excluída com sucesso!");
+	};
+
+	return (
+		<Dialog>
+			<DialogTrigger asChild>
+				<Button
+					title="Excluir"
+					variant="ghost"
+					className="cursor-pointer"
+				>
+					<Trash2 size={16} />
+				</Button>
+			</DialogTrigger>
+			<DialogContent className="sm:max-w-[425px]">
+				<DialogHeader>
+					<DialogTitle>Você tem certeza?</DialogTitle>
+					<DialogDescription>
+						Ao confirmar, essa tarefa será excluida permanentemente.
+					</DialogDescription>
+				</DialogHeader>
+				<DialogFooter>
+					<Button
+						type="submit"
+						variant={"destructive"}
+						onClick={onDelete}
+					>
+						Excluir
+					</Button>
+					<DialogClose asChild>
+						<Button variant="outline">Cancel</Button>
+					</DialogClose>
+				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	);

@@ -1,4 +1,4 @@
-import type { DailyRepository } from "@/domain/repositories/daily-repository";
+import type { DailyRepository } from "@/domain/repositories/all-repository";
 
 export class DeleteDailyUseCase {
 	constructor(private readonly dailyRepository: DailyRepository) {}

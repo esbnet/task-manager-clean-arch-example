@@ -1,6 +1,6 @@
 import "./globals.css";
 
-import { Lobster, Syne_Mono } from "next/font/google";
+import { Kode_Mono, Lobster } from "next/font/google";
 
 import { Toaster } from "@/components/ui/sonner";
 import { HabitProvider } from "@/contexts/habit-context";
@@ -13,10 +13,16 @@ const lobster = Lobster({
 	variable: "--font-lobster",
 });
 
-const syneMono = Syne_Mono({
+// const syneMono = Syne_Mono({
+// 	subsets: ["latin"],
+// 	weight: "400", // Lobster geralmente só tem peso 400
+// 	variable: "--font-syne-mono",
+// });
+
+const kodeMono = Kode_Mono({
 	subsets: ["latin"],
 	weight: "400", // Lobster geralmente só tem peso 400
-	variable: "--font-syne-mono",
+	variable: "--font-kode-mono",
 });
 
 export const metadata: Metadata = {
@@ -30,9 +36,10 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="pt-BR">
+		<html lang="pt-BR" data-theme="light">
 			<body
-				className={` ${lobster.className}  ${syneMono.className}   antialiased `}
+				className={` ${lobster.className}  ${kodeMono.className} antialiased `
+				}
 			>
 				<ThemeProvider
 					attribute="class"
