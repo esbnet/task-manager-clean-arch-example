@@ -1,11 +1,15 @@
+import { CalendarIcon, Plus, SaveIcon, Trash2 } from "lucide-react";
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
 	Select,
 	SelectContent,
@@ -13,35 +17,38 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import {
-	FcHighPriority,
-	FcLowPriority,
-	FcMediumPriority,
-} from "react-icons/fc";
 import type { Todo, TodoDificult } from "../../types";
+import { format, setDefaultOptions } from "date-fns";
 
-import { useTodoContext } from "@/contexts/todo-context";
-import { useState } from "react";
-import { toast } from "sonner";
 import { Button } from "../ui/button";
+import { Calendar } from "../ui/calendar";
 import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+import { TodoCard } from "./todo-card";
+import { ptBR } from "date-fns/locale";
+import { toast } from "sonner";
+import { useState } from "react";
+import { useTodoContext } from "@/contexts/todo-context";
+
+setDefaultOptions({ locale: ptBR });
 
 interface TodoFormProps {
-	todo: Partial<Todo> &
-		Pick<Todo, "observations" | "tags" | "difficulty" | "title">;
-	icon: React.ReactNode;
+	todo: Todo
 }
 
-export function TodoForm({ todo, icon }: TodoFormProps) {
+export function TodoForm({ todo }: TodoFormProps) {
 	const { updateTodo, addTodo } = useTodoContext();
 
 	const [title, setTitle] = useState(todo.title || "");
-
-	const [dificulty, setDifficulty] = useState<TodoDificult>(
-		todo.difficulty || "Fácil",
+	const [observations, setObservations] = useState(todo.observations || "");
+	const [tasks, setTodo] = useState<string[]>(todo.tasks || []);
+	const [difficult, setDifficult] = useState<TodoDificult>(
+		todo.difficult || "Fácil",
 	);
+	const [startDate, setStartDate] = useState(todo.startDate || new Date());
 	const [tags, setTags] = useState<string[]>(todo.tags || []);
 
+	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [open, setOpen] = useState(false);
 
 	async function handleUpdateTodo() {
@@ -52,8 +59,10 @@ export function TodoForm({ todo, icon }: TodoFormProps) {
 				...todo,
 				title,
 				observations: todo.observations || "",
-				difficulty: dificulty,
-				tags,
+				tasks: todo.tasks || [],
+				difficulty: difficult,
+				startDate: todo.startDate || new Date(),
+				tags: todo.tags || [],
 			} as Todo);
 
 			toast.success("Tarefa atualizada com sucesso!");
@@ -74,15 +83,14 @@ export function TodoForm({ todo, icon }: TodoFormProps) {
 			await addTodo({
 				title,
 				observations: todo.observations || "",
-				difficulty: dificulty,
-				tags,
-				startDate: new Date(),
 				tasks: [] as string[],
-				createdAt: new Date(),
-			} as Todo);
+				difficult: difficult,
+				startDate: new Date(),
+				tags: [] as string[],
+			});
 
 			setTitle("");
-			setDifficulty(dificulty);
+			setDifficult(difficult);
 			setTags(tags);
 			toast.success("Hábito criada com sucesso!");
 			setOpen(false);
@@ -95,75 +103,147 @@ export function TodoForm({ todo, icon }: TodoFormProps) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger className="outline-none">
-				{icon}
-				<span className="sr-only">Edit todo</span>
+				<TodoCard todo={todo} />
 			</DialogTrigger>
-			<DialogContent className="flex flex-col gap-2 bg-transparent backdrop-blur-sm">
+			<DialogContent className="flex flex-col gap-6 bg-transparent backdrop-blur-sm">
 				<DialogHeader>
 					<DialogTitle>Editar Tarefa</DialogTitle>
 					<DialogDescription className="text-zinc-400 text-sm">
 						{todo.id
-							? "Edite os detalhes da tarefa"
+							? "Altere os detalhes da tarefa"
 							: "Adicione uma nova tarefa"}
 					</DialogDescription>
 				</DialogHeader>
 
-				<div className="flex flex-col gap-2 bg-zinc-100/30 opacity-0 shadow-xl backdrop-blur-md p-4 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]">
-					<Input
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-						placeholder="Nova tarefa"
-						required
-					/>
-					<Select
-						onValueChange={(value) =>
-							setDifficulty(value as TodoDificult)
-						}
-						value={dificulty}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue
-								placeholder="Dificuldade"
-								className="text-zinc-300"
-							/>
-						</SelectTrigger>
-						<SelectContent
-							className="w-[180px]"
-							defaultValue={dificulty}
+				<div className="flex flex-col gap-4 bg-gray-100/20 p-2 py-4 rounded-lg text-muted-background animate-[fadeIn_1s_ease-in-out_forwards]">
+					<div className="flex flex-col gap-1">
+						<Label className="font-bold">Título</Label>
+						<Input
+							value={title}
+							onChange={(e) => setTitle(e.target.value)}
+							placeholder="Nova diária"
+							required
+						/>
+					</div>
+					<div className="flex flex-col gap-1">
+						<Label className="font-bold">Observação</Label>
+						<Input
+							value={observations}
+							onChange={(e) => setObservations(e.target.value)}
+							placeholder="Adicionar observações"
+						/>
+					</div>
+					<div className="flex flex-col gap-1">
+						<Label className="font-bold">Lista de tarefas</Label>
+						<Input
+							value={tasks.join(",") || ""}
+							onChange={(e) => setTodo(e.target.value.split(",").map(todo => todo.trim()).filter(Boolean))}
+							placeholder="Novo item da lista de tarefas"
+							required
+						/>
+					</div>
+					<div className="flex flex-col gap-1">
+						<Label className="font-bold">Dificuldade</Label>
+						<Select
+							onValueChange={(value) =>
+								setDifficult(value as TodoDificult)
+							}
+							value={difficult || "Fácil"}
 						>
-							<SelectItem value="Trivial">Trival</SelectItem>
-							<SelectItem value="Fácil">Fácil</SelectItem>
-							<SelectItem value="Média">Média</SelectItem>
-							<SelectItem value="Difícil">Difícil</SelectItem>
-						</SelectContent>
-					</Select>
+							<SelectTrigger className="w-full">
+								<SelectValue
+									placeholder="Dificuldade"
+									className="text-zinc-300"
+								/>
+							</SelectTrigger>
+							<SelectContent
+								className="w-full"
+								defaultValue={difficult || "Fácil"}
+							>
+								<SelectItem value="Trivial" className="justify-between" >Trival ⭐</SelectItem>
+								<SelectItem value="Fácil">Fácil ⭐⭐</SelectItem>
+								<SelectItem value="Média">Média ⭐⭐⭐</SelectItem>
+								<SelectItem value="Difícil">Difícil ⭐⭐⭐⭐</SelectItem>
+							</SelectContent>
+						</Select>
 
-					<Select
-						onValueChange={(value) => setTags(value.split(","))}
-						value={tags.join(",") || ""}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue placeholder="Prioridade" />
-						</SelectTrigger>
-						<SelectContent className="w-[180px]">
-							<SelectItem value="BAIXA">
-								<FcLowPriority size={24} /> Baixa
-							</SelectItem>
-							<SelectItem value="MEDIA">
-								<FcMediumPriority size={24} /> Média
-							</SelectItem>
-							<SelectItem value="ALTA">
-								<FcHighPriority size={24} /> Alta
-							</SelectItem>
-						</SelectContent>
-					</Select>
+					</div>
+					<div className="flex flex-col gap-1">
+						<Label className="font-bold">Data de início</Label>
+						<Popover>
+							<PopoverTrigger asChild>
+								<Button
+									variant="outline"
+									data-empty={!startDate}
+									className="justify-start w-full font-normal data-[empty=true]:text-muted-foreground text-left"
+								>
+									<CalendarIcon />
+									{startDate ? format(startDate, "PPP", { locale: ptBR }) : <span>Pick a date</span>}
+								</Button>
+							</PopoverTrigger>
+							<PopoverContent className="p-0 w-auto">
+								<Calendar mode="single" required={true} selected={startDate} onSelect={setStartDate} />
+							</PopoverContent>
+						</Popover>
+					</div>
 
 					<Button
 						onClick={todo.id ? handleUpdateTodo : handleAddTodo}
 					>
-						{todo.id ? "Atualizar" : "Adicionar"}
+						{todo.id ? <SaveIcon /> : <Plus />}
+						{todo.id ? "Salvar" : "Adicionar"}
 					</Button>
 				</div>
+				<div className="flex justify-right items-center">
+					<DialogConfirmDelete id={todo.id} />
+				</div>
+
+
+			</DialogContent>
+		</Dialog>
+	);
+}
+
+function DialogConfirmDelete({ id }: { id: string }) {
+	const { deleteTodo } = useTodoContext();
+	const onDelete = async () => {
+		await deleteTodo(id);
+		toast.success("Tarefa excluída com sucesso!");
+	};
+
+	return (
+		<Dialog>
+			<DialogTrigger asChild>
+				<div className="flex justify-center items-center mt-4 w-full">
+					<Button
+						variant="link"
+						// size="sm"
+						className="flex justify-center items-center hover:bg-background/20 rounded-lg text-destructive cursor-pointer"
+					>
+						<Trash2 size={16} /> Delete este(a) Afazer
+					</Button>
+				</div>
+			</DialogTrigger>
+			<DialogContent className="sm:max-w-[425px]">
+				<DialogHeader>
+					<DialogTitle>Você tem certeza?</DialogTitle>
+					<DialogDescription>
+						Confirmando a exclusão, você não poderá desfazer essa
+						ação.
+					</DialogDescription>
+				</DialogHeader>
+				<DialogFooter>
+					<Button
+						type="submit"
+						variant={"destructive"}
+						onClick={onDelete}
+					>
+						Excluir
+					</Button>
+					<DialogClose asChild>
+						<Button variant="outline">Cancel</Button>
+					</DialogClose>
+				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	);

@@ -15,7 +15,6 @@
 		"git.enableSmartCommit": true,
 		"git.autofetchPeriod": 1800,
 		"editor.formatOnSave": true,
-		"prisma-smart-formatter.prisma.defaultFormatter": "Prisma.prisma"
 	},
 	"extensions": {
 		"recommendations": [

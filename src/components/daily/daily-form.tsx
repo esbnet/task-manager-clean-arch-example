@@ -15,7 +15,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import type { Daily, DailyDificult, DailyRepeat } from "@/types";
-import { Locale, format, setDefaultOptions } from "date-fns";
+import { format, setDefaultOptions } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 import { MultiSelect } from "@/components/ui/multi-select";

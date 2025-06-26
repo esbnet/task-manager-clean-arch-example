@@ -5,7 +5,7 @@ export interface Todo {
 	title: string;
 	observations: string;
 	tasks: string[];
-	difficulty: TodoDificult;
+	difficult: TodoDificult;
 	startDate: Date;
 	tags: string[];
 	createdAt: Date;

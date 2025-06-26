@@ -28,7 +28,7 @@ export function TodoCard({ todo }: Props) {
 	return <TodoItem todo={todo} />;
 }
 
-export function TodoItem({ todo }: Props) {
+function TodoItem({ todo }: Props) {
 	const { attributes, listeners, setNodeRef, transform } = useDraggable({
 		id: todo.id,
 	});
@@ -80,59 +80,13 @@ export function TodoItem({ todo }: Props) {
 				</div>
 
 				<span>
-					{todo.difficulty === "Trivial" && (
+					{todo.difficult === "Trivial" && (
 						<FcLowPriority size={16} title="fazer depois" />
 					)}
 				</span>
-			</div>
-
-			<div className="flex items-center h-full">
-				<TodoForm todo={todo} icon={<Edit2 size={16} />} />
-				<DialogConfirmDelete id={todo.id} />
 			</div>
 		</div>
 	);
 }
 
-function DialogConfirmDelete({ id }: { id: string }) {
-	const { deleteTodo } = useTodoContext();
-	const onDelete = async () => {
-		await deleteTodo(id);
-		toast.success("Tarefa excluída com sucesso!");
-	};
 
-	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button
-					variant="ghost"
-					size="sm"
-					className="flex justify-center items-center hover:bg-background/20 rounded-lg w-6 h-6 cursor-pointer"
-				>
-					<Trash2 size={16} />
-				</Button>
-			</DialogTrigger>
-			<DialogContent className="sm:max-w-[425px]">
-				<DialogHeader>
-					<DialogTitle>Você tem certeza?</DialogTitle>
-					<DialogDescription>
-						Confirmando a exclusão, você não poderá desfazer essa
-						ação.
-					</DialogDescription>
-				</DialogHeader>
-				<DialogFooter>
-					<Button
-						type="submit"
-						variant={"destructive"}
-						onClick={onDelete}
-					>
-						Excluir
-					</Button>
-					<DialogClose asChild>
-						<Button variant="outline">Cancel</Button>
-					</DialogClose>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
-	);
-}

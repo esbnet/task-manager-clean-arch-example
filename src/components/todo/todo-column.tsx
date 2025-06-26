@@ -1,8 +1,10 @@
 import { useTodoContext } from "@/contexts/todo-context";
 import type { Todo } from "@/types";
 import { useDroppable } from "@dnd-kit/core";
+import { Plus } from "lucide-react";
 import { Loading } from "../ui/loading";
 import { TodoCard } from "./todo-card";
+import { TodoForm } from "./todo-form";
 
 export const TodoColumn = () => {
 	return (
@@ -38,7 +40,8 @@ const Todos = () => {
 	return (
 		<div ref={setNodeRef} className="flex flex-col gap-2">
 			{todos.map((todo: Todo) => {
-				return <TodoCard key={todo.id} todo={todo} />;
+				// return <TodoCard key={todo.id} todo={todo} />;
+				return <TodoForm key={todo.id} todo={todo} />
 			})}
 		</div>
 	);
