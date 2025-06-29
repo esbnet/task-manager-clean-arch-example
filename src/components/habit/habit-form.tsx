@@ -15,15 +15,10 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import {
-	FcHighPriority,
-	FcLowPriority,
-	FcMediumPriority,
-} from "react-icons/fc";
-import type { Habit, HabitDificult, HabitReset } from "../../types";
+import { Plus, SaveIcon, Trash2 } from "lucide-react";
+import type { Habit, HabitDifficult, HabitReset } from "../../types";
 
 import { useHabitContext } from "@/contexts/habit-context";
-import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from ".././ui/button";
@@ -31,22 +26,24 @@ import { Input } from ".././ui/input";
 import { tagsNew } from "../daily/daily-form";
 import { Label } from "../ui/label";
 import { MultiSelect } from "../ui/multi-select";
+import { HabitCard } from "./habit-card";
 
 interface HabitFormProps {
 	habit: Habit;
-	icon: React.ReactNode;
 }
 
-export function HabitForm({ habit, icon }: HabitFormProps) {
+export function HabitForm({ habit }: HabitFormProps) {
 	const { updateHabit, addHabit } = useHabitContext();
 
 	const [title, setTitle] = useState(habit.title || "");
 	const [observations, setObservations] = useState(habit.observations || "");
-	const [difficult, setDifficult] = useState<HabitDificult>(
+	const [difficult, setDifficult] = useState<HabitDifficult>(
 		habit.difficult || "Fácil",
 	);
 	const [tags, setTags] = useState<string[]>(habit.tags || []);
-	const [reset, setReset] = useState<HabitReset>(habit.reset || "Diariamente");
+	const [reset, setReset] = useState<HabitReset>(
+		habit.reset || "Diariamente",
+	);
 
 	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [open, setOpen] = useState(false);
@@ -102,12 +99,11 @@ export function HabitForm({ habit, icon }: HabitFormProps) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger className="outline-none">
-				{icon}
-				<span className="sr-only">Edit habit</span>
+				<HabitCard habit={habit} />
 			</DialogTrigger>
 			<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
 				<DialogHeader className="flex flex-col gap-1">
-					<DialogTitle className="font-bold text-foreground text-2xl" >
+					<DialogTitle className="font-bold text-foreground text-2xl">
 						{habit.id ? "Editar" : "Adicionar"} Hábito
 					</DialogTitle>
 					<DialogDescription className="text-zinc-400 text-sm">
@@ -140,7 +136,7 @@ export function HabitForm({ habit, icon }: HabitFormProps) {
 						<Label className="font-bold">Dificuldade</Label>
 						<Select
 							onValueChange={(value) =>
-								setDifficult(value as HabitDificult)
+								setDifficult(value as HabitDifficult)
 							}
 							value={difficult}
 						>
@@ -192,23 +188,28 @@ export function HabitForm({ habit, icon }: HabitFormProps) {
 								className="w-[180px]"
 								defaultValue={reset}
 							>
-								<SelectItem value="Trivial">Diariamente</SelectItem>
-								<SelectItem value="Fácil">Semanalmente</SelectItem>
-								<SelectItem value="Média">Mensalmente</SelectItem>
+								<SelectItem value="Trivial">
+									Diariamente
+								</SelectItem>
+								<SelectItem value="Fácil">
+									Semanalmente
+								</SelectItem>
+								<SelectItem value="Média">
+									Mensalmente
+								</SelectItem>
 							</SelectContent>
 						</Select>
 					</div>
 
-					<div className="flex justify-end gap-2">
-						<Button
-							onClick={habit.id ? handleUpdateHabit : handleAddHabit}
-						>
-							{habit.id ? "Atualizar" : "Adicionar"}
-						</Button>
-						{habit.id && <DialogConfirmDelete id={habit.id} />}
-
+					<Button
+						onClick={habit.id ? handleUpdateHabit : handleAddHabit}
+					>
+						{habit.id ? <SaveIcon /> : <Plus />}
+						{habit.id ? "Salvar" : "Adicionar"}
+					</Button>
+					<div className="flex justify-right items-center">
+						<DialogConfirmDelete id={habit.id} />
 					</div>
-
 				</div>
 			</DialogContent>
 		</Dialog>
@@ -225,19 +226,21 @@ function DialogConfirmDelete({ id }: { id: string }) {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button
-					title="Excluir"
-					variant="ghost"
-					className="cursor-pointer"
-				>
-					<Trash2 size={16} />
-				</Button>
+				<div className="flex justify-center items-center mt-4 w-full">
+					<Button
+						variant="link"
+						// size="sm"
+						className="flex justify-center items-center hover:bg-background/20 rounded-lg text-destructive cursor-pointer"
+					>
+						<Trash2 size={16} /> Delete esta tarefa
+					</Button>
+				</div>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
 					<DialogTitle>Você tem certeza?</DialogTitle>
 					<DialogDescription>
-						Ao confirmar, essa tarefa será excluida permanentemente.
+						Ao confirmar, essa tarefa será excluída permanentemente.
 					</DialogDescription>
 				</DialogHeader>
 				<DialogFooter>
@@ -256,3 +259,4 @@ function DialogConfirmDelete({ id }: { id: string }) {
 		</Dialog>
 	);
 }
+

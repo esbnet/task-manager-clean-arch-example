@@ -1,9 +1,7 @@
 import { useTodoContext } from "@/contexts/todo-context";
 import type { Todo } from "@/types";
 import { useDroppable } from "@dnd-kit/core";
-import { Plus } from "lucide-react";
 import { Loading } from "../ui/loading";
-import { TodoCard } from "./todo-card";
 import { TodoForm } from "./todo-form";
 
 export const TodoColumn = () => {
@@ -19,17 +17,21 @@ export const TodoColumn = () => {
 			<Todos />
 		</div>
 	);
-}
+};
 
 const Todos = () => {
-	const { todos, isloading } = useTodoContext();
+	const { todos, isLoading } = useTodoContext();
 
-	if (isloading) {
+	if (isLoading) {
 		return <Loading text="Carregando afazeres..." size="lg" />;
 	}
 
 	if (todos.length === 0) {
-		return <div className="flex flex-1 justify-center items-center font-lg text-muted-foreground">Nenhum ativo... </div>
+		return (
+			<div className="flex flex-1 justify-center items-center font-lg text-muted-foreground">
+				Nenhum afazer ativo...{" "}
+			</div>
+		);
 	}
 
 	const { setNodeRef } = useDroppable({
@@ -40,9 +42,8 @@ const Todos = () => {
 	return (
 		<div ref={setNodeRef} className="flex flex-col gap-2">
 			{todos.map((todo: Todo) => {
-				// return <TodoCard key={todo.id} todo={todo} />;
-				return <TodoForm key={todo.id} todo={todo} />
+				return <TodoForm key={todo.id} todo={todo} />;
 			})}
 		</div>
 	);
-}
+};

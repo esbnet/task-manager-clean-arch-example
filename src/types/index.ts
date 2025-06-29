@@ -1,14 +1,14 @@
-import type { Daily, DailyDificult, DailyRepeat } from "./daily";
-import type { Habit, HabitDificult, HabitReset } from "./habit";
-import type { Todo, TodoDificult } from "./todo";
+import type { Daily, DailyDifficult, DailyRepeat } from "./daily";
+import type { Habit, HabitDifficult, HabitReset } from "./habit";
+import type { Todo, TodoDifficult } from "./todo";
 
 export type {
 	Daily,
-	DailyDificult,
+	DailyDifficult,
 	DailyRepeat,
 	Habit,
-	HabitDificult,
+	HabitDifficult,
 	HabitReset,
 	Todo,
-	TodoDificult,
+	TodoDifficult,
 };

@@ -1,24 +1,9 @@
-import { Edit2, GripVertical, Trash2 } from "lucide-react";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "../ui/dialog";
-
 import { Checkbox } from "@/components/ui/checkbox";
-import { useTodoContext } from "@/contexts/todo-context";
+// import { useTodoContext } from "@/contexts/todo-context";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { FcLowPriority } from "react-icons/fc";
-import { toast } from "sonner";
+import { GripVertical } from "lucide-react";
 import type { Todo } from "../../types";
-import { Button } from "../ui/button";
-import { TodoForm } from "./todo-form";
 
 type Props = {
 	todo: Todo;
@@ -33,7 +18,7 @@ function TodoItem({ todo }: Props) {
 		id: todo.id,
 	});
 
-	const { updateTodo } = useTodoContext();
+	// const { updateTodo } = useTodoContext();
 
 	// const onToggle = async (checked: boolean) => {
 	// 	await updateTodo({ ...todo, completed: checked });
@@ -67,26 +52,11 @@ function TodoItem({ todo }: Props) {
 						// onCheckedChange={onToggle}
 						className="hover:bg-foreground/10 border-foreground/30 focus-visible:ring-0 focus-visible:ring-offset-0 w-5 h-5 focus-visible:bg-accent-foreground hover:cursor-pointer"
 					/>
-					<span
-						className={
-							" text-foreground/60 text-justify "
-							// todo.completed
-							// 	? "line-through text-foreground/30 "
-							// 	: " text-foreground/60 text-justify "
-						}
-					>
+					<span className={" text-foreground/60 text-justify "}>
 						{todo.title}
 					</span>
 				</div>
-
-				<span>
-					{todo.difficult === "Trivial" && (
-						<FcLowPriority size={16} title="fazer depois" />
-					)}
-				</span>
 			</div>
 		</div>
 	);
 }
-
-

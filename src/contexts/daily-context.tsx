@@ -8,7 +8,7 @@ import {
 	useState,
 } from "react";
 
-import type { Daily, DailyDificult } from "@/types";
+import type { Daily, DailyDifficult } from "@/types";
 
 import { ApiDailyRepository } from "@/infra/repositories/backend/api-daily-repository";
 import type { DailyRepeatType } from "@/types/daily";
@@ -66,14 +66,16 @@ export function DailyProvider({ children }: DailyProviderProps) {
 				title: daily.title,
 				observations: daily.observations || "",
 				tasks: daily.tasks || [],
-				difficulty: (daily.difficulty as DailyDificult) || "Fácil",
+				difficulty: (daily.difficulty as DailyDifficult) || "Fácil",
 				startDate: daily.startDate || new Date(),
 				tags: daily.tags || [],
 				createdAt: new Date(),
 				repeat: {
-					type: (daily.repeat?.type as DailyRepeatType) || "Diariamente",
+					type:
+						(daily.repeat?.type as DailyRepeatType) ||
+						"Diariamente",
 					frequency: 1,
-				}
+				},
 			});
 			setDailys((prevDailys) => [...prevDailys, result.daily as Daily]);
 		} catch (err) {

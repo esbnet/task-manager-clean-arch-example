@@ -1,12 +1,10 @@
 import { useDailyContext } from "@/contexts/daily-context";
+import type { Daily } from "@/types";
 import { useDroppable } from "@dnd-kit/core";
-import { Plus } from "lucide-react";
 import { Loading } from "../ui/loading";
-import { DailyCard } from "./daily-card";
 import { DailyForm } from "./daily-form";
 
 export const DailyColumn = () => {
-
 	return (
 		<div
 			key={"DAILYS"}
@@ -16,30 +14,10 @@ export const DailyColumn = () => {
 				Diárias
 			</h2>
 
-			<DailyForm
-				daily={{
-					id: "",
-					title: "",
-					observations: "",
-					tasks: [],
-					difficulty: "Fácil",
-					startDate: new Date(),
-					repeat: {
-						type: "Semanalmente",
-						frequency: 1,
-					},
-					tags: [],
-					createdAt: new Date(),
-				}}
-				icon={<Plus />}
-
-			/>
-
 			<Dailys />
-
 		</div>
 	);
-}
+};
 
 const Dailys = () => {
 	const { dailys, isLoading } = useDailyContext();
@@ -49,7 +27,11 @@ const Dailys = () => {
 	}
 
 	if (dailys.length === 0) {
-		return <div className="flex flex-1 justify-center items-center font-lg text-muted-foreground">Nenhum ativo... </div>
+		return (
+			<div className="flex flex-1 justify-center items-center font-lg text-muted-foreground">
+				Nenhuma tarefa diária ativa...{" "}
+			</div>
+		);
 	}
 
 	const { setNodeRef } = useDroppable({
@@ -59,9 +41,9 @@ const Dailys = () => {
 
 	return (
 		<div ref={setNodeRef} className="flex flex-col gap-2">
-			{dailys.map((daily) => {
-				return <DailyCard key={daily.id} daily={daily} />;
+			{dailys.map((daily: Daily) => {
+				return <DailyForm key={daily.id} daily={daily} />;
 			})}
 		</div>
 	);
-}
+};

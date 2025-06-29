@@ -15,15 +15,16 @@
 		"git.enableSmartCommit": true,
 		"git.autofetchPeriod": 1800,
 		"editor.formatOnSave": true,
+		"prisma-smart-formatter.prisma.defaultFormatter": "Prisma.prisma",
 	},
 	"extensions": {
 		"recommendations": [
-			"esbenp.prettier-vscode",
+			// "esbenp.prettier-vscode",
 			"ms-azuretools.vscode-docker",
 			"ms-vscode-remote.remote-containers",
 			"ms-vscode-remote.remote-ssh",
 			"ms-vscode-remote.remote-ssh-edit",
-			"ms-vscode.vscode-typescript-tslint-plugin",
+			// "ms-vscode.vscode-typescript-tslint-plugin",
 			"redhat.vscode-yaml",
 			"streetsidesoftware.code-spell-checker"
 		]

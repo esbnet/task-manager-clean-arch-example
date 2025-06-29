@@ -16,7 +16,7 @@ import { UpdateTodoUseCase } from "@/use-cases/todo/update-todo/update-todo-use-
 
 interface TodoContextType {
 	todos: Todo[];
-	isloading: boolean;
+	isLoading: boolean;
 	error: string | null;
 	addTodo: (todo: Omit<Todo, "id" | "createdAt">) => Promise<void>;
 	updateTodo: (todo: Todo) => Promise<void>;
@@ -33,7 +33,7 @@ interface TodoProviderProps {
 
 export function TodoProvider({ children }: TodoProviderProps) {
 	const [todos, setTodos] = useState<Todo[]>([]);
-	const [isloading, setIsLoading] = useState<boolean>(true);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
 	const todoRepository = new ApiTodoRepository();
@@ -65,12 +65,12 @@ export function TodoProvider({ children }: TodoProviderProps) {
 				title: todo.title,
 				observations: todo.observations || "",
 				tasks: todo.tasks || ([] as string[]),
-				difficulty: todo.difficulty || "Fácil",
+				difficulty: todo.difficult || "Fácil",
 				startDate: todo.startDate || new Date(),
 				tags: todo.tags || [],
 				createdAt: new Date(),
 			});
-			setTodos((prevTodos) => [...prevTodos, result.todo as Todo]);
+			setTodos((prevTodos) => [...prevTodos, result.todo as unknown as Todo]);
 		} catch (err) {
 			setError("Failed to add todo");
 			console.error(err);
@@ -128,7 +128,7 @@ export function TodoProvider({ children }: TodoProviderProps) {
 
 	const value = {
 		todos,
-		isloading,
+		isLoading,
 		error,
 		addTodo,
 		updateTodo,

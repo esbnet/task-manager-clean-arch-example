@@ -1,24 +1,9 @@
-import { Edit2, GripVertical, Trash2 } from "lucide-react";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "../ui/dialog";
-
 import { Checkbox } from "@/components/ui/checkbox";
-import { useDailyContext } from "@/contexts/daily-context";
+// import { useDailyContext } from "@/contexts/daily-context";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { FcLowPriority } from "react-icons/fc";
-import { toast } from "sonner";
+import { GripVertical } from "lucide-react";
 import type { Daily } from "../../types";
-import { Button } from "../ui/button";
-import { DailyForm } from "./daily-form";
 
 type Props = {
 	daily: Daily;
@@ -33,7 +18,7 @@ export function DailyItem({ daily }: Props) {
 		id: daily.id,
 	});
 
-	const { updateDaily } = useDailyContext();
+	// const { updateDaily } = useDailyContext();
 
 	// const onToggle = async (checked: boolean) => {
 	// 	await updateDaily({ ...daily, completed: checked });
@@ -67,72 +52,11 @@ export function DailyItem({ daily }: Props) {
 						// onCheckedChange={onToggle}
 						className="hover:bg-foreground/10 border-foreground/30 focus-visible:ring-0 focus-visible:ring-offset-0 w-5 h-5 focus-visible:bg-accent-foreground hover:cursor-pointer"
 					/>
-					<span
-						className={
-							" text-foreground/60 text-justify "
-							// daily.completed
-							// 	? "line-through text-foreground/30 "
-							// 	: " text-foreground/60 text-justify "
-						}
-					>
+					<span className="text-foreground/60 text-justify">
 						{daily.title}
 					</span>
 				</div>
-
-				<span>
-					{daily.difficulty === "Trivial" && (
-						<FcLowPriority size={16} title="fazer depois" />
-					)}
-				</span>
-			</div>
-
-			<div className="flex items-center h-full">
-				<DailyForm daily={daily} icon={<Edit2 size={16} />} />
-				<DialogConfirmDelete id={daily.id} />
 			</div>
 		</div>
-	);
-}
-
-function DialogConfirmDelete({ id }: { id: string }) {
-	const { deleteDaily } = useDailyContext();
-	const onDelete = async () => {
-		await deleteDaily(id);
-		toast.success("Tarefa excluída com sucesso!");
-	};
-
-	return (
-		<Dialog>
-			<DialogTrigger asChild>
-				<Button
-					variant="ghost"
-					size="sm"
-					className="flex justify-center items-center hover:bg-background/20 rounded-lg w-6 h-6 cursor-pointer"
-				>
-					<Trash2 size={16} />
-				</Button>
-			</DialogTrigger>
-			<DialogContent className="sm:max-w-[425px]">
-				<DialogHeader>
-					<DialogTitle>Você tem certeza?</DialogTitle>
-					<DialogDescription>
-						Confirmando a exclusão, você não poderá desfazer essa
-						ação.
-					</DialogDescription>
-				</DialogHeader>
-				<DialogFooter>
-					<Button
-						type="submit"
-						variant={"destructive"}
-						onClick={onDelete}
-					>
-						Excluir
-					</Button>
-					<DialogClose asChild>
-						<Button variant="outline">Cancel</Button>
-					</DialogClose>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
 	);
 }

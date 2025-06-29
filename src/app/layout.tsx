@@ -38,8 +38,7 @@ export default function RootLayout({
 	return (
 		<html lang="pt-BR" data-theme="light">
 			<body
-				className={` ${lobster.className}  ${kodeMono.className} antialiased `
-				}
+				className={` ${lobster.className}  ${kodeMono.className} antialiased `}
 			>
 				<ThemeProvider
 					attribute="class"

@@ -7,7 +7,10 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": [".next", "node_modules"],
+		"ignore": [
+			".next",
+			"node_modules"
+		],
 		"include": [
 			"src/**/*.js",
 			"src/**/*.jsx",
@@ -33,7 +36,11 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"correctness": {
+				"noUnusedImports": "error",
+				"noUnusedVariables": "error"
+			}
 		}
 	},
 	"javascript": {

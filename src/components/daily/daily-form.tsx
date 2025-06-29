@@ -1,54 +1,60 @@
 import {
 	Dialog,
+	DialogClose,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
 	Select,
 	SelectContent,
 	SelectItem,
-	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import type { Daily, DailyDificult, DailyRepeat } from "@/types";
+import type { Daily, DailyDifficult, DailyRepeat } from "@/types";
 import { format, setDefaultOptions } from "date-fns";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Calendar as CalendarIcon, Plus, SaveIcon, Trash2 } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useDailyContext } from "@/contexts/daily-context";
 import type { DailyRepeatType } from "@/types/daily";
 import { ptBR } from "date-fns/locale";
-import { Calendar as CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Button } from "../ui/button";
-import { Calendar } from "../ui/calendar";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { DailyCard } from "./daily-card";
 
 setDefaultOptions({ locale: ptBR });
 
 interface DailyFormProps {
 	daily: Daily;
-	icon: React.ReactNode;
 }
 
-export function DailyForm({ daily, icon }: DailyFormProps) {
+export function DailyForm({ daily }: DailyFormProps) {
 	const { updateDaily, addDaily } = useDailyContext();
 	const [title, setTitle] = useState(daily.title || "");
 	const [observations, setObservations] = useState(daily.observations || "");
 	const [tasks, setTasks] = useState<string[]>(daily.tasks || []);
-	const [dificulty, setDifficulty] = useState<DailyDificult>(
+	const [dificulty, setDifficulty] = useState<DailyDifficult>(
 		daily.difficulty || "Fácil",
 	);
-	const [startDate, setStartDate] = useState<Date>(daily.startDate || new Date());
-	const [repeatType, setRepeatType] = useState<DailyRepeatType>(daily.repeat.type ||
-		"Semanalmente");
-	const [repeatFrequency, setRepeatFrequency] = useState<number>(daily.repeat.frequency || 1);
+	const [startDate, setStartDate] = useState<Date>(
+		daily.startDate || new Date(),
+	);
+	const [repeatType, setRepeatType] = useState<DailyRepeatType>(
+		daily.repeat.type || "Semanalmente",
+	);
+	const [repeatFrequency, setRepeatFrequency] = useState<number>(
+		daily.repeat.frequency || 1,
+	);
 	const [tags, setTags] = useState<string[]>(daily.tags || []);
 	const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
@@ -63,7 +69,7 @@ export function DailyForm({ daily, icon }: DailyFormProps) {
 				title,
 				observations: daily.observations || "",
 				difficulty: dificulty,
-				tags,
+				tags: daily.tags || [],
 			} as Daily);
 
 			toast.success("Hábito atualizado com sucesso!");
@@ -107,15 +113,13 @@ export function DailyForm({ daily, icon }: DailyFormProps) {
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogTrigger className="outline-none">
-				{icon}
-				<span className="sr-only">Editar diária</span>
+				<DailyCard daily={daily} />
 			</DialogTrigger>
-			<DialogContent className="flex flex-col gap-2 bg-transparent backdrop-blur-sm">
-				<DialogHeader>
+			<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
+
+				<DialogHeader className="flex flex-col gap-1">
 					<DialogTitle>
-						{daily.id
-							? "Editar Diária"
-							: "Adicionar Diária"}
+						{daily.id ? "Editar " : "Adicionar "} Diária
 					</DialogTitle>
 					<DialogDescription className="text-zinc-400 text-sm">
 						{daily.id
@@ -124,142 +128,238 @@ export function DailyForm({ daily, icon }: DailyFormProps) {
 					</DialogDescription>
 				</DialogHeader>
 
-				<div className="flex flex-col gap-2 bg-zinc-100/30 opacity-0 shadow-xl backdrop-blur-md p-4 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]">
-					<Label>Título</Label>
-					<Input
-						value={title}
-						onChange={(e) => setTitle(e.target.value)}
-						placeholder="Nova diária"
-						required
-					/>
-					<Label>Observação</Label>
-					<Input
-						value={observations}
-						onChange={(e) => setObservations(e.target.value)}
-						placeholder="Adicionar observações"
-					/>
-
-					<Label>Lista de tarefas</Label>
-					<Input
-						value={tasks.join(",") || ""}
-						onChange={(e) => setTasks(e.target.value.split(",").map(task => task.trim()).filter(Boolean))}
-						placeholder="Novo item da lista de tarefas"
-						required
-					/>
-					<Label>Dificuldade</Label>
-					<Select
-						onValueChange={(value) =>
-							setDifficulty(value as DailyDificult)
-						}
-						value={dificulty || "Fácil"}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue
-								placeholder="Dificuldade"
-								className="text-zinc-300"
-							/>
-						</SelectTrigger>
-						<SelectContent
-							className="w-[180px]"
-							defaultValue={dificulty}
-						>
-							<SelectItem value="Trivial">Trival</SelectItem>
-							<SelectItem value="Fácil">Fácil</SelectItem>
-							<SelectItem value="Média">Média</SelectItem>
-							<SelectItem value="Difícil">Difícil</SelectItem>
-						</SelectContent>
-					</Select>
-
-					<Label>Data de início</Label>
-					<Popover>
-						<PopoverTrigger asChild>
-							<Button
-								variant="outline"
-								data-empty={!startDate}
-								className="justify-start w-[280px] font-normal data-[empty=true]:text-muted-foreground text-left"
-							>
-								<CalendarIcon />
-								{startDate ? format(startDate, "PPP", { locale: ptBR }) : <span>Pick a date</span>}
-							</Button>
-						</PopoverTrigger>
-						<PopoverContent className="p-0 w-auto">
-							<Calendar mode="single" required={true} selected={startDate} onSelect={setStartDate} />
-						</PopoverContent>
-					</Popover>
-
-					<Label>Repetição</Label>
-					<Select
-						onValueChange={(value) =>
-							setRepeatType(value as DailyRepeatType)
-						}
-						value={repeatType || "Semanalmente"}
-					>
-						<SelectTrigger className="w-[180px]">
-							<SelectValue
-								placeholder="Repetição"
-								className="text-zinc-300"
-							/>
-						</SelectTrigger>
-						<SelectContent
-							className="w-[180px]"
-							defaultValue={repeatType}
-						>
-							<SelectItem value="Diariamente">Diariamente</SelectItem>
-							<SelectItem value="Semanalmente">Semanalmente</SelectItem>
-							<SelectItem value="Mensalmente">Mensalmente</SelectItem>
-							<SelectItem value="Anualmente">Anualmente</SelectItem>
-						</SelectContent>
-					</Select>
-
-					<Label>A cada</Label>
-					<div className="flex items-center gap-2">
+				<div className="flex flex-col gap-4 bg-gray-100/20 p-2 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]">
+					<div className="flex flex-col gap-1">
+						<Label>Título</Label>
 						<Input
-							type="number"
-							value={repeatFrequency || 1}
-							onChange={(e) => setRepeatFrequency(e.target.value ? Number.parseInt(e.target.value) : 1)}
-							placeholder="Quantidade de vezes"
+							value={title}
+							onChange={(e) => setTitle(e.target.value)}
+							placeholder="Nova diária"
 							required
 						/>
-						<span>
-							{repeatType === "Diariamente"
-								? "Dia"
-								: repeatType === "Semanalmente"
-									? "Semana"
-									: repeatType === "Mensalmente"
-										? "Mês"
-										: repeatType === "Anualmente"
-											? "Ano"
-											: ""}
-						</span>
 					</div>
+					<div className="flex flex-col gap-1">
 
-					<Label>Etiquetas</Label>
-					<MultiSelect
-						options={tagsNew}
-						onValueChange={setSelectedTags}
-						defaultValue={selectedTags}
-						placeholder="Adicionar etiquetas"
-						variant="inverted"
-						animation={2}
-						maxCount={3}
-					/>
+						<Label>Observação</Label>
+						<Input
+							value={observations}
+							onChange={(e) => setObservations(e.target.value)}
+							placeholder="Adicionar observações"
+						/>
+
+					</div>
+					<div className="flex flex-col gap-1">
+						<Label>Lista de tarefas</Label>
+						<Input
+							value={tasks.join(",") || ""}
+							onChange={(e) =>
+								setTasks(
+									e.target.value
+										.split(",")
+										.map((task) => task.trim())
+										.filter(Boolean),
+								)
+							}
+							placeholder="Novo item da lista de tarefas"
+							required
+						/>
+					</div>
+					<div className="flex flex-col gap-1">
+						<Label>Dificuldade</Label>
+						<Select
+							onValueChange={(value) =>
+								setDifficulty(value as DailyDifficult)
+							}
+							value={dificulty || "Fácil"}
+						>
+							<SelectTrigger className="w-[180px]">
+								<SelectValue
+									placeholder="Dificuldade"
+									className="text-zinc-300"
+								/>
+							</SelectTrigger>
+							<SelectContent
+								className="w-[180px]"
+								defaultValue={dificulty}
+							>
+								<SelectItem value="Trivial">Trival</SelectItem>
+								<SelectItem value="Fácil">Fácil</SelectItem>
+								<SelectItem value="Média">Média</SelectItem>
+								<SelectItem value="Difícil">Difícil</SelectItem>
+							</SelectContent>
+						</Select>
+
+					</div>
+					<div className="flex flex-col gap-1">
+						<Label>Data de início</Label>
+						<Popover>
+							<PopoverTrigger asChild>
+								<Button
+									variant="outline"
+									data-empty={!startDate}
+									className="justify-start w-[280px] font-normal data-[empty=true]:text-muted-foreground text-left"
+								>
+									<CalendarIcon />
+									{startDate ? (
+										format(startDate, "PPP", { locale: ptBR })
+									) : (
+										<span>Pick a date</span>
+									)}
+								</Button>
+							</PopoverTrigger>
+							<PopoverContent className="p-0 w-auto">
+								<Calendar
+									mode="single"
+									required={true}
+									selected={startDate}
+									onSelect={setStartDate}
+								/>
+							</PopoverContent>
+						</Popover>
+
+					</div>
+					<div className="flex flex-col gap-1">
+						<Label>Repetição</Label>
+						<Select
+							onValueChange={(value) =>
+								setRepeatType(value as DailyRepeatType)
+							}
+							value={repeatType || "Semanalmente"}
+						>
+							<SelectTrigger className="w-[180px]">
+								<SelectValue
+									placeholder="Repetição"
+									className="text-zinc-300"
+								/>
+							</SelectTrigger>
+							<SelectContent
+								className="w-[180px]"
+								defaultValue={repeatType}
+							>
+								<SelectItem value="Diariamente">
+									Diariamente
+								</SelectItem>
+								<SelectItem value="Semanalmente">
+									Semanalmente
+								</SelectItem>
+								<SelectItem value="Mensalmente">
+									Mensalmente
+								</SelectItem>
+								<SelectItem value="Anualmente">
+									Anualmente
+								</SelectItem>
+							</SelectContent>
+						</Select>
+
+					</div>
+					<div className="flex flex-col gap-1">
+						<Label>A cada</Label>
+						<div className="flex items-center gap-2">
+							<Input
+								type="number"
+								value={repeatFrequency || 1}
+								onChange={(e) =>
+									setRepeatFrequency(
+										e.target.value
+											? Number.parseInt(e.target.value)
+											: 1,
+									)
+								}
+								placeholder="Quantidade de vezes"
+								required
+							/>
+							<span>
+								{repeatType === "Diariamente"
+									? "Dia"
+									: repeatType === "Semanalmente"
+										? "Semana"
+										: repeatType === "Mensalmente"
+											? "Mês"
+											: repeatType === "Anualmente"
+												? "Ano"
+												: ""}
+							</span>
+						</div>
+
+					</div>
+					<div className="flex flex-col gap-1">
+						<Label>Etiquetas</Label>
+						<MultiSelect
+							options={tagsNew}
+							onValueChange={setSelectedTags}
+							defaultValue={selectedTags}
+							placeholder="Adicionar etiquetas"
+							variant="inverted"
+							animation={2}
+							maxCount={3}
+						/>
+					</div>
 
 					<Button
 						onClick={daily.id ? handleUpdateDaily : handleAddDaily}
 					>
-						{daily.id ? "Atualizar" : "Adicionar"}
+						{daily.id ? <SaveIcon /> : <Plus />}
+						{daily.id ? "Salvar" : "Adicionar"}
 					</Button>
+					<div className="flex justify-right items-center">
+						<DialogConfirmDelete id={daily.id} />
+					</div>
 				</div>
 			</DialogContent>
 		</Dialog>
 	);
 }
 
-export const tagsNew =
-	[
-		{ value: "Trabalho", label: "Trabalho" },
-		{ value: "Exercício", label: "Exercício" },
-		{ value: "Saúde e bem-estar", label: "Saúde e bem-estar" },
-		{ value: "Escola", label: "Escola" },
-		{ value: "Times", label: "Times" }
-	];
+function DialogConfirmDelete({ id }: { id: string }) {
+	const { deleteDaily } = useDailyContext();
+	const onDelete = async () => {
+		await deleteDaily(id);
+		toast.success("Tarefa excluída com sucesso!");
+	};
+
+	return (
+		<Dialog>
+			<DialogTrigger asChild>
+				<div className="flex justify-center items-center mt-4 w-full">
+					<Button
+						variant="link"
+						// size="sm"
+						className="flex justify-center items-center hover:bg-background/20 rounded-lg text-destructive cursor-pointer"
+					>
+						<Trash2 size={16} /> Delete esta tarefa
+					</Button>
+				</div>
+
+			</DialogTrigger>
+			<DialogContent className="sm:max-w-[425px]">
+				<DialogHeader>
+					<DialogTitle>Você tem certeza?</DialogTitle>
+					<DialogDescription>
+						Confirmando a exclusão, você não poderá desfazer essa
+						ação.
+					</DialogDescription>
+				</DialogHeader>
+				<DialogFooter>
+					<Button
+						type="submit"
+						variant={"destructive"}
+						onClick={onDelete}
+					>
+						Excluir
+					</Button>
+					<DialogClose asChild>
+						<Button variant="outline">Cancel</Button>
+					</DialogClose>
+				</DialogFooter>
+			</DialogContent>
+		</Dialog>
+	);
+}
+
+export const tagsNew = [
+	{ value: "Trabalho", label: "Trabalho" },
+	{ value: "Exercício", label: "Exercício" },
+	{ value: "Saúde e bem-estar", label: "Saúde e bem-estar" },
+	{ value: "Escola", label: "Escola" },
+	{ value: "Times", label: "Times" },
+];

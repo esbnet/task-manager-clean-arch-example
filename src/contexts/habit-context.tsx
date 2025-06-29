@@ -8,7 +8,7 @@ import {
 	useState,
 } from "react";
 
-import type { Habit, HabitDificult, HabitReset } from "@/types";
+import type { Habit, HabitDifficult, HabitReset } from "@/types";
 
 import { ApiHabitRepository } from "@/infra/repositories/backend/api-habit-repository";
 import { CreateHabitUseCase } from "@/use-cases/habit/create-habit/create-habit-use-case";
@@ -16,7 +16,7 @@ import { UpdateHabitUseCase } from "@/use-cases/habit/update-habit/update-habit-
 
 interface HabitContextType {
 	habits: Habit[];
-	isloading: boolean;
+	isLoading: boolean;
 	error: string | null;
 	addHabit: (habit: Omit<Habit, "id">) => Promise<void>;
 	updateHabit: (habit: Habit) => Promise<void>;
@@ -33,7 +33,7 @@ interface HabitProviderProps {
 
 export function HabitProvider({ children }: HabitProviderProps) {
 	const [habits, setHabits] = useState<Habit[]>([]);
-	const [isloading, setIsLoading] = useState<boolean>(true);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
 	const habitRepository = new ApiHabitRepository();
@@ -44,7 +44,7 @@ export function HabitProvider({ children }: HabitProviderProps) {
 		try {
 			setIsLoading(true);
 			const fetchedHabits = await habitRepository.list();
-			setHabits(fetchedHabits);
+			setHabits(fetchedHabits as unknown as Habit[]);
 			setError(null);
 		} catch (err) {
 			setError("Failed to fetch habits");
@@ -64,7 +64,7 @@ export function HabitProvider({ children }: HabitProviderProps) {
 			const result = await createHabitUseCase.execute({
 				title: habit.title,
 				observations: habit.observations || "",
-				difficulty: habit.difficulty as HabitDificult,
+				difficulty: habit.difficult as HabitDifficult,
 				tags: habit.tags || [],
 				reset: habit.reset as HabitReset,
 				createdAt: habit.createdAt || new Date(),
@@ -85,7 +85,11 @@ export function HabitProvider({ children }: HabitProviderProps) {
 
 	const updateHabit = async (habit: Habit) => {
 		try {
-			const updatedHabit = await updateHabitUseCase.execute(habit);
+			const updatedHabitOutput = await updateHabitUseCase.execute(habit); // returns UpdateHabitOutput
+			const updatedHabit: Habit = {
+				...habit,
+				...updatedHabitOutput,
+			};
 			setHabits((prevHabits) =>
 				prevHabits.map((t) =>
 					t.id === updatedHabit.id ? updatedHabit : t,
@@ -111,11 +115,14 @@ export function HabitProvider({ children }: HabitProviderProps) {
 
 	const toggleComplete = async (id: string) => {
 		try {
-			const updatedHabit = await habitRepository.toggleComplete(id);
+			const updatedHabitFromRepo = await habitRepository.toggleComplete(id);
+
+			const updatedHabit: Habit = {
+				...updatedHabitFromRepo,
+			} as Habit;
+
 			setHabits((prevHabits) =>
-				prevHabits.map((habit) =>
-					habit.id === id ? updatedHabit : habit,
-				),
+				prevHabits.map((habit) => (habit.id === id ? updatedHabit : habit)),
 			);
 		} catch (err) {
 			setError("Falha ao completar tarefa");
@@ -123,13 +130,16 @@ export function HabitProvider({ children }: HabitProviderProps) {
 		}
 	};
 
+
+
+
 	const getHabit = (id: string) => {
 		return habits.find((habit) => habit.id === id);
 	};
 
 	const value = {
 		habits,
-		isloading,
+		isLoading,
 		error,
 		addHabit,
 		updateHabit,

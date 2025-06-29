@@ -1,4 +1,3 @@
-import { CalendarIcon, Plus, SaveIcon, Trash2 } from "lucide-react";
 import {
 	Dialog,
 	DialogClose,
@@ -9,7 +8,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
 	Select,
 	SelectContent,
@@ -17,23 +16,24 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import type { Todo, TodoDificult } from "../../types";
 import { format, setDefaultOptions } from "date-fns";
+import { CalendarIcon, Plus, SaveIcon, Trash2 } from "lucide-react";
+import type { Todo, TodoDifficult } from "../../types";
 
-import { Button } from "../ui/button";
-import { Calendar } from "../ui/calendar";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { TodoCard } from "./todo-card";
-import { ptBR } from "date-fns/locale";
-import { toast } from "sonner";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useTodoContext } from "@/contexts/todo-context";
+import { ptBR } from "date-fns/locale";
+import { useState } from "react";
+import { toast } from "sonner";
+import { TodoCard } from "./todo-card";
 
 setDefaultOptions({ locale: ptBR });
 
 interface TodoFormProps {
-	todo: Todo
+	todo: Todo;
 }
 
 export function TodoForm({ todo }: TodoFormProps) {
@@ -42,13 +42,13 @@ export function TodoForm({ todo }: TodoFormProps) {
 	const [title, setTitle] = useState(todo.title || "");
 	const [observations, setObservations] = useState(todo.observations || "");
 	const [tasks, setTodo] = useState<string[]>(todo.tasks || []);
-	const [difficult, setDifficult] = useState<TodoDificult>(
+	const [difficult, setDifficult] = useState<TodoDifficult>(
 		todo.difficult || "Fácil",
 	);
 	const [startDate, setStartDate] = useState(todo.startDate || new Date());
 	const [tags, setTags] = useState<string[]>(todo.tags || []);
 
-	const [selectedTags, setSelectedTags] = useState<string[]>([]);
+	// const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [open, setOpen] = useState(false);
 
 	async function handleUpdateTodo() {
@@ -87,7 +87,7 @@ export function TodoForm({ todo }: TodoFormProps) {
 				difficult: difficult,
 				startDate: new Date(),
 				tags: [] as string[],
-			});
+			} as Todo);
 
 			setTitle("");
 			setDifficult(difficult);
@@ -105,9 +105,13 @@ export function TodoForm({ todo }: TodoFormProps) {
 			<DialogTrigger className="outline-none">
 				<TodoCard todo={todo} />
 			</DialogTrigger>
-			<DialogContent className="flex flex-col gap-6 bg-transparent backdrop-blur-sm">
-				<DialogHeader>
-					<DialogTitle>Editar Tarefa</DialogTitle>
+			<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
+
+				<DialogHeader className="flex flex-col gap-1">
+					<DialogTitle>
+						{todo.id ? "Editar " : "Adicionar "} Afazer
+					</DialogTitle>
+
 					<DialogDescription className="text-zinc-400 text-sm">
 						{todo.id
 							? "Altere os detalhes da tarefa"
@@ -115,7 +119,7 @@ export function TodoForm({ todo }: TodoFormProps) {
 					</DialogDescription>
 				</DialogHeader>
 
-				<div className="flex flex-col gap-4 bg-gray-100/20 p-2 py-4 rounded-lg text-muted-background animate-[fadeIn_1s_ease-in-out_forwards]">
+				<div className="flex flex-col gap-4 bg-gray-100/20 p-2 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]">
 					<div className="flex flex-col gap-1">
 						<Label className="font-bold">Título</Label>
 						<Input
@@ -137,7 +141,14 @@ export function TodoForm({ todo }: TodoFormProps) {
 						<Label className="font-bold">Lista de tarefas</Label>
 						<Input
 							value={tasks.join(",") || ""}
-							onChange={(e) => setTodo(e.target.value.split(",").map(todo => todo.trim()).filter(Boolean))}
+							onChange={(e) =>
+								setTodo(
+									e.target.value
+										.split(",")
+										.map((todo) => todo.trim())
+										.filter(Boolean),
+								)
+							}
 							placeholder="Novo item da lista de tarefas"
 							required
 						/>
@@ -146,7 +157,7 @@ export function TodoForm({ todo }: TodoFormProps) {
 						<Label className="font-bold">Dificuldade</Label>
 						<Select
 							onValueChange={(value) =>
-								setDifficult(value as TodoDificult)
+								setDifficult(value as TodoDifficult)
 							}
 							value={difficult || "Fácil"}
 						>
@@ -160,13 +171,23 @@ export function TodoForm({ todo }: TodoFormProps) {
 								className="w-full"
 								defaultValue={difficult || "Fácil"}
 							>
-								<SelectItem value="Trivial" className="justify-between" >Trival ⭐</SelectItem>
-								<SelectItem value="Fácil">Fácil ⭐⭐</SelectItem>
-								<SelectItem value="Média">Média ⭐⭐⭐</SelectItem>
-								<SelectItem value="Difícil">Difícil ⭐⭐⭐⭐</SelectItem>
+								<SelectItem
+									value="Trivial"
+									className="justify-between"
+								>
+									Trival ⭐
+								</SelectItem>
+								<SelectItem value="Fácil">
+									Fácil ⭐⭐
+								</SelectItem>
+								<SelectItem value="Média">
+									Média ⭐⭐⭐
+								</SelectItem>
+								<SelectItem value="Difícil">
+									Difícil ⭐⭐⭐⭐
+								</SelectItem>
 							</SelectContent>
 						</Select>
-
 					</div>
 					<div className="flex flex-col gap-1">
 						<Label className="font-bold">Data de início</Label>
@@ -178,11 +199,22 @@ export function TodoForm({ todo }: TodoFormProps) {
 									className="justify-start w-full font-normal data-[empty=true]:text-muted-foreground text-left"
 								>
 									<CalendarIcon />
-									{startDate ? format(startDate, "PPP", { locale: ptBR }) : <span>Pick a date</span>}
+									{startDate ? (
+										format(startDate, "PPP", {
+											locale: ptBR,
+										})
+									) : (
+										<span>Pick a date</span>
+									)}
 								</Button>
 							</PopoverTrigger>
 							<PopoverContent className="p-0 w-auto">
-								<Calendar mode="single" required={true} selected={startDate} onSelect={setStartDate} />
+								<Calendar
+									mode="single"
+									required={true}
+									selected={startDate}
+									onSelect={setStartDate}
+								/>
 							</PopoverContent>
 						</Popover>
 					</div>
@@ -193,12 +225,10 @@ export function TodoForm({ todo }: TodoFormProps) {
 						{todo.id ? <SaveIcon /> : <Plus />}
 						{todo.id ? "Salvar" : "Adicionar"}
 					</Button>
+					<div className="flex justify-right items-center">
+						<DialogConfirmDelete id={todo.id} />
+					</div>
 				</div>
-				<div className="flex justify-right items-center">
-					<DialogConfirmDelete id={todo.id} />
-				</div>
-
-
 			</DialogContent>
 		</Dialog>
 	);
@@ -220,7 +250,7 @@ function DialogConfirmDelete({ id }: { id: string }) {
 						// size="sm"
 						className="flex justify-center items-center hover:bg-background/20 rounded-lg text-destructive cursor-pointer"
 					>
-						<Trash2 size={16} /> Delete este(a) Afazer
+						<Trash2 size={16} /> Delete esta tarefa
 					</Button>
 				</div>
 			</DialogTrigger>

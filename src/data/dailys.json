@@ -67,6 +67,20 @@
       },
       "tags": [],
       "createdAt": "2025-06-24T07:26:50.930Z"
+    },
+    {
+      "id": "f6nlw",
+      "title": "asdfasdfsf",
+      "observations": "",
+      "tasks": [],
+      "difficulty": "Fácil",
+      "startDate": "2025-06-28T13:53:44.962Z",
+      "repeat": {
+        "type": "Diariamente",
+        "frequency": 1
+      },
+      "tags": [],
+      "createdAt": "2025-06-28T13:53:44.963Z"
     }
   ]
 }
