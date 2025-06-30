@@ -1,4 +1,4 @@
-import type { TodoRepository } from "@/domain/repositories/todo-repository";
+import type { TodoRepository } from "@/domain/repositories/all-repository";
 import type { TodoOutput } from "./toggle-todo-dto";
 
 export class ToggleTodoUseCase {

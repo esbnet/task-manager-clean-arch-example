@@ -1,10 +1,6 @@
-import type {
-	CreateTodoInput,
-	CreateTodoOutput,
-	TodoDificult,
-} from "./create-todo-dto";
+import type { CreateTodoInput, CreateTodoOutput } from "./create-todo-dto";
 
-import type { TodoRepository } from "@/domain/repositories/todo-repository";
+import type { TodoRepository } from "@/domain/repositories/all-repository";
 
 export class CreateTodoUseCase {
 	constructor(private readonly todoRepository: TodoRepository) {}
@@ -14,7 +10,7 @@ export class CreateTodoUseCase {
 			title: inputTodo.title,
 			observations: inputTodo.observations,
 			tasks: inputTodo.tasks,
-			difficulty: inputTodo.difficulty as TodoDificult,
+			difficulty: inputTodo.difficultyas Tododifficulty,
 			startDate: inputTodo.startDate,
 			tags: inputTodo.tags,
 		});

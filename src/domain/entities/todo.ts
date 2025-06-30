@@ -1,11 +1,11 @@
-type TodoDifficult = "Trivial" | "Fácil" | "Médio" | "Difícil";
+type TodoDifficulty = "Trivial" | "Fácil" | "Médio" | "Difícil";
 
 export interface Todo {
 	id: string;
 	title: string;
 	observations: string;
 	tasks: string[];
-	difficult: TodoDifficult;
+	difficulty: TodoDifficulty;
 	startDate: Date;
 	tags: string[];
 	createdAt: Date;

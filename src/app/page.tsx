@@ -1,47 +1,38 @@
 "use client";
 
-import {
-	DndContext,
-	KeyboardSensor,
-	PointerSensor,
-	closestCorners,
-	useSensor,
-	useSensors,
-} from "@dnd-kit/core";
-import { Suspense, useState } from "react";
-
 import { DailyColumn } from "@/components/daily/daily-column";
 import { HabitColumn } from "@/components/habit/habit-column";
 import { ModeToggleButton } from "@/components/mode-toggle-button";
 import { TodoColumn } from "@/components/todo/todo-column";
-import { Loading } from "@/components/ui/loading";
 import { DailyProvider } from "@/contexts/daily-context";
 import { HabitProvider } from "@/contexts/habit-context";
 import { TodoProvider } from "@/contexts/todo-context";
-import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-import { PlusCircle } from "lucide-react";
+
+// import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
 export default function Home() {
-	const [isDroped, setIsDroped] = useState(false);
+	// const [isDroped, setIsDroped] = useState(false);
 
-	if (isDroped) {
-		document.body.style.overflow = "hidden";
-	}
+	// if (isDroped) {
+	// 	document.body.style.overflow = "hidden";
+	// }
 
-	const sensors = useSensors(
-		useSensor(PointerSensor),
-		useSensor(KeyboardSensor, {
-			coordinateGetter: sortableKeyboardCoordinates,
-		}),
-	);
+	// const sensors = useSensors(
+	// 	useSensor(PointerSensor),
+	// 	useSensor(KeyboardSensor, {
+	// 		coordinateGetter: sortableKeyboardCoordinates,
+	// 	}),
+	// );
 
 	return (
 		<main className="relative flex flex-col gap-4 bg-gradient-to-br from-10% from-indigo-500 via-30% via-sky-500 to-90% to-emerald-500 m-auto p-2 lg:max-w-[80vw] min-h-screen">
+
 			<div className="flex bg-background/80 shadow-xl rounded-lg text-center animate-[fadeIn_1s_ease-in-out_forwards]">
 				<div className="flex justify-center items-center gap-2 bg-clip-text bg-gradient-to-br from-10% from-indigo-500 via-30% via-sky-500 to-90% to-emerald-500 p-4 rounded-lg w-full font-bold text-transparent text-6xl">
 					Gerenciador de Tarefas
 				</div>
 			</div>
+
 			<div className="flex flex-row gap-4">
 				<HabitProvider>
 					<HabitColumn />

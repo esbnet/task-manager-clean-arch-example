@@ -8,7 +8,11 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import {
 	Select,
 	SelectContent,
@@ -16,7 +20,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import type { Daily, DailyDifficult, DailyRepeat } from "@/types";
+import type { Daily, DailyRepeat } from "@/types";
 import { format, setDefaultOptions } from "date-fns";
 import { Calendar as CalendarIcon, Plus, SaveIcon, Trash2 } from "lucide-react";
 
@@ -116,7 +120,6 @@ export function DailyForm({ daily }: DailyFormProps) {
 				<DailyCard daily={daily} />
 			</DialogTrigger>
 			<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
-
 				<DialogHeader className="flex flex-col gap-1">
 					<DialogTitle>
 						{daily.id ? "Editar " : "Adicionar "} Diária
@@ -139,14 +142,12 @@ export function DailyForm({ daily }: DailyFormProps) {
 						/>
 					</div>
 					<div className="flex flex-col gap-1">
-
 						<Label>Observação</Label>
 						<Input
 							value={observations}
 							onChange={(e) => setObservations(e.target.value)}
 							placeholder="Adicionar observações"
 						/>
-
 					</div>
 					<div className="flex flex-col gap-1">
 						<Label>Lista de tarefas</Label>
@@ -188,7 +189,6 @@ export function DailyForm({ daily }: DailyFormProps) {
 								<SelectItem value="Difícil">Difícil</SelectItem>
 							</SelectContent>
 						</Select>
-
 					</div>
 					<div className="flex flex-col gap-1">
 						<Label>Data de início</Label>
@@ -201,7 +201,9 @@ export function DailyForm({ daily }: DailyFormProps) {
 								>
 									<CalendarIcon />
 									{startDate ? (
-										format(startDate, "PPP", { locale: ptBR })
+										format(startDate, "PPP", {
+											locale: ptBR,
+										})
 									) : (
 										<span>Pick a date</span>
 									)}
@@ -216,7 +218,6 @@ export function DailyForm({ daily }: DailyFormProps) {
 								/>
 							</PopoverContent>
 						</Popover>
-
 					</div>
 					<div className="flex flex-col gap-1">
 						<Label>Repetição</Label>
@@ -250,7 +251,6 @@ export function DailyForm({ daily }: DailyFormProps) {
 								</SelectItem>
 							</SelectContent>
 						</Select>
-
 					</div>
 					<div className="flex flex-col gap-1">
 						<Label>A cada</Label>
@@ -280,7 +280,6 @@ export function DailyForm({ daily }: DailyFormProps) {
 												: ""}
 							</span>
 						</div>
-
 					</div>
 					<div className="flex flex-col gap-1">
 						<Label>Etiquetas</Label>
@@ -329,7 +328,6 @@ function DialogConfirmDelete({ id }: { id: string }) {
 						<Trash2 size={16} /> Delete esta tarefa
 					</Button>
 				</div>
-
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>

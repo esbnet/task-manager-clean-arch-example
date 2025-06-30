@@ -8,9 +8,10 @@ import {
 	useState,
 } from "react";
 
-import type { Habit, HabitDifficult, HabitReset } from "@/types";
+import type { Habit, HabitReset } from "@/types";
 
 import { ApiHabitRepository } from "@/infra/repositories/backend/api-habit-repository";
+import type { HabitDifficulty } from "@/types/habit";
 import { CreateHabitUseCase } from "@/use-cases/habit/create-habit/create-habit-use-case";
 import { UpdateHabitUseCase } from "@/use-cases/habit/update-habit/update-habit-use-case";
 
@@ -64,11 +65,13 @@ export function HabitProvider({ children }: HabitProviderProps) {
 			const result = await createHabitUseCase.execute({
 				title: habit.title,
 				observations: habit.observations || "",
-				difficulty: habit.difficult as HabitDifficult,
+				difficulty: habit.difficulty as HabitDifficulty,
 				tags: habit.tags || [],
 				reset: habit.reset as HabitReset,
 				createdAt: habit.createdAt || new Date(),
 			});
+
+			setHabits((prevHabits) => [...prevHabits, result.habit]);
 			// setHabits((prevHabits) => [
 			// 	...prevHabits,
 			// 	{
@@ -115,23 +118,23 @@ export function HabitProvider({ children }: HabitProviderProps) {
 
 	const toggleComplete = async (id: string) => {
 		try {
-			const updatedHabitFromRepo = await habitRepository.toggleComplete(id);
+			const updatedHabitFromRepo =
+				await habitRepository.toggleComplete(id);
 
 			const updatedHabit: Habit = {
 				...updatedHabitFromRepo,
 			} as Habit;
 
 			setHabits((prevHabits) =>
-				prevHabits.map((habit) => (habit.id === id ? updatedHabit : habit)),
+				prevHabits.map((habit) =>
+					habit.id === id ? updatedHabit : habit,
+				),
 			);
 		} catch (err) {
 			setError("Falha ao completar tarefa");
 			console.error(err);
 		}
 	};
-
-
-
 
 	const getHabit = (id: string) => {
 		return habits.find((habit) => habit.id === id);

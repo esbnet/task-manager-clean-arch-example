@@ -16,7 +16,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Plus, SaveIcon, Trash2 } from "lucide-react";
-import type { Habit, HabitDifficult, HabitReset } from "../../types";
+import type { Habit, HabitReset } from "../../types";
 
 import { useHabitContext } from "@/contexts/habit-context";
 import { useState } from "react";
@@ -37,8 +37,8 @@ export function HabitForm({ habit }: HabitFormProps) {
 
 	const [title, setTitle] = useState(habit.title || "");
 	const [observations, setObservations] = useState(habit.observations || "");
-	const [difficult, setDifficult] = useState<HabitDifficult>(
-		habit.difficult || "Fácil",
+	const [difficulty, setDifficult] = useState<HabitDifficult>(
+		habit.difficulty || "Fácil",
 	);
 	const [tags, setTags] = useState<string[]>(habit.tags || []);
 	const [reset, setReset] = useState<HabitReset>(
@@ -56,7 +56,7 @@ export function HabitForm({ habit }: HabitFormProps) {
 				...habit,
 				title,
 				observations: habit.observations || "",
-				difficult: difficult,
+				difficulty: difficulty,
 				tags,
 				reset,
 			} as Habit);
@@ -79,7 +79,7 @@ export function HabitForm({ habit }: HabitFormProps) {
 			await addHabit({
 				title,
 				observations: habit.observations || "",
-				difficult: difficult,
+				difficulty: difficulty,
 				tags,
 				reset,
 				createdAt: new Date(),
@@ -259,4 +259,3 @@ function DialogConfirmDelete({ id }: { id: string }) {
 		</Dialog>
 	);
 }
-

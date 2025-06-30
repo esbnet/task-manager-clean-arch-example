@@ -8,10 +8,10 @@ import {
 	useState,
 } from "react";
 
-import type { Daily, DailyDifficult } from "@/types";
+import type { Daily } from "@/types";
 
 import { ApiDailyRepository } from "@/infra/repositories/backend/api-daily-repository";
-import type { DailyRepeatType } from "@/types/daily";
+import type { DailyDifficulty, DailyRepeatType } from "@/types/daily";
 import { CreateDailyUseCase } from "@/use-cases/daily/create-daily/create-daily-use-case";
 import { UpdateDailyUseCase } from "@/use-cases/daily/update-daily/update-daily-use-case";
 
@@ -66,7 +66,7 @@ export function DailyProvider({ children }: DailyProviderProps) {
 				title: daily.title,
 				observations: daily.observations || "",
 				tasks: daily.tasks || [],
-				difficulty: (daily.difficulty as DailyDifficult) || "Fácil",
+				difficulty: (daily.difficulty as DailyDifficulty) || "Fácil",
 				startDate: daily.startDate || new Date(),
 				tags: daily.tags || [],
 				createdAt: new Date(),

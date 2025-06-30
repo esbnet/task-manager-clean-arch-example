@@ -1,11 +1,9 @@
 import "./globals.css";
 
-import { Kode_Mono, Lobster } from "next/font/google";
-
 import { Toaster } from "@/components/ui/sonner";
-import { HabitProvider } from "@/contexts/habit-context";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
+import { Kode_Mono, Lobster } from "next/font/google";
 
 const lobster = Lobster({
 	subsets: ["latin"],

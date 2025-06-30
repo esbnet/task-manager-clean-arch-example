@@ -1,4 +1,4 @@
-import type { TodoRepository } from "@/domain/repositories/todo-repository";
+import type { TodoRepository } from "@/domain/repositories/all-repository";
 
 export class DeleteTodoUseCase {
 	constructor(private readonly todoRepository: TodoRepository) {}

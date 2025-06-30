@@ -8,7 +8,11 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 import {
 	Select,
 	SelectContent,
@@ -18,7 +22,6 @@ import {
 } from "@/components/ui/select";
 import { format, setDefaultOptions } from "date-fns";
 import { CalendarIcon, Plus, SaveIcon, Trash2 } from "lucide-react";
-import type { Todo, TodoDifficult } from "../../types";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -28,6 +31,7 @@ import { useTodoContext } from "@/contexts/todo-context";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
 import { toast } from "sonner";
+import type { Todo } from "../../types";
 import { TodoCard } from "./todo-card";
 
 setDefaultOptions({ locale: ptBR });
@@ -42,8 +46,8 @@ export function TodoForm({ todo }: TodoFormProps) {
 	const [title, setTitle] = useState(todo.title || "");
 	const [observations, setObservations] = useState(todo.observations || "");
 	const [tasks, setTodo] = useState<string[]>(todo.tasks || []);
-	const [difficult, setDifficult] = useState<TodoDifficult>(
-		todo.difficult || "Fácil",
+	const [difficulty, setDifficult] = useState<TodoDifficult>(
+		todo.difficulty || "Fácil",
 	);
 	const [startDate, setStartDate] = useState(todo.startDate || new Date());
 	const [tags, setTags] = useState<string[]>(todo.tags || []);
@@ -60,7 +64,7 @@ export function TodoForm({ todo }: TodoFormProps) {
 				title,
 				observations: todo.observations || "",
 				tasks: todo.tasks || [],
-				difficulty: difficult,
+				difficulty: difficulty,
 				startDate: todo.startDate || new Date(),
 				tags: todo.tags || [],
 			} as Todo);
@@ -84,7 +88,7 @@ export function TodoForm({ todo }: TodoFormProps) {
 				title,
 				observations: todo.observations || "",
 				tasks: [] as string[],
-				difficult: difficult,
+				difficulty: difficulty,
 				startDate: new Date(),
 				tags: [] as string[],
 			} as Todo);
@@ -106,7 +110,6 @@ export function TodoForm({ todo }: TodoFormProps) {
 				<TodoCard todo={todo} />
 			</DialogTrigger>
 			<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
-
 				<DialogHeader className="flex flex-col gap-1">
 					<DialogTitle>
 						{todo.id ? "Editar " : "Adicionar "} Afazer
@@ -159,7 +162,7 @@ export function TodoForm({ todo }: TodoFormProps) {
 							onValueChange={(value) =>
 								setDifficult(value as TodoDifficult)
 							}
-							value={difficult || "Fácil"}
+							value={difficulty || "Fácil"}
 						>
 							<SelectTrigger className="w-full">
 								<SelectValue
@@ -169,7 +172,7 @@ export function TodoForm({ todo }: TodoFormProps) {
 							</SelectTrigger>
 							<SelectContent
 								className="w-full"
-								defaultValue={difficult || "Fácil"}
+								defaultValue={difficulty || "Fácil"}
 							>
 								<SelectItem
 									value="Trivial"

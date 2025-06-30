@@ -1,7 +1,6 @@
 import type {
 	CreateHabitInput,
 	CreateHabitOutput,
-	HabitDificult,
 	HabitReset,
 } from "./create-habit-dto";
 
@@ -14,7 +13,7 @@ export class CreateHabitUseCase {
 		const habit = await this.habitRepository.create({
 			title: inputHabit.title,
 			observations: inputHabit.observations,
-			difficulty: (inputHabit.difficulty as HabitDificult) ?? "Trivial",
+			difficulty: (inputHabit.difficultyas HabitDificult) ?? "Trivial",
 			tags: inputHabit.tags ?? [],
 			reset: (inputHabit.reset as HabitReset) ?? "diária",
 		});

@@ -2,7 +2,7 @@
 // src/domain/entities/habit.ts
 // Habits do not have a specific deadline. You can schedule them up to several times a day
 
-export type HabitDifficult = "Trivial" | "Fácil" | "Médio" | "Difícil";
+export type Habitdifficulty = "Trivial" | "Fácil" | "Médio" | "Difícil";
 
 export type HabitReset = "Diariamente" | "Semanalmente" | "Mensalmente";
 
@@ -10,7 +10,7 @@ export interface Habit {
 	id: string;
 	title: string;
 	observations: string;
-	difficult: HabitDifficult;
+	difficulty: HabitDifficult;
 	tags: string[];
 	reset: HabitReset;
 	createdAt: Date;

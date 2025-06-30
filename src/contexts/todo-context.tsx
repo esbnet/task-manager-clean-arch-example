@@ -65,7 +65,7 @@ export function TodoProvider({ children }: TodoProviderProps) {
 				title: todo.title,
 				observations: todo.observations || "",
 				tasks: todo.tasks || ([] as string[]),
-				difficulty: todo.difficult || "Fácil",
+				difficulty: todo.difficulty || "Fácil",
 				startDate: todo.startDate || new Date(),
 				tags: todo.tags || [],
 				createdAt: new Date(),

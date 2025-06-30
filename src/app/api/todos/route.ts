@@ -15,7 +15,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-	const { title, observations, tasks, difficulty, startDate, repeat, tags } =
+	const { title, observations, tasks, difficulty, startDate, tags } =
 		await request.json();
 	const useCase = new CreateTodoUseCase(todoRepo);
 	const result = await useCase.execute({
@@ -23,8 +23,8 @@ export async function POST(request: NextRequest) {
 		observations: observations || "",
 		tasks: tasks || ([] as string[]),
 		difficulty: difficulty || "Fácil",
-		startDate: new Date(),
-		tags: [] as string[],
+		startDate: startDate || new Date(),
+		tags: tags || ([] as string[]),
 		createdAt: new Date(),
 	});
 	return Response.json(result, { status: 201 });

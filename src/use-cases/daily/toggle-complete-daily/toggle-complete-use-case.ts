@@ -1,12 +1,12 @@
-import type { TaskRepository } from "@/domain/repositories/task-repository";
-import type { TaskOutput } from "./list-daily-dto";
+import type { DailyRepository } from "@/domain/repositories/all-repository";
+import type { DailyOutput } from "./list-daily-dto";
 
 export class ToggleCompleteUseCase {
-	constructor(private readonly taskRepository: TaskRepository) {}
+	constructor(private readonly dailyRepository: DailyRepository) {}
 
-	async execute(id: string): Promise<TaskOutput> {
-		const task = await this.taskRepository.toggleComplete(id);
+	async execute(id: string): Promise<DailyOutput> {
+		const daily = await this.dailyRepository.toggleComplete(id);
 
-		return { task };
+		return { daily };
 	}
 }
