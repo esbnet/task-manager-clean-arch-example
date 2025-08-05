@@ -25,6 +25,7 @@ interface HabitContextType {
 	toggleComplete: (id: string) => Promise<void>;
 	getHabit: (id: string) => Habit | undefined;
 	reorderHabits: (habits: Habit[]) => Promise<void>;
+	completeHabit: (habit: Habit) => Promise<void>;
 }
 
 const HabitContext = createContext<HabitContextType | undefined>(undefined);
@@ -152,8 +153,35 @@ export function HabitProvider({ children }: HabitProviderProps) {
 		}
 	};
 
+	const completeHabit = async (habit: Habit) => {
+		try {
+			// Salva no log
+			await fetch("/api/habit-logs", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ habit }),
+			});
+			
+			// Atualiza o hábito com a data de conclusão
+			const today = new Date().toISOString().split('T')[0];
+			const updatedHabit = { ...habit, lastCompletedDate: today };
+			await updateHabitUseCase.execute(updatedHabit);
+			
+			// Atualiza o estado local
+			setHabits(prevHabits => 
+				prevHabits.map(h => h.id === habit.id ? updatedHabit : h)
+			);
+		} catch (err) {
+			setError("Failed to complete habit");
+			console.error(err);
+		}
+	};
+
+	const today = new Date().toISOString().split('T')[0];
+	const visibleHabits = habits.filter(habit => habit.lastCompletedDate !== today);
+
 	const value = {
-		habits: habits.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+		habits: visibleHabits.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
 		isLoading,
 		error,
 		addHabit,
@@ -162,6 +190,7 @@ export function HabitProvider({ children }: HabitProviderProps) {
 		toggleComplete,
 		getHabit,
 		reorderHabits,
+		completeHabit,
 	};
 
 	return (

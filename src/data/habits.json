@@ -6,8 +6,8 @@
       "observations": "Aim for 2 liters a day.",
       "difficulty": "Trivial",
       "tags": [
-        "health",
-        "hydration"
+        "Exercício",
+        "Saúde e bem-estar"
       ],
       "reset": "Fácil",
       "createdAt": "2023-10-01T00:00:00Z",
@@ -18,14 +18,15 @@
       "id": "habit2",
       "title": "Exercise",
       "observations": "30 minutes of activity daily.",
-      "difficulty": "Medium",
+      "difficulty": "Trivial",
       "tags": [
-        "fitness",
-        "health"
+        "Trabalho",
+        "Exercício"
       ],
-      "reset": "Weekly",
+      "reset": "Trivial",
       "createdAt": "2023-10-02T00:00:00Z",
-      "order": 0
+      "order": 0,
+      "lastCompletedDate": "2025-08-05"
     },
     {
       "id": "habit3",
@@ -33,12 +34,11 @@
       "observations": "At least 20 pages a day.",
       "difficulty": "Easy",
       "tags": [
-        "reading",
-        "knowledge"
+        "Saúde e bem-estar"
       ],
-      "reset": "Daily",
+      "reset": "Trivial",
       "createdAt": "2023-10-03T00:00:00Z",
-      "order": 3
+      "order": 2
     },
     {
       "id": "habit4",
@@ -46,12 +46,12 @@
       "observations": "10 minutes of mindfulness.",
       "difficulty": "Média",
       "tags": [
-        "mental health",
-        "relaxation"
+        "Trabalho"
       ],
       "reset": "Trivial",
       "createdAt": "2023-10-04T00:00:00Z",
-      "order": 2
+      "order": 2,
+      "lastCompletedDate": "2025-08-05"
     },
     {
       "id": "g6hcx7",
@@ -61,17 +61,20 @@
       "tags": [],
       "reset": "Trivial",
       "createdAt": "2025-06-30T06:33:48.886Z",
-      "order": 4
+      "order": 0
     },
     {
       "id": "lqzigk",
       "title": "Parar de roer a unha",
       "observations": "",
       "difficulty": "Fácil",
-      "tags": [],
+      "tags": [
+        "Escola"
+      ],
       "reset": "Fácil",
       "createdAt": "2025-08-05T03:58:12.598Z",
-      "order": 6
+      "order": 6,
+      "lastCompletedDate": "2025-08-05"
     }
   ]
 }
