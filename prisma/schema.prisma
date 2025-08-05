@@ -58,8 +58,22 @@ model Daily {
   createdAt          DateTime  @default(now())
   
   logs               DailyLog[]
+  subtasks           DailySubtask[]
   
   @@map("dailys")
+}
+
+model DailySubtask {
+  id          String   @id @default(cuid())
+  title       String
+  completed   Boolean  @default(false)
+  dailyId     String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  
+  daily       Daily    @relation(fields: [dailyId], references: [id], onDelete: Cascade)
+  
+  @@map("daily_subtasks")
 }
 
 model DailyLog {
@@ -103,4 +117,13 @@ model TodoLog {
   todo        Todo     @relation(fields: [todoId], references: [id], onDelete: Cascade)
   
   @@map("todo_logs")
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  color     String   @default("#3b82f6")
+  createdAt DateTime @default(now())
+  
+  @@map("tags")
 }

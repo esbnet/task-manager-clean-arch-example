@@ -20,7 +20,7 @@ import type { Habit, HabitReset } from "../../types";
 
 import { useHabitContext } from "@/contexts/habit-context";
 import type { HabitDifficulty } from "@/types/habit";
-import { tagsNew } from "@/types/tags";
+import { useTags } from "@/hooks/use-tags";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from ".././ui/button";
@@ -36,6 +36,7 @@ interface HabitFormProps {
 
 export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 	const { updateHabit } = useHabitContext();
+	const { tagOptions } = useTags();
 
 	const [title, setTitle] = useState(habit.title || "");
 	const [observations, setObservations] = useState(habit.observations || "");
@@ -179,7 +180,7 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 						</Label>
 						<MultiSelect
 							id="tags"
-							options={tagsNew}
+							options={tagOptions}
 							onValueChange={(value) => setTags(value)}
 							defaultValue={tags}
 							placeholder="Adicionar etiquetas"

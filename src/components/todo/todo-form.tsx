@@ -28,7 +28,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTodoContext } from "@/contexts/todo-context";
-import { tagsNew } from "@/types/tags";
+import { useTags } from "@/hooks/use-tags";
 import type { TodoDifficulty } from "@/types/todo";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
@@ -46,6 +46,7 @@ interface TodoFormProps {
 
 export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 	const { updateTodo } = useTodoContext();
+	const { tagOptions } = useTags();
 
 	const [title, setTitle] = useState(todo.title || "");
 	const [observations, setObservations] = useState(todo.observations || "");
@@ -148,7 +149,7 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 						</Label>
 						<MultiSelect
 							id="tags"
-							options={tagsNew}
+							options={tagOptions}
 							onValueChange={(value) => setTags(value)}
 							defaultValue={tags || []}
 							placeholder="Adicionar etiquetas"

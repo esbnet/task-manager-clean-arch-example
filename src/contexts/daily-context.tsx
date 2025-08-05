@@ -9,6 +9,7 @@ import {
 } from "react";
 
 import type { Daily } from "@/types";
+import { shouldShowDailyToday } from "@/utils/daily-schedule";
 
 import { ApiDailyRepository } from "@/infra/repositories/backend/api-daily-repository";
 import type { DailyDifficulty, DailyRepeatType } from "@/types/daily";
@@ -179,11 +180,8 @@ export function DailyProvider({ children }: DailyProviderProps) {
 		}
 	};
 
-	const today = new Date().toISOString().split('T')[0];
-	const visibleDaily = daily.filter(daily => daily.lastCompletedDate !== today);
-
 	const value = {
-		daily: visibleDaily.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+		daily: daily.filter(shouldShowDailyToday).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
 		isLoading,
 		error,
 		addDaily,
