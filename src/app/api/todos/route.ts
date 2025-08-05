@@ -1,4 +1,4 @@
-import { InJsonFileTodoRepository } from "@/infra/repositories/frontend/json-file-todo-repository";
+import { PrismaTodoRepository } from "@/infra/repositories/database/prisma-todo-repository";
 import { CreateTodoUseCase } from "@/use-cases/todo/create-todo/create-todo-use-case";
 import { DeleteTodoUseCase } from "@/use-cases/todo/delete-todo/toggle-delete-use-case";
 import { ListTodosUseCase } from "@/use-cases/todo/list-todo/list-todo-use-case";
@@ -6,7 +6,8 @@ import { UpdateTodoUseCase } from "@/use-cases/todo/update-todo/update-todo-use-
 import type { NextRequest } from "next/server";
 
 // Instância única do repositório
-const todoRepo = new InJsonFileTodoRepository();
+// const todoRepo = new InJsonFileTodoRepository();
+const todoRepo = new PrismaTodoRepository();
 
 export async function GET() {
 	const useCase = new ListTodosUseCase(todoRepo);

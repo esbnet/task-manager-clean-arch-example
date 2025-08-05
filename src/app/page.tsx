@@ -8,22 +8,7 @@ import { DailyProvider } from "@/contexts/daily-context";
 import { HabitProvider } from "@/contexts/habit-context";
 import { TodoProvider } from "@/contexts/todo-context";
 
-// import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
-
 export default function Home() {
-	// const [isDroped, setIsDroped] = useState(false);
-
-	// if (isDroped) {
-	// 	document.body.style.overflow = "hidden";
-	// }
-
-	// const sensors = useSensors(
-	// 	useSensor(PointerSensor),
-	// 	useSensor(KeyboardSensor, {
-	// 		coordinateGetter: sortableKeyboardCoordinates,
-	// 	}),
-	// );
-
 	return (
 		<main className="relative flex flex-col gap-4 bg-gradient-to-br from-10% from-indigo-500 via-30% via-sky-500 to-90% to-emerald-500 m-auto p-2 lg:max-w-[80vw] min-h-screen">
 

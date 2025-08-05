@@ -1,8 +1,9 @@
-import { InJsonFileTodoLogRepository } from "@/infra/repositories/frontend/json-file-todo-log-repository";
+import { PrismaTodoLogRepository } from "@/infra/repositories/database/prisma-todo-log-repository";
 import { CompleteTodoUseCase } from "@/use-cases/todo/complete-todo/complete-todo-use-case";
 import type { NextRequest } from "next/server";
 
-const todoLogRepository = new InJsonFileTodoLogRepository();
+// const todoLogRepository = new InJsonFileTodoLogRepository();
+const todoLogRepository = new PrismaTodoLogRepository();
 
 export async function POST(request: NextRequest) {
 	const { todo } = await request.json();

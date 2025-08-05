@@ -118,6 +118,16 @@
       "createdAt": "2025-08-05T05:33:05.994Z",
       "order": 9,
       "lastCompletedDate": "2025-08-05"
+    },
+    {
+      "id": "vneuy",
+      "title": "teste",
+      "observations": "",
+      "difficulty": "Fácil",
+      "tags": [],
+      "reset": "Diariamente",
+      "createdAt": "2025-08-05T06:39:23.477Z",
+      "order": 10
     }
   ]
 }

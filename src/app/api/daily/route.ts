@@ -1,4 +1,4 @@
-import { InJsonFileDailyRepository } from "@/infra/repositories/frontend/json-file-daily-repository";
+import { PrismaDailyRepository } from "@/infra/repositories/database/prisma-daily-repository";
 import { CreateDailyUseCase } from "@/use-cases/daily/create-daily/create-daily-use-case";
 import { DeleteDailyUseCase } from "@/use-cases/daily/delete-daily/toggle-delete-use-case";
 import { ListDailyUseCase } from "@/use-cases/daily/list-daily/list-daily-use-case";
@@ -6,7 +6,8 @@ import { UpdateDailyUseCase } from "@/use-cases/daily/update-daily/update-daily-
 import type { NextRequest } from "next/server";
 
 // Instância única do repositório
-const dailyRepo = new InJsonFileDailyRepository();
+// const dailyRepo = new InJsonFileDailyRepository();
+ const dailyRepo = new PrismaDailyRepository();
 
 export async function GET() {
 	const useCase = new ListDailyUseCase(dailyRepo);
