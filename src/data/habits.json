@@ -1,50 +1,133 @@
 {
-	"habits": [
-		{
-			"id": "habit1",
-			"title": "Drink Water",
-			"observations": "Aim for 2 liters a day.",
-			"difficulty": "Easy",
-			"tags": ["health", "hydration"],
-			"reset": "Daily",
-			"createdAt": "2023-10-01T00:00:00Z",
-			"difficult": "Fácil"
-		},
-		{
-			"id": "habit2",
-			"title": "Exercise",
-			"observations": "30 minutes of activity daily.",
-			"difficulty": "Medium",
-			"tags": ["fitness", "health"],
-			"reset": "Weekly",
-			"createdAt": "2023-10-02T00:00:00Z"
-		},
-		{
-			"id": "habit3",
-			"title": "Read a Book",
-			"observations": "At least 20 pages a day.",
-			"difficulty": "Easy",
-			"tags": ["reading", "knowledge"],
-			"reset": "Daily",
-			"createdAt": "2023-10-03T00:00:00Z"
-		},
-		{
-			"id": "habit4",
-			"title": "Meditate",
-			"observations": "10 minutes of mindfulness.",
-			"difficulty": "Medium",
-			"tags": ["mental health", "relaxation"],
-			"reset": "Daily",
-			"createdAt": "2023-10-04T00:00:00Z"
-		},
-		{
-			"id": "rg89sd",
-			"title": "tste",
-			"observations": "",
-			"difficulty": "Trivial",
-			"tags": [],
-			"reset": "Diariamente",
-			"createdAt": "2025-06-26T14:22:04.418Z"
-		}
-	]
+  "habits": [
+    {
+      "id": "habit1",
+      "title": "Drink Water",
+      "observations": "Aim for 2 liters a day.",
+      "difficulty": "Trivial",
+      "tags": [
+        "Exercício",
+        "Saúde e bem-estar"
+      ],
+      "reset": "Fácil",
+      "createdAt": "2023-10-01T00:00:00Z",
+      "difficult": "Fácil",
+      "order": 1
+    },
+    {
+      "id": "habit2",
+      "title": "Exercise",
+      "observations": "30 minutes of activity daily.",
+      "difficulty": "Trivial",
+      "tags": [
+        "Trabalho",
+        "Exercício"
+      ],
+      "reset": "Trivial",
+      "createdAt": "2023-10-02T00:00:00Z",
+      "order": 0,
+      "lastCompletedDate": "2025-08-05"
+    },
+    {
+      "id": "habit3",
+      "title": "Read a Book",
+      "observations": "At least 20 pages a day.",
+      "difficulty": "Easy",
+      "tags": [
+        "Saúde e bem-estar"
+      ],
+      "reset": "Trivial",
+      "createdAt": "2023-10-03T00:00:00Z",
+      "order": 2
+    },
+    {
+      "id": "habit4",
+      "title": "Meditate",
+      "observations": "10 minutes of mindfulness.",
+      "difficulty": "Média",
+      "tags": [
+        "Trabalho"
+      ],
+      "reset": "Trivial",
+      "createdAt": "2023-10-04T00:00:00Z",
+      "order": 2,
+      "lastCompletedDate": "2025-08-05"
+    },
+    {
+      "id": "g6hcx7",
+      "title": "Minha tarefa nova",
+      "observations": "",
+      "difficulty": "Fácil",
+      "tags": [],
+      "reset": "Trivial",
+      "createdAt": "2025-06-30T06:33:48.886Z",
+      "order": 0
+    },
+    {
+      "id": "lqzigk",
+      "title": "Parar de roer a unha",
+      "observations": "",
+      "difficulty": "Fácil",
+      "tags": [
+        "Escola"
+      ],
+      "reset": "Fácil",
+      "createdAt": "2025-08-05T03:58:12.598Z",
+      "order": 6,
+      "lastCompletedDate": "2025-08-05"
+    },
+    {
+      "id": "h19v",
+      "title": "fsdfasdfasd",
+      "observations": "",
+      "difficulty": "Média",
+      "tags": [
+        "Trabalho"
+      ],
+      "reset": "Diariamente",
+      "createdAt": "2025-08-05T05:32:54.729Z",
+      "order": 6
+    },
+    {
+      "id": "l4r6q2",
+      "title": "fasdffsd",
+      "observations": "",
+      "difficulty": "Fácil",
+      "tags": [],
+      "reset": "Diariamente",
+      "createdAt": "2025-08-05T05:32:58.086Z",
+      "order": 7
+    },
+    {
+      "id": "geanpm",
+      "title": "adfasdfa",
+      "observations": "",
+      "difficulty": "Fácil",
+      "tags": [],
+      "reset": "Diariamente",
+      "createdAt": "2025-08-05T05:33:03.816Z",
+      "order": 8
+    },
+    {
+      "id": "u0dty",
+      "title": "dfas",
+      "observations": "",
+      "difficulty": "Fácil",
+      "tags": [],
+      "reset": "Diariamente",
+      "createdAt": "2025-08-05T05:33:05.994Z",
+      "order": 9,
+      "lastCompletedDate": "2025-08-05"
+    },
+    {
+      "id": "vneuy",
+      "title": "teste",
+      "observations": "",
+      "difficulty": "Fácil",
+      "tags": [],
+      "reset": "Diariamente",
+      "createdAt": "2025-08-05T06:39:23.477Z",
+      "order": 10
+    }
+  ]
 }

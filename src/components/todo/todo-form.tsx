@@ -21,32 +21,35 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { format, setDefaultOptions } from "date-fns";
-import { CalendarIcon, Plus, SaveIcon, Trash2 } from "lucide-react";
+import { CalendarIcon, SaveIcon, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTodoContext } from "@/contexts/todo-context";
+import { tagsNew } from "@/types/tags";
+import type { TodoDifficulty } from "@/types/todo";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
 import { toast } from "sonner";
 import type { Todo } from "../../types";
+import { MultiSelect } from "../ui/multi-select";
 import { TodoCard } from "./todo-card";
 
 setDefaultOptions({ locale: ptBR });
 
 interface TodoFormProps {
 	todo: Todo;
+	dragHandleProps?: any;
 }
 
-export function TodoForm({ todo }: TodoFormProps) {
-	const { updateTodo, addTodo } = useTodoContext();
+export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
+	const { updateTodo } = useTodoContext();
 
 	const [title, setTitle] = useState(todo.title || "");
 	const [observations, setObservations] = useState(todo.observations || "");
-	const [tasks, setTodo] = useState<string[]>(todo.tasks || []);
-	const [difficulty, setDifficult] = useState<TodoDifficult>(
+	const [difficulty, setDifficult] = useState<TodoDifficulty>(
 		todo.difficulty || "Fácil",
 	);
 	const [startDate, setStartDate] = useState(todo.startDate || new Date());
@@ -55,18 +58,19 @@ export function TodoForm({ todo }: TodoFormProps) {
 	// const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [open, setOpen] = useState(false);
 
-	async function handleUpdateTodo() {
+	async function handleUpdateTodo(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+
 		if (!title.trim()) return;
 
 		try {
 			await updateTodo({
 				...todo,
 				title,
-				observations: todo.observations || "",
-				tasks: todo.tasks || [],
+				observations: observations || "",
 				difficulty: difficulty,
-				startDate: todo.startDate || new Date(),
-				tags: todo.tags || [],
+				startDate: startDate || new Date(),
+				tags: tags || [],
 			} as Todo);
 
 			toast.success("Tarefa atualizada com sucesso!");
@@ -77,52 +81,50 @@ export function TodoForm({ todo }: TodoFormProps) {
 		}
 	}
 
-	async function handleAddTodo() {
-		if (!title.trim()) {
-			toast.warning("Título da tarefa é obrigatório");
-			return;
-		}
+	// async function handleAddTodo() {
+	// 	if (!title.trim()) {
+	// 		toast.warning("Título da tarefa é obrigatório");
+	// 		return;
+	// 	}
 
-		try {
-			await addTodo({
-				title,
-				observations: todo.observations || "",
-				tasks: [] as string[],
-				difficulty: difficulty,
-				startDate: new Date(),
-				tags: [] as string[],
-			} as Todo);
+	// 	try {
+	// 		await addTodo({
+	// 			title,
+	// 			observations: todo.observations || "",
+	// 			tasks: [] as string[],
+	// 			difficulty: difficulty,
+	// 			startDate: new Date(),
+	// 			tags: [] as string[],
+	// 		} as Todo);
 
-			setTitle("");
-			setDifficult(difficult);
-			setTags(tags);
-			toast.success("Hábito criada com sucesso!");
-			setOpen(false);
-		} catch (error) {
-			toast.error(`Erro ao criar hábito ${error}`);
-			console.error("Erro ao criar hábito", error);
-		}
-	}
+	// 		setTitle("");
+	// 		setDifficult(difficulty);
+	// 		setTags(tags);
+	// 		toast.success("Hábito criada com sucesso!");
+	// 		setOpen(false);
+	// 	} catch (error) {
+	// 		toast.error(`Erro ao criar hábito ${error}`);
+	// 		console.error("Erro ao criar hábito", error);
+	// 	}
+	// }
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger className="outline-none">
-				<TodoCard todo={todo} />
-			</DialogTrigger>
-			<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
+		<>
+			<TodoCard todo={todo} dragHandleProps={dragHandleProps} onEditClick={() => setOpen(true)} />
+			<Dialog open={open} onOpenChange={setOpen}>
+				<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
 				<DialogHeader className="flex flex-col gap-1">
-					<DialogTitle>
-						{todo.id ? "Editar " : "Adicionar "} Afazer
-					</DialogTitle>
+					<DialogTitle>Editar Afazer</DialogTitle>
 
 					<DialogDescription className="text-zinc-400 text-sm">
-						{todo.id
-							? "Altere os detalhes da tarefa"
-							: "Adicione uma nova tarefa"}
+						Altere os detalhes da tarefa
 					</DialogDescription>
 				</DialogHeader>
 
-				<div className="flex flex-col gap-4 bg-gray-100/20 p-2 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]">
+				<form
+					onSubmit={handleUpdateTodo}
+					className="flex flex-col gap-4 bg-gray-100/20 p-2 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]"
+				>
 					<div className="flex flex-col gap-1">
 						<Label className="font-bold">Título</Label>
 						<Input
@@ -141,26 +143,25 @@ export function TodoForm({ todo }: TodoFormProps) {
 						/>
 					</div>
 					<div className="flex flex-col gap-1">
-						<Label className="font-bold">Lista de tarefas</Label>
-						<Input
-							value={tasks.join(",") || ""}
-							onChange={(e) =>
-								setTodo(
-									e.target.value
-										.split(",")
-										.map((todo) => todo.trim())
-										.filter(Boolean),
-								)
-							}
-							placeholder="Novo item da lista de tarefas"
-							required
+						<Label className="font-bold" htmlFor="tags">
+							Etiquetas
+						</Label>
+						<MultiSelect
+							id="tags"
+							options={tagsNew}
+							onValueChange={(value) => setTags(value)}
+							defaultValue={tags || []}
+							placeholder="Adicionar etiquetas"
+							variant="inverted"
+							maxCount={3}
 						/>
 					</div>
+
 					<div className="flex flex-col gap-1">
 						<Label className="font-bold">Dificuldade</Label>
 						<Select
 							onValueChange={(value) =>
-								setDifficult(value as TodoDifficult)
+								setDifficult(value as TodoDifficulty)
 							}
 							value={difficulty || "Fácil"}
 						>
@@ -192,6 +193,7 @@ export function TodoForm({ todo }: TodoFormProps) {
 							</SelectContent>
 						</Select>
 					</div>
+
 					<div className="flex flex-col gap-1">
 						<Label className="font-bold">Data de início</Label>
 						<Popover>
@@ -222,18 +224,22 @@ export function TodoForm({ todo }: TodoFormProps) {
 						</Popover>
 					</div>
 
-					<Button
-						onClick={todo.id ? handleUpdateTodo : handleAddTodo}
-					>
-						{todo.id ? <SaveIcon /> : <Plus />}
-						{todo.id ? "Salvar" : "Adicionar"}
-					</Button>
-					<div className="flex justify-right items-center">
-						<DialogConfirmDelete id={todo.id} />
+					<div className="flex gap-1 mt-2">
+						<DialogClose asChild>
+							<Button variant="link">Cancel</Button>
+						</DialogClose>
+						<Button type="submit" className="flex-1">
+							<SaveIcon />
+							Salvar
+						</Button>
 					</div>
-				</div>
-			</DialogContent>
-		</Dialog>
+				</form>
+				<div className="flex justify-right items-center">
+					<DialogConfirmDelete id={todo.id} />
+					</div>
+				</DialogContent>
+			</Dialog>
+		</>
 	);
 }
 

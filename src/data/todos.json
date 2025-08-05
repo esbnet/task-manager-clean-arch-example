@@ -1,54 +1,87 @@
 {
-	"todos": [
-		{
-			"id": "vdmws8",
-			"title": "Tarefa Nova",
-			"observations": "",
-			"tasks": ["Tarefa 1", "Tarefa 2"],
-			"difficulty": "Fácil",
-			"startDate": "2025-06-24T07:29:41.398Z",
-			"tags": ["Tag 1", "Tag 2"],
-			"createdAt": "2025-06-24T07:29:41.399Z"
-		},
-		{
-			"id": "qinmjs",
-			"title": "Tarefa 1",
-			"observations": "Observações",
-			"tasks": ["Tarefa 1", "Tarefa 2"],
-			"difficulty": "Fácil",
-			"startDate": "2025-06-24T07:29:41.406Z",
-			"tags": ["Tag 1", "Tag 2"],
-			"createdAt": "2025-06-24T07:29:41.406Z"
-		},
-		{
-			"id": "oog48",
-			"title": "Tarefa 1",
-			"observations": "",
-			"tasks": ["Tarefa 1", "Tarefa 2"],
-			"difficulty": "Fácil",
-			"startDate": "2025-06-24T07:30:18.159Z",
-			"tags": ["Tag 1", "Tag 2"],
-			"createdAt": "2025-06-24T07:30:18.160Z"
-		},
-		{
-			"id": "p8hetq",
-			"title": "Tarefa 1",
-			"observations": "Observações",
-			"tasks": ["Tarefa 1", "Tarefa 2"],
-			"difficulty": "Fácil",
-			"startDate": "2025-06-24T07:30:18.162Z",
-			"tags": ["Tag 1", "Tag 2"],
-			"createdAt": "2025-06-24T07:30:18.163Z"
-		},
-		{
-			"id": "umvqeg",
-			"title": "Tarefa Antiga",
-			"observations": "",
-			"tasks": ["Tarefa 1", "Tarefa 2"],
-			"difficulty": "Fácil",
-			"startDate": "2025-06-24T07:31:19.404Z",
-			"tags": ["Tag 1", "Tag 2"],
-			"createdAt": "2025-06-24T07:31:19.404Z"
-		}
-	]
+  "todos": [
+    {
+      "id": "vdmws8",
+      "title": "Tarefa Nova",
+      "observations": "",
+      "tasks": [
+        "Tarefa 1",
+        "Tarefa 2"
+      ],
+      "difficulty": "Fácil",
+      "startDate": "2025-06-24T07:29:41.398Z",
+      "tags": [
+        "Tag 1",
+        "Tag 2"
+      ],
+      "createdAt": "2025-06-24T07:29:41.399Z",
+      "order": 0
+    },
+    {
+      "id": "qinmjs",
+      "title": "Tarefa 1",
+      "observations": "Observações",
+      "tasks": [
+        "Tarefa 1",
+        "Tarefa 2"
+      ],
+      "difficulty": "Fácil",
+      "startDate": "2025-06-24T07:29:41.406Z",
+      "tags": [
+        "Tag 1",
+        "Tag 2"
+      ],
+      "createdAt": "2025-06-24T07:29:41.406Z",
+      "order": 1
+    },
+    {
+      "id": "oog48",
+      "title": "Marcar consulta",
+      "observations": "",
+      "tasks": [
+        "Tarefa 1",
+        "Tarefa 2"
+      ],
+      "difficulty": "Fácil",
+      "startDate": "2025-06-24T07:30:18.159Z",
+      "tags": [
+        "Tag 1",
+        "Tag 2"
+      ],
+      "createdAt": "2025-06-24T07:30:18.160Z",
+      "order": 2
+    },
+    {
+      "id": "umvqeg",
+      "title": "Tarefa Antiga",
+      "observations": "",
+      "tasks": [
+        "Tarefa 1",
+        "Tarefa 2"
+      ],
+      "difficulty": "Fácil",
+      "startDate": "2025-06-24T07:31:19.404Z",
+      "tags": [
+        "Tag 1",
+        "Tag 2"
+      ],
+      "createdAt": "2025-06-24T07:31:19.404Z",
+      "order": 3
+    },
+    {
+      "id": "9kq303",
+      "title": "Novo afazer",
+      "observations": "",
+      "tasks": [],
+      "difficulty": "Difícil",
+      "startDate": "2025-08-14T03:00:00.000Z",
+      "tags": [
+        "Trabalho",
+        "Exercício"
+      ],
+      "createdAt": "2025-06-30T23:11:53.713Z",
+      "order": 4,
+      "lastCompletedDate": "2025-08-05"
+    }
+  ]
 }

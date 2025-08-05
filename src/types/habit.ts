@@ -10,4 +10,6 @@ export interface Habit {
 	tags: string[];
 	reset: HabitReset;
 	createdAt: Date;
+	order?: number;
+	lastCompletedDate?: string;
 }

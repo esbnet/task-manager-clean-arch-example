@@ -1,7 +1,7 @@
 import type { Daily } from "@/types";
 
 export type ListDailyOutput = {
-	dailys: Daily[];
+	daily: Daily[];
 };
 export type ListDailyInput = {
 	page: number;

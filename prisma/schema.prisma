@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Habit {
+  id                 String    @id @default(cuid())
+  title              String
+  observations       String    @default("")
+  difficulty         String
+  tags               String[]
+  reset              String
+  order              Int       @default(0)
+  lastCompletedDate  String?
+  createdAt          DateTime  @default(now())
+  
+  logs               HabitLog[]
+  
+  @@map("habits")
+}
+
+model HabitLog {
+  id          String   @id @default(cuid())
+  habitId     String
+  habitTitle  String
+  difficulty  String
+  tags        String[]
+  completedAt DateTime @default(now())
+  
+  habit       Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
+  
+  @@map("habit_logs")
+}
+
+model Daily {
+  id                 String    @id @default(cuid())
+  title              String
+  observations       String    @default("")
+  tasks              String[]
+  difficulty         String
+  startDate          DateTime
+  repeatType         String
+  repeatFrequency    Int       @default(1)
+  tags               String[]
+  order              Int       @default(0)
+  lastCompletedDate  String?
+  createdAt          DateTime  @default(now())
+  
+  logs               DailyLog[]
+  
+  @@map("dailys")
+}
+
+model DailyLog {
+  id          String   @id @default(cuid())
+  dailyId     String
+  dailyTitle  String
+  difficulty  String
+  tags        String[]
+  completedAt DateTime @default(now())
+  
+  daily       Daily    @relation(fields: [dailyId], references: [id], onDelete: Cascade)
+  
+  @@map("daily_logs")
+}
+
+model Todo {
+  id                 String    @id @default(cuid())
+  title              String
+  observations       String    @default("")
+  tasks              String[]
+  difficulty         String
+  startDate          DateTime
+  tags               String[]
+  order              Int       @default(0)
+  lastCompletedDate  String?
+  createdAt          DateTime  @default(now())
+  
+  logs               TodoLog[]
+  
+  @@map("todos")
+}
+
+model TodoLog {
+  id          String   @id @default(cuid())
+  todoId      String
+  todoTitle   String
+  difficulty  String
+  tags        String[]
+  completedAt DateTime @default(now())
+  
+  todo        Todo     @relation(fields: [todoId], references: [id], onDelete: Cascade)
+  
+  @@map("todo_logs")
+}

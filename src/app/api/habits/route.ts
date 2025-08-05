@@ -1,4 +1,4 @@
-import { InJsonFileHabitRepository } from "@/infra/repositories/frontend/json-file-habit-repository";
+import { PrismaHabitRepository } from "@/infra/repositories/database/prisma-habit-repository";
 import { CreateHabitUseCase } from "@/use-cases/habit/create-habit/create-habit-use-case";
 import { DeleteHabitUseCase } from "@/use-cases/habit/delete-habit/toggle-delete-use-case";
 import { ListHabitsUseCase } from "@/use-cases/habit/list-habit/list-task-use-case";
@@ -7,7 +7,8 @@ import { UpdateHabitUseCase } from "@/use-cases/habit/update-habit/update-habit-
 import type { NextRequest } from "next/server";
 
 // Instância única do repositório
-const habitRepository = new InJsonFileHabitRepository();
+//const habitRepository = new InJsonFileHabitRepository();
+const habitRepository = new PrismaHabitRepository();
 
 export async function GET() {
 	const useCase = new ListHabitsUseCase(habitRepository);
