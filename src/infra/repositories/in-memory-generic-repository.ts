@@ -37,9 +37,9 @@ export abstract class InMemoryGenericRepository<T extends BaseEntity>
 		if (index < 0) throw new Error("Entity not found");
 
 		const item = this.items[index];
-		// Assumindo que a entidade tem uma propriedade 'completed'
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		(item as any).completed = !(item as any).completed;
+		(item as { completed?: boolean }).completed = !(
+			item as { completed?: boolean }
+		).completed;
 
 		this.items[index] = item;
 		return item;

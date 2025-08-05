@@ -1,18 +1,20 @@
-import { useDailyContext } from "@/contexts/daily-context";
+import AddDaily from "./add-daily";
 import type { Daily } from "@/types";
-import { useDroppable } from "@dnd-kit/core";
-import { Loading } from "../ui/loading";
 import { DailyForm } from "./daily-form";
+import { Loading } from "../ui/loading";
+import { useDailyContext } from "@/contexts/daily-context";
 
 export const DailyColumn = () => {
 	return (
 		<div
 			key={"DAILYS"}
-			className="flex flex-col flex-1 bg-background/20 opacity-0 shadow-lg backdrop-blur-md p-2 rounded-lg max-h-full overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
+			className="flex flex-col flex-1 gap-4 bg-background/20 opacity-0 shadow-lg backdrop-blur-md p-2 rounded-lg max-h-full overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
 		>
-			<h2 className="top-0 sticky bg-background/30 shadow-sm mb-4 p-2 rounded-lg font-semibold text-foreground/40 text-2xl text-center">
+			<h2 className="top-0 sticky bg-background/30 shadow-sm p-2 rounded-lg font-semibold text-foreground/40 text-2xl text-center">
 				Diárias
 			</h2>
+
+			<AddDaily />
 
 			<Dailys />
 		</div>
@@ -34,13 +36,8 @@ const Dailys = () => {
 		);
 	}
 
-	const { setNodeRef } = useDroppable({
-		id: "DAILYS",
-		data: dailys,
-	});
-
 	return (
-		<div ref={setNodeRef} className="flex flex-col gap-2">
+		<div className="flex flex-col gap-2">
 			{dailys.map((daily: Daily) => {
 				return <DailyForm key={daily.id} daily={daily} />;
 			})}

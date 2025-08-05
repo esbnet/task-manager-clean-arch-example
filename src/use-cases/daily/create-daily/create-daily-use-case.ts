@@ -1,4 +1,8 @@
-import type { CreateDailyInput, CreateDailyOutput } from "./create-daily-dto";
+import type {
+	CreateDailyInput,
+	CreateDailyOutput,
+	DailyDifficulty,
+} from "./create-daily-dto";
 
 import type { DailyRepository } from "@/domain/repositories/all-repository";
 
@@ -12,7 +16,7 @@ export class CreateDailyUseCase {
 			title: inputDaily.title,
 			observations: "",
 			tasks: [],
-			difficulty: (inputDaily.difficultyas DailyDifficult) ?? "Fácil",
+			difficulty: (inputDaily.difficulty as DailyDifficulty) ?? "Fácil",
 			startDate: new Date(),
 			repeat: {
 				type: "Diariamente",

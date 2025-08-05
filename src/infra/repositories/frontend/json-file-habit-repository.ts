@@ -32,6 +32,7 @@ export class InJsonFileHabitRepository implements HabitRepository {
 			id: Math.random().toString(36).substring(7),
 			...data,
 			createdAt: new Date(),
+			order: habits.length,
 		};
 
 		habits.push(newHabit);

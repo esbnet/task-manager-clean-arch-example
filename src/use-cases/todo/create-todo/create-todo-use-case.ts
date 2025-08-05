@@ -1,4 +1,8 @@
-import type { CreateTodoInput, CreateTodoOutput } from "./create-todo-dto";
+import type {
+	CreateTodoInput,
+	CreateTodoOutput,
+	TodoDifficulty,
+} from "./create-todo-dto";
 
 import type { TodoRepository } from "@/domain/repositories/all-repository";
 
@@ -10,7 +14,7 @@ export class CreateTodoUseCase {
 			title: inputTodo.title,
 			observations: inputTodo.observations,
 			tasks: inputTodo.tasks,
-			difficulty: inputTodo.difficultyas Tododifficulty,
+			difficulty: inputTodo.difficulty as TodoDifficulty,
 			startDate: inputTodo.startDate,
 			tags: inputTodo.tags,
 		});

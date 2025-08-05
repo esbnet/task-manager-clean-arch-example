@@ -20,9 +20,9 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import type { Daily, DailyRepeat } from "@/types";
+import type { DailyDifficulty, DailyRepeatType } from "@/types/daily";
 import { format, setDefaultOptions } from "date-fns";
-import { Calendar as CalendarIcon, Plus, SaveIcon, Trash2 } from "lucide-react";
+import { Calendar as CalendarIcon, SaveIcon, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -30,7 +30,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useDailyContext } from "@/contexts/daily-context";
-import type { DailyRepeatType } from "@/types/daily";
+import type { Daily } from "@/types";
+import { tagsNew } from "@/types/tags";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -43,11 +44,12 @@ interface DailyFormProps {
 }
 
 export function DailyForm({ daily }: DailyFormProps) {
-	const { updateDaily, addDaily } = useDailyContext();
+	const { updateDaily } = useDailyContext();
+
 	const [title, setTitle] = useState(daily.title || "");
 	const [observations, setObservations] = useState(daily.observations || "");
 	const [tasks, setTasks] = useState<string[]>(daily.tasks || []);
-	const [dificulty, setDifficulty] = useState<DailyDifficult>(
+	const [dificulty, setDifficulty] = useState<DailyDifficulty>(
 		daily.difficulty || "Fácil",
 	);
 	const [startDate, setStartDate] = useState<Date>(
@@ -60,11 +62,14 @@ export function DailyForm({ daily }: DailyFormProps) {
 		daily.repeat.frequency || 1,
 	);
 	const [tags, setTags] = useState<string[]>(daily.tags || []);
-	const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+	// const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
 	const [open, setOpen] = useState(false);
 
-	async function handleUpdateDaily() {
+	async function handleUpdateDaily(e: React.FormEvent<HTMLFormElement>) {
+		e.preventDefault();
+
 		if (!title.trim()) return;
 
 		try {
@@ -72,7 +77,13 @@ export function DailyForm({ daily }: DailyFormProps) {
 				...daily,
 				title,
 				observations: daily.observations || "",
+				tasks: daily.tasks || [],
 				difficulty: dificulty,
+				startDate: daily.startDate || new Date(),
+				repeat: {
+					type: repeatType as DailyRepeatType,
+					frequency: repeatFrequency,
+				},
 				tags: daily.tags || [],
 			} as Daily);
 
@@ -84,35 +95,35 @@ export function DailyForm({ daily }: DailyFormProps) {
 		}
 	}
 
-	async function handleAddDaily() {
-		if (!title.trim()) {
-			toast.warning("Título da diária diária é obrigatório");
-			return;
-		}
+	// async function handleAddDaily(  ) {
+	// 	if (!title.trim()) {
+	// 		toast.warning("Título da diária diária é obrigatório");
+	// 		return;
+	// 	}
 
-		try {
-			await addDaily({
-				title,
-				observations: daily.observations || "",
-				tasks: [] as string[],
-				difficulty: dificulty,
-				repeat: {
-					type: repeatType as DailyRepeatType,
-					frequency: repeatFrequency,
-				} as DailyRepeat,
-				tags,
-			} as Daily);
+	// 	try {
+	// 		await addDaily({
+	// 			title,
+	// 			observations: daily.observations || "",
+	// 			tasks: [] as string[],
+	// 			difficulty: dificulty,
+	// 			repeat: {
+	// 				type: repeatType as DailyRepeatType,
+	// 				frequency: repeatFrequency,
+	// 			} as DailyRepeat,
+	// 			tags,
+	// 		} as Daily);
 
-			setTitle("");
-			setDifficulty(dificulty);
-			setTags(tags);
-			toast.success("Hábito diário criada com sucesso!");
-			setOpen(false);
-		} catch (error) {
-			toast.error(`Erro ao criar hábito diário ${error}`);
-			console.error("Erro ao criar hábito diário", error);
-		}
-	}
+	// 		setTitle("");
+	// 		setDifficulty(dificulty);
+	// 		setTags(tags);
+	// 		toast.success("Hábito diário criada com sucesso!");
+	// 		setOpen(false);
+	// 	} catch (error) {
+	// 		toast.error(`Erro ao criar hábito diário ${error}`);
+	// 		console.error("Erro ao criar hábito diário", error);
+	// 	}
+	// }
 
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
@@ -121,17 +132,16 @@ export function DailyForm({ daily }: DailyFormProps) {
 			</DialogTrigger>
 			<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
 				<DialogHeader className="flex flex-col gap-1">
-					<DialogTitle>
-						{daily.id ? "Editar " : "Adicionar "} Diária
-					</DialogTitle>
+					<DialogTitle>Editar</DialogTitle>
 					<DialogDescription className="text-zinc-400 text-sm">
-						{daily.id
-							? "Edite os detalhes da diária"
-							: "Adicione uma nova diária"}
+						Edite os detalhes da diária
 					</DialogDescription>
 				</DialogHeader>
 
-				<div className="flex flex-col gap-4 bg-gray-100/20 p-2 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]">
+				<form
+					onSubmit={handleUpdateDaily}
+					className="flex flex-col gap-4 bg-gray-100/20 p-2 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]"
+				>
 					<div className="flex flex-col gap-1">
 						<Label>Título</Label>
 						<Input
@@ -164,12 +174,22 @@ export function DailyForm({ daily }: DailyFormProps) {
 							placeholder="Novo item da lista de tarefas"
 							required
 						/>
+
+						<MultiSelect
+							id="tags"
+							options={tagsNew}
+							onValueChange={(value) => setTags(value)}
+							defaultValue={tasks || []}
+							placeholder="Adicionar tarefas"
+							variant="inverted"
+							maxCount={3}
+						/>
 					</div>
 					<div className="flex flex-col gap-1">
 						<Label>Dificuldade</Label>
 						<Select
 							onValueChange={(value) =>
-								setDifficulty(value as DailyDifficult)
+								setDifficulty(value as DailyDifficulty)
 							}
 							value={dificulty || "Fácil"}
 						>
@@ -284,25 +304,28 @@ export function DailyForm({ daily }: DailyFormProps) {
 					<div className="flex flex-col gap-1">
 						<Label>Etiquetas</Label>
 						<MultiSelect
+							id="tags"
 							options={tagsNew}
-							onValueChange={setSelectedTags}
-							defaultValue={selectedTags}
+							onValueChange={(value) => setTags(value)}
+							defaultValue={tags || []}
 							placeholder="Adicionar etiquetas"
 							variant="inverted"
-							animation={2}
 							maxCount={3}
 						/>
 					</div>
 
-					<Button
-						onClick={daily.id ? handleUpdateDaily : handleAddDaily}
-					>
-						{daily.id ? <SaveIcon /> : <Plus />}
-						{daily.id ? "Salvar" : "Adicionar"}
-					</Button>
-					<div className="flex justify-right items-center">
-						<DialogConfirmDelete id={daily.id} />
+					<div className="flex gap-1 mt-2">
+						<DialogClose asChild>
+							<Button variant="link">Cancel</Button>
+						</DialogClose>
+						<Button type="submit" className="flex-1">
+							<SaveIcon />
+							Salvar
+						</Button>
 					</div>
+				</form>
+				<div className="flex justify-right items-center">
+					<DialogConfirmDelete id={daily.id} />
 				</div>
 			</DialogContent>
 		</Dialog>
@@ -353,11 +376,3 @@ function DialogConfirmDelete({ id }: { id: string }) {
 		</Dialog>
 	);
 }
-
-export const tagsNew = [
-	{ value: "Trabalho", label: "Trabalho" },
-	{ value: "Exercício", label: "Exercício" },
-	{ value: "Saúde e bem-estar", label: "Saúde e bem-estar" },
-	{ value: "Escola", label: "Escola" },
-	{ value: "Times", label: "Times" },
-];

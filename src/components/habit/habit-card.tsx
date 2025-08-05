@@ -1,46 +1,23 @@
 import { Checkbox } from "@/components/ui/checkbox";
-// import { useHabitContext } from "@/contexts/habit-context";
-import { useDraggable } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
 import { GripVertical } from "lucide-react";
 import type { Habit } from "../../types";
 
 type Props = {
 	habit: Habit;
+	dragHandleProps?: any;
 };
 
-export function HabitCard({ habit }: Props) {
-	return <HabitItem habit={habit} />;
+export function HabitCard({ habit, dragHandleProps }: Props) {
+	return <HabitItem habit={habit} dragHandleProps={dragHandleProps} />;
 }
 
-function HabitItem({ habit }: Props) {
-	const { attributes, listeners, setNodeRef, transform } = useDraggable({
-		id: habit.id,
-	});
-
-	// const { updateHabit } = useHabitContext();
-
-	// const onToggle = async (checked: boolean) => {
-	// 	await updateHabit({ ...habit, completed: checked });
-	// 	toast.success(
-	// 		`Tarefa ${checked ? "concluída" : "desfeita"} com sucesso!`,
-	// 	);
-	// };
-
-	const style = {
-		transform: CSS.Translate.toString(transform),
-	};
+function HabitItem({ habit, dragHandleProps }: Props) {
 
 	return (
-		<div
-			ref={setNodeRef}
-			style={style}
-			{...attributes}
-			className="flex justify-between items-center gap-2 bg-background/30 shadow-sm hover:shadow-md p-1 rounded-sm transition-all duration-200 ease-in-out"
-		>
+		<div className="flex justify-between items-center gap-2 bg-background/30 shadow-sm hover:shadow-md p-1 rounded-sm transition-all duration-200 ease-in-out">
 			<div
 				className="hover:bg-background/10 px-1 py-2 rounded-sm cursor-grab"
-				{...listeners}
+				{...dragHandleProps}
 				title="Arraste para mover a tarefa"
 			>
 				<GripVertical size={16} className="text-foreground" />

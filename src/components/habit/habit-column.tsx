@@ -1,18 +1,23 @@
-import { useHabitContext } from "@/contexts/habit-context";
+import AddHabitForm from "./add-habit";
 import type { Habit } from "@/types";
-import { useDroppable } from "@dnd-kit/core";
-import { Loading } from "../ui/loading";
 import { HabitForm } from "./habit-form";
+import { Loading } from "../ui/loading";
+import { useHabitContext } from "@/contexts/habit-context";
+import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, arrayMove, useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 export const HabitColumn = () => {
 	return (
 		<div
 			key={"HABITS"}
-			className="flex flex-col flex-1 bg-background/20 opacity-0 shadow-lg backdrop-blur-md p-2 rounded-lg max-h-full overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
+			className="flex flex-col flex-1 gap-4 bg-background/20 opacity-0 shadow-lg backdrop-blur-md p-2 rounded-lg max-h-full overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
 		>
-			<h2 className="top-0 sticky bg-background/30 shadow-sm mb-4 p-2 rounded-lg font-semibold text-foreground/40 text-2xl text-center">
+			<h2 className="top-0 sticky bg-background/30 shadow-sm p-2 rounded-lg font-semibold text-foreground/40 text-2xl text-center">
 				Hábitos
 			</h2>
+
+			<AddHabitForm />
 
 			<Habits />
 		</div>
@@ -20,7 +25,7 @@ export const HabitColumn = () => {
 };
 
 const Habits = () => {
-	const { habits, isLoading } = useHabitContext();
+	const { habits, isLoading, reorderHabits } = useHabitContext();
 
 	if (isLoading) {
 		return <Loading text="Carregando hábitos..." size="lg" />;
@@ -34,16 +39,52 @@ const Habits = () => {
 		);
 	}
 
-	const { setNodeRef } = useDroppable({
-		id: "HABITOS",
-		data: habits,
-	});
+	const handleDragEnd = (event: DragEndEvent) => {
+		const { active, over } = event;
+
+		if (!over || active.id === over.id) return;
+
+		const oldIndex = habits.findIndex((habit) => habit.id === active.id);
+		const newIndex = habits.findIndex((habit) => habit.id === over.id);
+
+		const reorderedHabits = arrayMove(habits, oldIndex, newIndex);
+		reorderHabits(reorderedHabits);
+	};
 
 	return (
-		<div ref={setNodeRef} className="flex flex-col gap-2">
-			{habits.map((habit: Habit) => {
-				return <HabitForm key={habit.id} habit={habit} />;
-			})}
+		<DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+			<SortableContext items={habits.map(h => h.id)} strategy={verticalListSortingStrategy}>
+				<div className="flex flex-col gap-2">
+					{habits.map((habit: Habit) => {
+						return <SortableHabitItem key={habit.id} habit={habit} />;
+					})}
+				</div>
+			</SortableContext>
+		</DndContext>
+	);
+};
+
+const SortableHabitItem = ({ habit }: { habit: Habit }) => {
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({
+		id: habit.id,
+	});
+
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+		opacity: isDragging ? 0.5 : 1,
+	};
+
+	return (
+		<div ref={setNodeRef} style={style} {...attributes}>
+			<HabitForm habit={habit} dragHandleProps={listeners} />
 		</div>
 	);
 };

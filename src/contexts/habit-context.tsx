@@ -19,11 +19,12 @@ interface HabitContextType {
 	habits: Habit[];
 	isLoading: boolean;
 	error: string | null;
-	addHabit: (habit: Omit<Habit, "id">) => Promise<void>;
+	addHabit: (habit: Omit<Habit, "id" | "createdAt">) => Promise<void>;
 	updateHabit: (habit: Habit) => Promise<void>;
 	deleteHabit: (id: string) => Promise<void>;
 	toggleComplete: (id: string) => Promise<void>;
 	getHabit: (id: string) => Habit | undefined;
+	reorderHabits: (habits: Habit[]) => Promise<void>;
 }
 
 const HabitContext = createContext<HabitContextType | undefined>(undefined);
@@ -60,26 +61,18 @@ export function HabitProvider({ children }: HabitProviderProps) {
 		fetchHabits();
 	}, []);
 
-	const addHabit = async (habit: Omit<Habit, "id">) => {
+	const addHabit = async (habit: Omit<Habit, "id" | "createdAt">): Promise<void> => {
 		try {
 			const result = await createHabitUseCase.execute({
 				title: habit.title,
 				observations: habit.observations || "",
-				difficulty: habit.difficulty as HabitDifficulty,
+				difficulty: habit.difficulty as HabitDifficulty || "Fácil",
 				tags: habit.tags || [],
-				reset: habit.reset as HabitReset,
-				createdAt: habit.createdAt || new Date(),
+				reset: habit.reset as HabitReset || "Diariamente",
+				createdAt: new Date(),
 			});
 
 			setHabits((prevHabits) => [...prevHabits, result.habit]);
-			// setHabits((prevHabits) => [
-			// 	...prevHabits,
-			// 	{
-			// 		...result.habit,
-			// 		category: result.habit.category as HabitCategory,
-			// 		priority: result.habit.priority as HabitPriority,
-			// 	},
-			// ]);
 		} catch (err) {
 			setError("Failed to add habit");
 			console.error(err);
@@ -140,8 +133,27 @@ export function HabitProvider({ children }: HabitProviderProps) {
 		return habits.find((habit) => habit.id === id);
 	};
 
+	const reorderHabits = async (reorderedHabits: Habit[]) => {
+		try {
+			const habitsWithOrder = reorderedHabits.map((habit, index) => ({
+				...habit,
+				order: index,
+			}));
+			
+			setHabits(habitsWithOrder);
+			
+			// Salvar a nova ordem no backend
+			for (const habit of habitsWithOrder) {
+				await updateHabitUseCase.execute(habit);
+			}
+		} catch (err) {
+			setError("Failed to reorder habits");
+			console.error(err);
+		}
+	};
+
 	const value = {
-		habits,
+		habits: habits.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
 		isLoading,
 		error,
 		addHabit,
@@ -149,6 +161,7 @@ export function HabitProvider({ children }: HabitProviderProps) {
 		deleteHabit,
 		toggleComplete,
 		getHabit,
+		reorderHabits,
 	};
 
 	return (
