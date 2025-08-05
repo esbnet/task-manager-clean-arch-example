@@ -24,6 +24,8 @@ interface DailyContextType {
 	deleteDaily: (id: string) => Promise<void>;
 	toggleComplete: (id: string) => Promise<void>;
 	getDaily: (id: string) => Daily | undefined;
+	reorderDailys: (dailys: Daily[]) => Promise<void>;
+	completeDaily: (daily: Daily) => Promise<void>;
 }
 
 const DailyContext = createContext<DailyContextType | undefined>(undefined);
@@ -138,8 +140,50 @@ export function DailyProvider({ children }: DailyProviderProps) {
 		return dailys.find((daily) => daily.id === id);
 	};
 
+	const reorderDailys = async (reorderedDailys: Daily[]) => {
+		try {
+			const dailysWithOrder = reorderedDailys.map((daily, index) => ({
+				...daily,
+				order: index,
+			}));
+			
+			setDailys(dailysWithOrder);
+			
+			for (const daily of dailysWithOrder) {
+				await updateDailyUseCase.execute(daily);
+			}
+		} catch (err) {
+			setError("Failed to reorder dailys");
+			console.error(err);
+		}
+	};
+
+	const completeDaily = async (daily: Daily) => {
+		try {
+			await fetch("/api/daily-logs", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ daily }),
+			});
+			
+			const today = new Date().toISOString().split('T')[0];
+			const updatedDaily = { ...daily, lastCompletedDate: today };
+			await updateDailyUseCase.execute(updatedDaily);
+			
+			setDailys(prevDailys => 
+				prevDailys.map(d => d.id === daily.id ? updatedDaily : d)
+			);
+		} catch (err) {
+			setError("Failed to complete daily");
+			console.error(err);
+		}
+	};
+
+	const today = new Date().toISOString().split('T')[0];
+	const visibleDailys = dailys.filter(daily => daily.lastCompletedDate !== today);
+
 	const value = {
-		dailys,
+		dailys: visibleDailys.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
 		isLoading,
 		error,
 		addDaily,
@@ -147,6 +191,8 @@ export function DailyProvider({ children }: DailyProviderProps) {
 		deleteDaily,
 		toggleComplete,
 		getDaily,
+		reorderDailys,
+		completeDaily,
 	};
 
 	return (

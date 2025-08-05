@@ -41,9 +41,10 @@ setDefaultOptions({ locale: ptBR });
 
 interface TodoFormProps {
 	todo: Todo;
+	dragHandleProps?: any;
 }
 
-export function TodoForm({ todo }: TodoFormProps) {
+export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 	const { updateTodo } = useTodoContext();
 
 	const [title, setTitle] = useState(todo.title || "");
@@ -108,11 +109,10 @@ export function TodoForm({ todo }: TodoFormProps) {
 	// }
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger className="outline-none">
-				<TodoCard todo={todo} />
-			</DialogTrigger>
-			<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
+		<>
+			<TodoCard todo={todo} dragHandleProps={dragHandleProps} onEditClick={() => setOpen(true)} />
+			<Dialog open={open} onOpenChange={setOpen}>
+				<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
 				<DialogHeader className="flex flex-col gap-1">
 					<DialogTitle>Editar Afazer</DialogTitle>
 
@@ -236,9 +236,10 @@ export function TodoForm({ todo }: TodoFormProps) {
 				</form>
 				<div className="flex justify-right items-center">
 					<DialogConfirmDelete id={todo.id} />
-				</div>
-			</DialogContent>
-		</Dialog>
+					</div>
+				</DialogContent>
+			</Dialog>
+		</>
 	);
 }
 

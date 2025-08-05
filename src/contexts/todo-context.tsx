@@ -23,6 +23,8 @@ interface TodoContextType {
 	deleteTodo: (id: string) => Promise<void>;
 	toggleComplete: (id: string) => Promise<void>;
 	getTodo: (id: string) => Todo | undefined;
+	reorderTodos: (todos: Todo[]) => Promise<void>;
+	completeTodo: (todo: Todo) => Promise<void>;
 }
 
 const TodoContext = createContext<TodoContextType | undefined>(undefined);
@@ -126,8 +128,50 @@ export function TodoProvider({ children }: TodoProviderProps) {
 		return todos.find((todo) => todo.id === id);
 	};
 
+	const reorderTodos = async (reorderedTodos: Todo[]) => {
+		try {
+			const todosWithOrder = reorderedTodos.map((todo, index) => ({
+				...todo,
+				order: index,
+			}));
+			
+			setTodos(todosWithOrder);
+			
+			for (const todo of todosWithOrder) {
+				await updateTodoUseCase.execute(todo);
+			}
+		} catch (err) {
+			setError("Failed to reorder todos");
+			console.error(err);
+		}
+	};
+
+	const completeTodo = async (todo: Todo) => {
+		try {
+			await fetch("/api/todo-logs", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ todo }),
+			});
+			
+			const today = new Date().toISOString().split('T')[0];
+			const updatedTodo = { ...todo, lastCompletedDate: today };
+			await updateTodoUseCase.execute(updatedTodo);
+			
+			setTodos(prevTodos => 
+				prevTodos.map(t => t.id === todo.id ? updatedTodo : t)
+			);
+		} catch (err) {
+			setError("Failed to complete todo");
+			console.error(err);
+		}
+	};
+
+	const today = new Date().toISOString().split('T')[0];
+	const visibleTodos = todos.filter(todo => todo.lastCompletedDate !== today);
+
 	const value = {
-		todos,
+		todos: visibleTodos.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
 		isLoading,
 		error,
 		addTodo,
@@ -135,6 +179,8 @@ export function TodoProvider({ children }: TodoProviderProps) {
 		deleteTodo,
 		toggleComplete,
 		getTodo,
+		reorderTodos,
+		completeTodo,
 	};
 
 	return (

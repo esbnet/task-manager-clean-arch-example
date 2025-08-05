@@ -32,6 +32,7 @@ export class InJsonFileDailyRepository implements DailyRepository {
 			id: Math.random().toString(36).substring(7),
 			...data,
 			createdAt: new Date(),
+			order: dailys.length,
 		};
 
 		dailys.push(newDaily);

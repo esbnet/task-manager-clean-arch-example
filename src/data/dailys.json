@@ -18,7 +18,9 @@
         "Tag 1",
         "Tag 2"
       ],
-      "createdAt": "2023-10-04T00:00:00Z"
+      "createdAt": "2023-10-04T00:00:00Z",
+      "order": 0,
+      "lastCompletedDate": "2025-08-05"
     },
     {
       "id": "2",
@@ -38,21 +40,9 @@
         "Tag 3",
         "Tag 4"
       ],
-      "createdAt": "2023-10-04T00:00:00Z"
-    },
-    {
-      "id": "9a1cdh",
-      "title": "teste",
-      "observations": "",
-      "tasks": [],
-      "difficulty": "Fácil",
-      "startDate": "2025-06-24T00:22:56.471Z",
-      "repeat": {
-        "type": "Diária",
-        "frequency": 1
-      },
-      "tags": [],
-      "createdAt": "2025-06-24T00:22:56.472Z"
+      "createdAt": "2023-10-04T00:00:00Z",
+      "order": 1,
+      "lastCompletedDate": "2025-08-05"
     },
     {
       "id": "51h9pa",
@@ -66,7 +56,8 @@
         "frequency": 1
       },
       "tags": [],
-      "createdAt": "2025-06-24T07:26:50.930Z"
+      "createdAt": "2025-06-24T07:26:50.930Z",
+      "order": 0
     },
     {
       "id": "87lvp",
@@ -80,7 +71,8 @@
         "frequency": 1
       },
       "tags": [],
-      "createdAt": "2025-06-30T23:12:38.879Z"
+      "createdAt": "2025-06-30T23:12:38.879Z",
+      "order": 1
     }
   ]
 }
