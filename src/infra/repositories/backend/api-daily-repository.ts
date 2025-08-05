@@ -2,12 +2,12 @@ import type { Daily } from "@/domain/entities/daily";
 import type { DailyRepository } from "@/domain/repositories/all-repository";
 
 export class ApiDailyRepository implements DailyRepository {
-	private baseUrl = "/api/dailys";
+	private baseUrl = "/api/daily";
 
 	async list(): Promise<Daily[]> {
 		const res = await fetch(this.baseUrl);
 		const json = await res.json();
-		return json.dailys || [];
+		return json.daily || [];
 	}
 
 	async create(data: Omit<Daily, "id" | "createdAt">): Promise<Daily> {

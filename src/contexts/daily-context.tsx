@@ -16,7 +16,7 @@ import { CreateDailyUseCase } from "@/use-cases/daily/create-daily/create-daily-
 import { UpdateDailyUseCase } from "@/use-cases/daily/update-daily/update-daily-use-case";
 
 interface DailyContextType {
-	dailys: Daily[];
+	daily: Daily[];
 	isLoading: boolean;
 	error: string | null;
 	addDaily: (daily: Omit<Daily, "id" | "createdAt">) => Promise<void>;
@@ -24,7 +24,7 @@ interface DailyContextType {
 	deleteDaily: (id: string) => Promise<void>;
 	toggleComplete: (id: string) => Promise<void>;
 	getDaily: (id: string) => Daily | undefined;
-	reorderDailys: (dailys: Daily[]) => Promise<void>;
+	reorderDaily: (daily: Daily[]) => Promise<void>;
 	completeDaily: (daily: Daily) => Promise<void>;
 }
 
@@ -35,7 +35,7 @@ interface DailyProviderProps {
 }
 
 export function DailyProvider({ children }: DailyProviderProps) {
-	const [dailys, setDailys] = useState<Daily[]>([]);
+	const [daily, setDaily] = useState<Daily[]>([]);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 
@@ -43,14 +43,14 @@ export function DailyProvider({ children }: DailyProviderProps) {
 	const createDailyUseCase = new CreateDailyUseCase(dailyRepository);
 	const updateDailyUseCase = new UpdateDailyUseCase(dailyRepository);
 
-	const fetchDailys = async () => {
+	const fetchDaily = async () => {
 		try {
 			setIsLoading(true);
-			const fetchedDailys = await dailyRepository.list();
-			setDailys(fetchedDailys as Daily[]);
+			const fetchedDaily = await dailyRepository.list();
+			setDaily(fetchedDaily as Daily[]);
 			setError(null);
 		} catch (err) {
-			setError("Failed to fetch dailys");
+			setError("Failed to fetch daily");
 			console.error(err);
 		} finally {
 			setIsLoading(false);
@@ -59,7 +59,7 @@ export function DailyProvider({ children }: DailyProviderProps) {
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
-		fetchDailys();
+		fetchDaily();
 	}, []);
 
 	const addDaily = async (daily: Omit<Daily, "id" | "createdAt">) => {
@@ -79,7 +79,7 @@ export function DailyProvider({ children }: DailyProviderProps) {
 					frequency: 1,
 				},
 			});
-			setDailys((prevDailys) => [...prevDailys, result.daily as Daily]);
+			setDaily((prevDaily) => [...prevDaily, result.daily as Daily]);
 		} catch (err) {
 			setError("Failed to add daily");
 			console.error(err);
@@ -93,8 +93,8 @@ export function DailyProvider({ children }: DailyProviderProps) {
 				...daily,
 				...updatedDailyOutput,
 			};
-			setDailys((prevDailys) =>
-				prevDailys.map((t) =>
+			setDaily((prevDaily) =>
+				prevDaily.map((t) =>
 					t.id === updatedDaily.id ? updatedDaily : t,
 				),
 			);
@@ -107,8 +107,8 @@ export function DailyProvider({ children }: DailyProviderProps) {
 	const deleteDaily = async (id: string) => {
 		try {
 			await dailyRepository.delete(id);
-			setDailys((prevDailys) =>
-				prevDailys.filter((daily) => daily.id !== id),
+			setDaily((prevDaily) =>
+				prevDaily.filter((daily) => daily.id !== id),
 			);
 		} catch (err) {
 			setError("Failed to delete daily");
@@ -125,8 +125,8 @@ export function DailyProvider({ children }: DailyProviderProps) {
 				...updatedDailyFromRepo,
 			} as Daily;
 
-			setDailys((prevDailys) =>
-				prevDailys.map((daily) =>
+			setDaily((prevDaily) =>
+				prevDaily.map((daily) =>
 					daily.id === id ? updatedDaily : daily,
 				),
 			);
@@ -137,23 +137,23 @@ export function DailyProvider({ children }: DailyProviderProps) {
 	};
 
 	const getDaily = (id: string) => {
-		return dailys.find((daily) => daily.id === id);
+		return daily.find((daily) => daily.id === id);
 	};
 
-	const reorderDailys = async (reorderedDailys: Daily[]) => {
+	const reorderDaily = async (reorderedDaily: Daily[]) => {
 		try {
-			const dailysWithOrder = reorderedDailys.map((daily, index) => ({
+			const dailyWithOrder = reorderedDaily.map((daily, index) => ({
 				...daily,
 				order: index,
 			}));
-			
-			setDailys(dailysWithOrder);
-			
-			for (const daily of dailysWithOrder) {
+
+			setDaily(dailyWithOrder);
+
+			for (const daily of dailyWithOrder) {
 				await updateDailyUseCase.execute(daily);
 			}
 		} catch (err) {
-			setError("Failed to reorder dailys");
+			setError("Failed to reorder daily");
 			console.error(err);
 		}
 	};
@@ -165,13 +165,13 @@ export function DailyProvider({ children }: DailyProviderProps) {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ daily }),
 			});
-			
+
 			const today = new Date().toISOString().split('T')[0];
 			const updatedDaily = { ...daily, lastCompletedDate: today };
 			await updateDailyUseCase.execute(updatedDaily);
-			
-			setDailys(prevDailys => 
-				prevDailys.map(d => d.id === daily.id ? updatedDaily : d)
+
+			setDaily(prevDaily =>
+				prevDaily.map(d => d.id === daily.id ? updatedDaily : d)
 			);
 		} catch (err) {
 			setError("Failed to complete daily");
@@ -180,10 +180,10 @@ export function DailyProvider({ children }: DailyProviderProps) {
 	};
 
 	const today = new Date().toISOString().split('T')[0];
-	const visibleDailys = dailys.filter(daily => daily.lastCompletedDate !== today);
+	const visibleDaily = daily.filter(daily => daily.lastCompletedDate !== today);
 
 	const value = {
-		dailys: visibleDailys.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+		daily: visibleDaily.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
 		isLoading,
 		error,
 		addDaily,
@@ -191,7 +191,7 @@ export function DailyProvider({ children }: DailyProviderProps) {
 		deleteDaily,
 		toggleComplete,
 		getDaily,
-		reorderDailys,
+		reorderDaily,
 		completeDaily,
 	};
 

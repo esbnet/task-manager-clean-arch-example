@@ -75,6 +75,49 @@
       "createdAt": "2025-08-05T03:58:12.598Z",
       "order": 6,
       "lastCompletedDate": "2025-08-05"
+    },
+    {
+      "id": "h19v",
+      "title": "fsdfasdfasd",
+      "observations": "",
+      "difficulty": "Média",
+      "tags": [
+        "Trabalho"
+      ],
+      "reset": "Diariamente",
+      "createdAt": "2025-08-05T05:32:54.729Z",
+      "order": 6
+    },
+    {
+      "id": "l4r6q2",
+      "title": "fasdffsd",
+      "observations": "",
+      "difficulty": "Fácil",
+      "tags": [],
+      "reset": "Diariamente",
+      "createdAt": "2025-08-05T05:32:58.086Z",
+      "order": 7
+    },
+    {
+      "id": "geanpm",
+      "title": "adfasdfa",
+      "observations": "",
+      "difficulty": "Fácil",
+      "tags": [],
+      "reset": "Diariamente",
+      "createdAt": "2025-08-05T05:33:03.816Z",
+      "order": 8
+    },
+    {
+      "id": "u0dty",
+      "title": "dfas",
+      "observations": "",
+      "difficulty": "Fácil",
+      "tags": [],
+      "reset": "Diariamente",
+      "createdAt": "2025-08-05T05:33:05.994Z",
+      "order": 9,
+      "lastCompletedDate": "2025-08-05"
     }
   ]
 }

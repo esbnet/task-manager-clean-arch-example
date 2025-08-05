@@ -1,9 +1,10 @@
 import "./globals.css";
 
+import { Kode_Mono, Lobster } from "next/font/google";
+
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { Kode_Mono, Lobster } from "next/font/google";
 
 const lobster = Lobster({
 	subsets: ["latin"],
@@ -34,7 +35,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="pt-BR" data-theme="light">
+		<html lang="pt-BR" className="dark">
 			<body
 				className={` ${lobster.className}  ${kodeMono.className} antialiased `}
 			>

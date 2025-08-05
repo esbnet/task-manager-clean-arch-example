@@ -1,18 +1,18 @@
-import fs from "node:fs";
-import path from "node:path";
 import type { Daily } from "@/domain/entities/daily";
 import type { DailyRepository } from "@/domain/repositories/all-repository";
+import fs from "node:fs";
+import path from "node:path";
 
-let dailys: Daily[] = [];
-const dataPath = path.join(process.cwd(), "src", "data", "dailys.json");
+let daily: Daily[] = [];
+const dataPath = path.join(process.cwd(), "src", "data", "daily.json");
 
 export class InJsonFileDailyRepository implements DailyRepository {
 	async list(): Promise<Daily[]> {
 		const data = fs.readFileSync(dataPath, "utf-8");
 		const parsedData = JSON.parse(data);
-		const dailys = parsedData.dailys || [];
+		const daily = parsedData.daily || [];
 
-		return [...dailys];
+		return [...daily];
 	}
 
 	async create(data: Omit<Daily, "id" | "createdAt">): Promise<Daily> {
@@ -25,20 +25,20 @@ export class InJsonFileDailyRepository implements DailyRepository {
 		// Lê os dados existentes ou inicializa um array vazio
 		if (fs.existsSync(dataPath)) {
 			const fileData = fs.readFileSync(dataPath);
-			dailys = JSON.parse(fileData.toString()).dailys || [];
+			daily = JSON.parse(fileData.toString()).daily || [];
 		}
 
 		const newDaily: Daily = {
 			id: Math.random().toString(36).substring(7),
 			...data,
 			createdAt: new Date(),
-			order: dailys.length,
+			order: daily.length,
 		};
 
-		dailys.push(newDaily);
+		daily.push(newDaily);
 
 		// Escreve de volta no arquivo
-		fs.writeFileSync(dataPath, JSON.stringify({ dailys }, null, 2));
+		fs.writeFileSync(dataPath, JSON.stringify({ daily }, null, 2));
 
 		return newDaily;
 	}
@@ -51,24 +51,24 @@ export class InJsonFileDailyRepository implements DailyRepository {
 
 		// Lê os dados existentes ou inicializa um array vazio
 		if (!fs.existsSync(dataPath)) {
-			fs.writeFileSync(dataPath, JSON.stringify({ dailys: [] }, null, 2));
+			fs.writeFileSync(dataPath, JSON.stringify({ daily: [] }, null, 2));
 		}
 
 		// Lê os dados existentes
 		const fileData = fs.readFileSync(dataPath);
-		dailys = JSON.parse(fileData.toString()).dailys || [];
+		daily = JSON.parse(fileData.toString()).daily || [];
 
 		// Verifica se a tarefa existe no array
-		const dailyIndex = dailys.findIndex((t) => t.id === id);
+		const dailyIndex = daily.findIndex((t) => t.id === id);
 		if (dailyIndex < 0) throw new Error("Daily not found");
 
-		const daily = dailys[dailyIndex];
+		const daily = daily[dailyIndex];
 		// daily.completed = !daily.completed; //TODO: Implementar lógica de toggle completo
 
-		dailys[dailyIndex] = daily;
+		daily[dailyIndex] = daily;
 
 		// Escreve de volta no arquivo
-		fs.writeFileSync(dataPath, JSON.stringify({ dailys }, null, 2));
+		fs.writeFileSync(dataPath, JSON.stringify({ daily }, null, 2));
 
 		return daily;
 	}
@@ -81,19 +81,19 @@ export class InJsonFileDailyRepository implements DailyRepository {
 
 		// Lê os dados existentes
 		const fileData = fs.readFileSync(dataPath);
-		dailys = JSON.parse(fileData.toString()).dailys || [];
+		daily = JSON.parse(fileData.toString()).daily || [];
 
 		// Verifica se a tarefa existe no array
-		const dailyIndex = dailys.findIndex((t) => t.id === daily.id);
+		const dailyIndex = daily.findIndex((t) => t.id === daily.id);
 		if (dailyIndex < 0) throw new Error("Daily not found");
 
 		// Atualiza a tarefa
-		dailys[dailyIndex] = { ...dailys[dailyIndex], ...daily };
+		daily[dailyIndex] = { ...daily[dailyIndex], ...daily };
 
 		// Escreve de volta no arquivo
-		fs.writeFileSync(dataPath, JSON.stringify({ dailys }, null, 2));
+		fs.writeFileSync(dataPath, JSON.stringify({ daily }, null, 2));
 
-		return dailys[dailyIndex];
+		return daily[dailyIndex];
 	}
 
 	async delete(id: string): Promise<void> {
@@ -104,20 +104,20 @@ export class InJsonFileDailyRepository implements DailyRepository {
 
 		// Lê os dados existentes
 		const fileData = fs.readFileSync(dataPath);
-		dailys = JSON.parse(fileData.toString()).dailys || [];
+		daily = JSON.parse(fileData.toString()).daily || [];
 
 		// Verifica se a tarefa existe no array
-		const dailyIndex = dailys.findIndex((t) => t.id === id);
+		const dailyIndex = daily.findIndex((t) => t.id === id);
 		if (dailyIndex < 0) throw new Error("Daily not found");
 
 		// Remove o usuário pelo índice
-		dailys.splice(dailyIndex, 1);
+		daily.splice(dailyIndex, 1);
 
 		// Salva de volta no arquivo
-		fs.writeFileSync(dataPath, JSON.stringify({ dailys }, null, 2));
+		fs.writeFileSync(dataPath, JSON.stringify({ daily }, null, 2));
 
 		// Atualiza o array em memória
-		dailys = dailys.filter((t) => t.id !== id);
+		daily = daily.filter((t) => t.id !== id);
 
 		return;
 	}

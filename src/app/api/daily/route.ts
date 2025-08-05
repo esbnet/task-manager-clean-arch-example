@@ -1,7 +1,7 @@
 import { InJsonFileDailyRepository } from "@/infra/repositories/frontend/json-file-daily-repository";
 import { CreateDailyUseCase } from "@/use-cases/daily/create-daily/create-daily-use-case";
 import { DeleteDailyUseCase } from "@/use-cases/daily/delete-daily/toggle-delete-use-case";
-import { ListDailysUseCase } from "@/use-cases/daily/list-dailys/list-daily-use-case";
+import { ListDailyUseCase } from "@/use-cases/daily/list-daily/list-daily-use-case";
 import { UpdateDailyUseCase } from "@/use-cases/daily/update-daily/update-daily-use-case";
 import type { NextRequest } from "next/server";
 
@@ -9,7 +9,7 @@ import type { NextRequest } from "next/server";
 const dailyRepo = new InJsonFileDailyRepository();
 
 export async function GET() {
-	const useCase = new ListDailysUseCase(dailyRepo);
+	const useCase = new ListDailyUseCase(dailyRepo);
 	const result = await useCase.execute();
 	return Response.json(result);
 }
