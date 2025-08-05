@@ -102,11 +102,10 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 	// }
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger className="outline-none">
-				<HabitCard habit={habit} dragHandleProps={dragHandleProps} />
-			</DialogTrigger>
-			<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
+		<>
+			<HabitCard habit={habit} dragHandleProps={dragHandleProps} onEditClick={() => setOpen(true)} />
+			<Dialog open={open} onOpenChange={setOpen}>
+				<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
 				<DialogHeader className="flex flex-col gap-1">
 					<DialogTitle className="font-bold text-foreground text-2xl">
 						{habit.id ? "Editar" : "Adicionar"} Hábito
@@ -236,9 +235,10 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 				</form>
 				<div className="flex justify-right items-center">
 					<DialogConfirmDelete id={habit.id} />
-				</div>
-			</DialogContent>
-		</Dialog>
+					</div>
+				</DialogContent>
+			</Dialog>
+		</>
 	);
 }
 

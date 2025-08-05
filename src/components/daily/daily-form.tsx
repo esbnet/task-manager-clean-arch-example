@@ -41,9 +41,10 @@ setDefaultOptions({ locale: ptBR });
 
 interface DailyFormProps {
 	daily: Daily;
+	dragHandleProps?: any;
 }
 
-export function DailyForm({ daily }: DailyFormProps) {
+export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 	const { updateDaily } = useDailyContext();
 
 	const [title, setTitle] = useState(daily.title || "");
@@ -126,11 +127,10 @@ export function DailyForm({ daily }: DailyFormProps) {
 	// }
 
 	return (
-		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger className="outline-none">
-				<DailyCard daily={daily} />
-			</DialogTrigger>
-			<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
+		<>
+			<DailyCard daily={daily} dragHandleProps={dragHandleProps} onEditClick={() => setOpen(true)} />
+			<Dialog open={open} onOpenChange={setOpen}>
+				<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
 				<DialogHeader className="flex flex-col gap-1">
 					<DialogTitle>Editar</DialogTitle>
 					<DialogDescription className="text-zinc-400 text-sm">
@@ -326,9 +326,10 @@ export function DailyForm({ daily }: DailyFormProps) {
 				</form>
 				<div className="flex justify-right items-center">
 					<DialogConfirmDelete id={daily.id} />
-				</div>
-			</DialogContent>
-		</Dialog>
+					</div>
+				</DialogContent>
+			</Dialog>
+		</>
 	);
 }
 

@@ -11,4 +11,5 @@ export interface Habit {
 	reset: HabitReset;
 	createdAt: Date;
 	order?: number;
+	lastCompletedDate?: string;
 }

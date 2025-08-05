@@ -3,6 +3,9 @@ import { Loading } from "../ui/loading";
 import type { Todo } from "@/types";
 import { TodoForm } from "./todo-form";
 import { useTodoContext } from "@/contexts/todo-context";
+import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, arrayMove, useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 export const TodoColumn = () => {
 	return (
@@ -22,7 +25,7 @@ export const TodoColumn = () => {
 };
 
 const Todos = () => {
-	const { todos, isLoading } = useTodoContext();
+	const { todos, isLoading, reorderTodos } = useTodoContext();
 
 	if (isLoading) {
 		return <Loading text="Carregando afazeres..." size="lg" />;
@@ -36,11 +39,52 @@ const Todos = () => {
 		);
 	}
 
+	const handleDragEnd = (event: DragEndEvent) => {
+		const { active, over } = event;
+
+		if (!over || active.id === over.id) return;
+
+		const oldIndex = todos.findIndex((todo) => todo.id === active.id);
+		const newIndex = todos.findIndex((todo) => todo.id === over.id);
+
+		const reorderedTodos = arrayMove(todos, oldIndex, newIndex);
+		reorderTodos(reorderedTodos);
+	};
+
 	return (
-		<div className="flex flex-col gap-2">
-			{todos.map((todo: Todo) => {
-				return <TodoForm key={todo.id} todo={todo} />;
-			})}
+		<DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+			<SortableContext items={todos.map(t => t.id)} strategy={verticalListSortingStrategy}>
+				<div className="flex flex-col gap-2">
+					{todos.map((todo: Todo) => {
+						return <SortableTodoItem key={todo.id} todo={todo} />;
+					})}
+				</div>
+			</SortableContext>
+		</DndContext>
+	);
+};
+
+const SortableTodoItem = ({ todo }: { todo: Todo }) => {
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging,
+	} = useSortable({
+		id: todo.id,
+	});
+
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+		opacity: isDragging ? 0.5 : 1,
+	};
+
+	return (
+		<div ref={setNodeRef} style={style} {...attributes}>
+			<TodoForm todo={todo} dragHandleProps={listeners} />
 		</div>
 	);
 };

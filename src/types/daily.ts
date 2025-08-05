@@ -21,4 +21,6 @@ export interface Daily {
 	repeat: DailyRepeat;
 	tags: string[];
 	createdAt: Date;
+	order?: number;
+	lastCompletedDate?: string;
 }

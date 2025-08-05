@@ -32,6 +32,7 @@ export class InJsonFileTodoRepository implements TodoRepository {
 			id: Math.random().toString(36).substring(7),
 			...data,
 			createdAt: new Date(),
+			order: todos.length,
 		};
 
 		todos.push(newTodo);

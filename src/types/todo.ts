@@ -9,4 +9,6 @@ export interface Todo {
 	startDate: Date;
 	tags: string[];
 	createdAt: Date;
+	order?: number;
+	lastCompletedDate?: string;
 }

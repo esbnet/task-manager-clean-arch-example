@@ -2,7 +2,7 @@ import { InJsonFileDailyRepository } from "@/infra/repositories/frontend/json-fi
 import { CreateDailyUseCase } from "@/use-cases/daily/create-daily/create-daily-use-case";
 import { DeleteDailyUseCase } from "@/use-cases/daily/delete-daily/toggle-delete-use-case";
 import { ListDailysUseCase } from "@/use-cases/daily/list-dailys/list-daily-use-case";
-// import { UpdateDailyUseCase } from "@/use-cases/daily/update-daily/update-daily-use-case";
+import { UpdateDailyUseCase } from "@/use-cases/daily/update-daily/update-daily-use-case";
 import type { NextRequest } from "next/server";
 
 // Instância única do repositório
@@ -41,12 +41,12 @@ export async function POST(request: NextRequest) {
 // 	return new Response(null, { status: 204 });
 // }
 
-// export async function PATCH(request: NextRequest) {
-// 	const { daily } = await request.json();
-// 	const useCase = new UpdateDailyUseCase(dailyRepo);
-// 	const updatedDaily = await useCase.execute(daily);
-// 	return Response.json({ daily: updatedDaily }, { status: 200 });
-// }
+export async function PATCH(request: NextRequest) {
+	const { daily } = await request.json();
+	const useCase = new UpdateDailyUseCase(dailyRepo);
+	const updatedDaily = await useCase.execute(daily);
+	return Response.json({ daily: updatedDaily }, { status: 200 });
+}
 
 export async function DELETE(request: NextRequest) {
 	const { id } = await request.json();

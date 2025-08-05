@@ -1,46 +1,34 @@
 import { Checkbox } from "@/components/ui/checkbox";
-// import { useDailyContext } from "@/contexts/daily-context";
-import { useDraggable } from "@dnd-kit/core";
-import { CSS } from "@dnd-kit/utilities";
+import { useDailyContext } from "@/contexts/daily-context";
 import { GripVertical } from "lucide-react";
+import { toast } from "sonner";
 import type { Daily } from "../../types";
 
 type Props = {
 	daily: Daily;
+	dragHandleProps?: any;
+	onEditClick?: () => void;
 };
 
-export function DailyCard({ daily }: Props) {
-	return <DailyItem daily={daily} />;
+export function DailyCard({ daily, dragHandleProps, onEditClick }: Props) {
+	return <DailyItem daily={daily} dragHandleProps={dragHandleProps} onEditClick={onEditClick} />;
 }
 
-export function DailyItem({ daily }: Props) {
-	const { attributes, listeners, setNodeRef, transform } = useDraggable({
-		id: daily.id,
-	});
+function DailyItem({ daily, dragHandleProps, onEditClick }: Props) {
+	const { completeDaily } = useDailyContext();
 
-	// const { updateDaily } = useDailyContext();
-
-	// const onToggle = async (checked: boolean) => {
-	// 	await updateDaily({ ...daily, completed: checked });
-	// 	toast.success(
-	// 		`Tarefa ${checked ? "concluída" : "desfeita"} com sucesso!`,
-	// 	);
-	// };
-
-	const style = {
-		transform: CSS.Translate.toString(transform),
+	const onComplete = async (checked: boolean) => {
+		if (checked) {
+			await completeDaily(daily);
+			toast.success(`Tarefa diária "${daily.title}" concluída!`);
+		}
 	};
 
 	return (
-		<div
-			ref={setNodeRef}
-			style={style}
-			{...attributes}
-			className="flex justify-between items-center gap-2 bg-background/30 shadow-sm hover:shadow-md p-1 rounded-sm transition-all duration-200 ease-in-out"
-		>
+		<div className="flex justify-between items-center gap-2 bg-background/30 shadow-sm hover:shadow-md p-1 rounded-sm transition-all duration-200 ease-in-out">
 			<div
 				className="hover:bg-background/10 px-1 py-2 rounded-sm cursor-grab"
-				{...listeners}
+				{...dragHandleProps}
 				title="Arraste para mover a tarefa"
 			>
 				<GripVertical size={16} className="text-foreground" />
@@ -48,11 +36,14 @@ export function DailyItem({ daily }: Props) {
 			<div className="flex justify-between items-center gap-1 w-full">
 				<div className="flex items-center gap-2">
 					<Checkbox
-						// checked={daily.completed}
-						// onCheckedChange={onToggle}
+						onCheckedChange={onComplete}
 						className="hover:bg-foreground/10 border-foreground/30 focus-visible:ring-0 focus-visible:ring-offset-0 w-5 h-5 focus-visible:bg-accent-foreground hover:cursor-pointer"
+						onClick={(e) => e.stopPropagation()}
 					/>
-					<span className="text-foreground/60 text-justify">
+					<span 
+						className="text-foreground/60 text-justify cursor-pointer hover:text-foreground/80"
+						onClick={onEditClick}
+					>
 						{daily.title}
 					</span>
 				</div>
