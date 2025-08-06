@@ -1,24 +1,20 @@
-import type { Daily, DailyRepeat, Dailydifficulty } from "./daily";
+import type { Daily, DailyDifficulty, DailyRepeat } from "./daily";
+import type { Habit, HabitDifficulty, HabitReset } from "./habit";
+import type { Todo, TodoDifficulty } from "./todo";
+
 import type { DailyLog } from "./daily-log";
 import type { DailySubtask } from "./daily-subtask";
-import type { Habit, HabitReset, Habitdifficulty } from "./habit";
 import type { HabitLog } from "./habit-log";
 import type { Tag } from "./tag";
-import type { Todo } from "./todo";
 import type { TodoLog } from "./todo-log";
+import type { TodoSubtask } from "./todo-subtask";
 
 export type {
-	Daily,
-	DailyLog,
+	Daily, DailyDifficulty, DailyLog,
 	DailyRepeat,
-	DailySubtask,
-	Dailydifficulty,
-	Habit,
-	HabitReset,
-	Habitdifficulty,
-	HabitLog,
-	Tag,
-	Todo,
-	TodoLog,
-	Tododifficulty,
+	DailySubtask, Habit, HabitDifficulty,
+	HabitLog, HabitReset, Tag,
+	Todo, TodoDifficulty, TodoLog,
+	TodoSubtask
 };
+

@@ -1,8 +1,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { useHabitContext } from "@/contexts/habit-context";
 import { GripVertical } from "lucide-react";
-import { toast } from "sonner";
 import type { Habit } from "../../types";
+import { toast } from "sonner";
+import { useHabitContext } from "@/contexts/habit-context";
 
 type Props = {
 	habit: Habit;
@@ -40,9 +40,10 @@ function HabitItem({ habit, dragHandleProps, onEditClick }: Props) {
 						className="hover:bg-foreground/10 border-foreground/30 focus-visible:ring-0 focus-visible:ring-offset-0 w-5 h-5 focus-visible:bg-accent-foreground hover:cursor-pointer"
 						onClick={(e) => e.stopPropagation()}
 					/>
-					<span 
-						className="text-foreground/60 text-justify cursor-pointer hover:text-foreground/80"
+					<span
+						className="text-foreground/60 hover:text-foreground/80 text-justify line-clamp-1 cursor-pointer"
 						onClick={onEditClick}
+						title={habit.title}
 					>
 						{habit.title}
 					</span>

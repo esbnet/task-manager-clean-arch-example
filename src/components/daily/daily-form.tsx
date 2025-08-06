@@ -28,15 +28,15 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import type { Daily } from "@/types";
 import { DailyCard } from "./daily-card";
+import { DailySubtaskList } from "./daily-subtask-list";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { SubtaskList } from "./subtask-list";
 import { ptBR } from "date-fns/locale";
 import { toast } from "sonner";
 import { useDailyContext } from "@/contexts/daily-context";
-import { useTags } from "@/hooks/use-tags";
 import { useState } from "react";
+import { useTags } from "@/hooks/use-tags";
 
 setDefaultOptions({ locale: ptBR });
 
@@ -133,7 +133,7 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 						</div>
 						<div className="flex flex-col gap-1">
 							<Label>Lista de tarefas</Label>
-							<SubtaskList dailyId={daily.id} />
+							<DailySubtaskList dailyId={daily.id} />
 						</div>
 						<div className="flex flex-col gap-1">
 							<Label>Dificuldade</Label>
@@ -143,20 +143,20 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 								}
 								value={difficulty || "Fácil"}
 							>
-								<SelectTrigger className="w-[180px]">
+								<SelectTrigger className="w-full">
 									<SelectValue
 										placeholder="Dificuldade"
 										className="text-zinc-300"
 									/>
 								</SelectTrigger>
 								<SelectContent
-									className="w-[180px]"
+									className="w-full"
 									defaultValue={difficulty}
 								>
-									<SelectItem value="Trivial">Trival</SelectItem>
-									<SelectItem value="Fácil">Fácil</SelectItem>
-									<SelectItem value="Média">Média</SelectItem>
-									<SelectItem value="Difícil">Difícil</SelectItem>
+									<SelectItem value="Trivial">Trival ⭐</SelectItem>
+									<SelectItem value="Fácil">Fácil ⭐⭐</SelectItem>
+									<SelectItem value="Média">Média ⭐⭐⭐</SelectItem>
+									<SelectItem value="Difícil">Difícil ⭐⭐⭐⭐</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>

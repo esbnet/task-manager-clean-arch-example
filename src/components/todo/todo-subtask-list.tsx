@@ -3,51 +3,75 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { DailySubtask } from "@/types";
 import { Input } from "@/components/ui/input";
+import type { TodoSubtask } from "@/types";
 import { toast } from "sonner";
 
-interface SubtaskListProps {
-	dailyId: string;
+interface TodoSubtaskListProps {
+	todoId: string;
 }
 
-export function SubtaskList({ dailyId }: SubtaskListProps) {
-	const [subtasks, setSubtasks] = useState<DailySubtask[]>([]);
+export function TodoSubtaskList({ todoId }: TodoSubtaskListProps) {
+	const [subtasks, setSubtasks] = useState<TodoSubtask[]>([]);
 	const [newTaskTitle, setNewTaskTitle] = useState("");
 
 	useEffect(() => {
 		fetchSubtasks();
-	}, [dailyId]);
+	}, [todoId]);
 
 	const fetchSubtasks = async () => {
-		const response = await fetch(`/api/daily-subtasks?dailyId=${dailyId}`);
-		const data = await response.json();
-		setSubtasks(data.subtasks || []);
+		try {
+			const response = await fetch(`/api/todo-subtasks?todoId=${todoId}`);
+			if (!response.ok) {
+				console.error('Failed to fetch subtasks:', response.status);
+				return;
+			}
+			const text = await response.text();
+			if (!text) {
+				setSubtasks([]);
+				return;
+			}
+			const data = JSON.parse(text);
+			setSubtasks(data.subtasks || []);
+		} catch (error) {
+			console.error('Error fetching subtasks:', error);
+			setSubtasks([]);
+		}
 	};
 
 	const addSubtask = async (e?: React.FormEvent) => {
 		if (e) e.preventDefault();
 		if (!newTaskTitle.trim()) return;
 
-		const response = await fetch("/api/daily-subtasks", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				title: newTaskTitle,
-				dailyId,
-				order: subtasks.length
-			})
-		});
+		try {
+			const response = await fetch("/api/todo-subtasks", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({
+					title: newTaskTitle,
+					todoId,
+					order: subtasks.length
+				})
+			});
 
-		const data = await response.json();
-		setSubtasks([...subtasks, data.subtask]);
-		setNewTaskTitle("");
+			if (!response.ok) {
+				toast.error('Erro ao criar tarefa');
+				return;
+			}
+
+			const data = await response.json();
+			setSubtasks([...subtasks, data.subtask]);
+			setNewTaskTitle("");
+		} catch (error) {
+			console.error('Error adding subtask:', error);
+			toast.error('Erro ao criar tarefa');
+		}
 	};
 
-	const toggleSubtask = async (subtask: DailySubtask) => {
+	const toggleSubtask = async (subtask: TodoSubtask) => {
 		const updated = { ...subtask, completed: !subtask.completed };
 
-		await fetch("/api/daily-subtasks", {
+		await fetch("/api/todo-subtasks", {
 			method: "PATCH",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ subtask: updated })
@@ -57,7 +81,7 @@ export function SubtaskList({ dailyId }: SubtaskListProps) {
 	};
 
 	const deleteSubtask = async (id: string, title: string) => {
-		await fetch("/api/daily-subtasks", {
+		await fetch("/api/todo-subtasks", {
 			method: "DELETE",
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({ id })
@@ -66,8 +90,6 @@ export function SubtaskList({ dailyId }: SubtaskListProps) {
 		setSubtasks(subtasks.filter(s => s.id !== id));
 		toast.success(`Tarefa "${title}" removida com sucesso!`);
 	};
-
-
 
 	return (
 		<div className="flex flex-col gap-2">
