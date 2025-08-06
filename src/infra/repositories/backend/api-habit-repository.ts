@@ -12,17 +12,25 @@ export class ApiHabitRepository implements HabitRepository {
 	}
 
 	async list(): Promise<Habit[]> {
-		const json = await this.httpClient.get<{ habits: Habit[] }>(this.baseUrl);
+		const json = await this.httpClient.get<{ habits: Habit[] }>(
+			this.baseUrl,
+		);
 		return json.habits || [];
 	}
 
 	async create(data: Omit<Habit, "id" | "createdAt">): Promise<Habit> {
-		const json = await this.httpClient.post<{ habit: Habit }>(this.baseUrl, data);
+		const json = await this.httpClient.post<{ habit: Habit }>(
+			this.baseUrl,
+			data,
+		);
 		return json.habit;
 	}
 
 	async update(habit: Habit): Promise<Habit> {
-		const json = await this.httpClient.patch<{ habit: Habit }>(this.baseUrl, { habit });
+		const json = await this.httpClient.patch<{ habit: Habit }>(
+			this.baseUrl,
+			{ habit },
+		);
 		return json.habit;
 	}
 

@@ -1,5 +1,8 @@
-import type { DailyRepository, DailyLogRepository } from "@/domain/repositories/all-repository";
 import type { Daily } from "@/domain/entities/daily";
+import type {
+	DailyLogRepository,
+	DailyRepository,
+} from "@/domain/repositories/all-repository";
 
 export interface CompleteDailyWithLogInput {
 	daily: Daily;
@@ -13,10 +16,12 @@ export interface CompleteDailyWithLogOutput {
 export class CompleteDailyWithLogUseCase {
 	constructor(
 		private dailyRepository: DailyRepository,
-		private dailyLogRepository: DailyLogRepository
+		private dailyLogRepository: DailyLogRepository,
 	) {}
 
-	async execute(input: CompleteDailyWithLogInput): Promise<CompleteDailyWithLogOutput> {
+	async execute(
+		input: CompleteDailyWithLogInput,
+	): Promise<CompleteDailyWithLogOutput> {
 		// Create log
 		await this.dailyLogRepository.create({
 			dailyId: input.daily.id,

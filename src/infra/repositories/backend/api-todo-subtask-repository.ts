@@ -12,17 +12,27 @@ export class ApiTodoSubtaskRepository implements TodoSubtaskRepository {
 	}
 
 	async listByTodoId(todoId: string): Promise<TodoSubtask[]> {
-		const json = await this.httpClient.get<{ subtasks: TodoSubtask[] }>(`${this.baseUrl}?todoId=${todoId}`);
+		const json = await this.httpClient.get<{ subtasks: TodoSubtask[] }>(
+			`${this.baseUrl}?todoId=${todoId}`,
+		);
 		return json.subtasks;
 	}
 
-	async create(data: Omit<TodoSubtask, "id" | "createdAt">): Promise<TodoSubtask> {
-		const json = await this.httpClient.post<{ subtask: TodoSubtask }>(this.baseUrl, data);
+	async create(
+		data: Omit<TodoSubtask, "id" | "createdAt">,
+	): Promise<TodoSubtask> {
+		const json = await this.httpClient.post<{ subtask: TodoSubtask }>(
+			this.baseUrl,
+			data,
+		);
 		return json.subtask;
 	}
 
 	async update(subtask: TodoSubtask): Promise<TodoSubtask> {
-		const json = await this.httpClient.patch<{ subtask: TodoSubtask }>(this.baseUrl, { subtask });
+		const json = await this.httpClient.patch<{ subtask: TodoSubtask }>(
+			this.baseUrl,
+			{ subtask },
+		);
 		return json.subtask;
 	}
 

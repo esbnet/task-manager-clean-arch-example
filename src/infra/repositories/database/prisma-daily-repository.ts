@@ -66,7 +66,10 @@ export class PrismaDailyRepository implements DailyRepository {
 		await prisma.daily.delete({ where: { id } });
 	}
 
+	// Converts Prisma entity to domain entity
+
 	private toDomain(daily: any): Daily {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		return {
 			id: daily.id,
 			title: daily.title,

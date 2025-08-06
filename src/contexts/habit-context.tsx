@@ -13,9 +13,9 @@ import type { Habit, HabitReset } from "@/types";
 import { ApiHabitRepository } from "@/infra/repositories/backend/api-habit-repository";
 import type { HabitDifficulty } from "@/types/habit";
 import { CreateHabitUseCase } from "@/use-cases/habit/create-habit/create-habit-use-case";
-import { UpdateHabitUseCase } from "@/use-cases/habit/update-habit/update-habit-use-case";
 import { DeleteHabitUseCase } from "@/use-cases/habit/delete-habit-use-case/delete-habit-use-case";
 import { ListHabitUseCase } from "@/use-cases/habit/list-habit-use-case/list-habit-use-case";
+import { UpdateHabitUseCase } from "@/use-cases/habit/update-habit/update-habit-use-case";
 
 interface HabitContextType {
 	habits: Habit[];
@@ -61,7 +61,6 @@ export function HabitProvider({ children }: HabitProviderProps) {
 		}
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		fetchHabits();
 	}, []);
@@ -161,14 +160,24 @@ export function HabitProvider({ children }: HabitProviderProps) {
 
 	const completeHabit = async (habit: Habit) => {
 		try {
-			const completeHabitWithLogUseCase = new (await import("@/use-cases/habit/complete-habit-with-log/complete-habit-with-log-use-case")).CompleteHabitWithLogUseCase(
+			const completeHabitWithLogUseCase = new (
+				await import(
+					"@/use-cases/habit/complete-habit-with-log/complete-habit-with-log-use-case"
+				)
+			).CompleteHabitWithLogUseCase(
 				habitRepository,
-				new (await import("@/infra/repositories/database/prisma-habit-log-repository")).PrismaHabitLogRepository()
+				new (
+					await import(
+						"@/infra/repositories/database/prisma-habit-log-repository"
+					)
+				).PrismaHabitLogRepository(),
 			);
-			
+
 			const result = await completeHabitWithLogUseCase.execute({ habit });
 			setHabits((prevHabits) =>
-				prevHabits.map((h) => (h.id === habit.id ? result.updatedHabit : h)),
+				prevHabits.map((h) =>
+					h.id === habit.id ? result.updatedHabit : h,
+				),
 			);
 		} catch (err) {
 			setError("Failed to complete habit");

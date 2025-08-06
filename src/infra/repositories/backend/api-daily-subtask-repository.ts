@@ -12,17 +12,27 @@ export class ApiDailySubtaskRepository implements DailySubtaskRepository {
 	}
 
 	async listByDailyId(dailyId: string): Promise<DailySubtask[]> {
-		const json = await this.httpClient.get<{ subtasks: DailySubtask[] }>(`${this.baseUrl}?dailyId=${dailyId}`);
+		const json = await this.httpClient.get<{ subtasks: DailySubtask[] }>(
+			`${this.baseUrl}?dailyId=${dailyId}`,
+		);
 		return json.subtasks;
 	}
 
-	async create(data: Omit<DailySubtask, "id" | "createdAt">): Promise<DailySubtask> {
-		const json = await this.httpClient.post<{ subtask: DailySubtask }>(this.baseUrl, data);
+	async create(
+		data: Omit<DailySubtask, "id" | "createdAt">,
+	): Promise<DailySubtask> {
+		const json = await this.httpClient.post<{ subtask: DailySubtask }>(
+			this.baseUrl,
+			data,
+		);
 		return json.subtask;
 	}
 
 	async update(subtask: DailySubtask): Promise<DailySubtask> {
-		const json = await this.httpClient.patch<{ subtask: DailySubtask }>(this.baseUrl, { subtask });
+		const json = await this.httpClient.patch<{ subtask: DailySubtask }>(
+			this.baseUrl,
+			{ subtask },
+		);
 		return json.subtask;
 	}
 

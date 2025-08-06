@@ -135,7 +135,6 @@ export const MultiSelect = React.forwardRef<
 			animation = 0,
 			maxCount = 3,
 			modalPopover = false,
-			asChild = false,
 			className,
 			...props
 		},
@@ -207,7 +206,7 @@ export const MultiSelect = React.forwardRef<
 						{...props}
 						onClick={handleTogglePopover}
 						className={cn(
-							"flex w-full p-1 rounded-md border min-h-10 h-auto items-center justify-between bg-inherit hover:bg-inherit [&_svg]:pointer-events-auto",
+							"flex justify-between items-center bg-inherit hover:bg-inherit p-1 border rounded-md w-full h-auto min-h-10 [&_svg]:pointer-events-auto",
 							className,
 						)}
 					>
@@ -256,7 +255,7 @@ export const MultiSelect = React.forwardRef<
 									{selectedValues.length > maxCount && (
 										<Badge
 											className={cn(
-												"bg-transparent text-foreground border-foreground/1 hover:bg-transparent",
+												"bg-transparent hover:bg-transparent border-foreground/1 text-foreground",
 												isAnimating
 													? "animate-bounce"
 													: "",
@@ -326,7 +325,7 @@ export const MultiSelect = React.forwardRef<
 								>
 									<div
 										className={cn(
-											"mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+											"flex justify-center items-center mr-2 border border-primary rounded-sm w-4 h-4",
 											selectedValues.length ===
 												options.length
 												? "bg-primary text-primary-foreground"
@@ -351,7 +350,7 @@ export const MultiSelect = React.forwardRef<
 										>
 											<div
 												className={cn(
-													"mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
+													"flex justify-center items-center mr-2 border border-primary rounded-sm w-4 h-4",
 													isSelected
 														? "bg-primary text-primary-foreground"
 														: "opacity-50 [&_svg]:invisible",
@@ -365,7 +364,7 @@ export const MultiSelect = React.forwardRef<
 											<div className="flex items-center gap-2">
 												{option.color && (
 													<div
-														className="w-3 h-3 rounded-full"
+														className="rounded-full w-3 h-3"
 														style={{
 															backgroundColor:
 																option.color,
@@ -409,7 +408,7 @@ export const MultiSelect = React.forwardRef<
 				{animation > 0 && selectedValues.length > 0 && (
 					<WandSparkles
 						className={cn(
-							"cursor-pointer my-2 text-foreground bg-background w-3 h-3",
+							"bg-background my-2 w-3 h-3 text-foreground cursor-pointer",
 							isAnimating ? "" : "text-muted-foreground",
 						)}
 						onClick={() => setIsAnimating(!isAnimating)}

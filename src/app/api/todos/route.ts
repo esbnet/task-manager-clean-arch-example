@@ -47,12 +47,12 @@ export async function PATCH(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
 	const url = new URL(request.url);
-	const id = url.searchParams.get('id');
-	
+	const id = url.searchParams.get("id");
+
 	if (!id) {
-		return Response.json({ error: 'ID is required' }, { status: 400 });
+		return Response.json({ error: "ID is required" }, { status: 400 });
 	}
-	
+
 	const useCase = new DeleteTodoUseCase(todoRepo);
 	await useCase.execute({ id });
 	return new Response(null, { status: 204 });

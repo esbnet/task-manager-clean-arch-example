@@ -31,7 +31,7 @@ import { HabitCard } from "./habit-card";
 
 interface HabitFormProps {
 	habit: Habit;
-	dragHandleProps?: any;
+	dragHandleProps?: () => void;
 }
 
 export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {

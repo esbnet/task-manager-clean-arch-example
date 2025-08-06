@@ -1,5 +1,5 @@
-import type { DailyRepository } from "@/domain/repositories/all-repository";
 import type { Daily } from "@/domain/entities/daily";
+import type { DailyRepository } from "@/domain/repositories/all-repository";
 
 export interface ListDailyOutput {
 	daily: Daily[];

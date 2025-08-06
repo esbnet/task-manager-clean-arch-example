@@ -10,11 +10,13 @@ import {
 
 import type { Todo } from "@/types";
 
+import { ApiTodoLogRepository } from "@/infra/repositories/backend/api-todo-log-repository";
 import { ApiTodoRepository } from "@/infra/repositories/backend/api-todo-repository";
+import { CompleteTodoWithLogUseCase } from "@/use-cases/todo/complete-todo-with-log/complete-todo-with-log-use-case";
 import { CreateTodoUseCase } from "@/use-cases/todo/create-todo/create-todo-use-case";
-import { UpdateTodoUseCase } from "@/use-cases/todo/update-todo/update-todo-use-case";
 import { DeleteTodoUseCase } from "@/use-cases/todo/delete-todo-use-case/delete-todo-use-case";
 import { ListTodoUseCase } from "@/use-cases/todo/list-todo-use-case/list-todo-use-case";
+import { UpdateTodoUseCase } from "@/use-cases/todo/update-todo/update-todo-use-case";
 
 interface TodoContextType {
 	todos: Todo[];
@@ -60,7 +62,6 @@ export function TodoProvider({ children }: TodoProviderProps) {
 		}
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		fetchTodos();
 	}, []);
@@ -155,14 +156,16 @@ export function TodoProvider({ children }: TodoProviderProps) {
 
 	const completeTodo = async (todo: Todo) => {
 		try {
-			const completeTodoWithLogUseCase = new (await import("@/use-cases/todo/complete-todo-with-log/complete-todo-with-log-use-case")).CompleteTodoWithLogUseCase(
+			const completeTodoWithLogUseCase = new CompleteTodoWithLogUseCase(
 				todoRepository,
-				new (await import("@/infra/repositories/database/prisma-todo-log-repository")).PrismaTodoLogRepository()
+				new ApiTodoLogRepository(),
 			);
-			
+
 			const result = await completeTodoWithLogUseCase.execute({ todo });
 			setTodos((prevTodos) =>
-				prevTodos.map((t) => (t.id === todo.id ? result.updatedTodo : t)),
+				prevTodos.map((t) =>
+					t.id === todo.id ? result.updatedTodo : t,
+				),
 			);
 		} catch (err) {
 			setError("Failed to complete todo");

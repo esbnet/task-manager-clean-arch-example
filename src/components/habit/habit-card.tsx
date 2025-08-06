@@ -6,7 +6,7 @@ import type { Habit } from "../../types";
 
 type Props = {
 	habit: Habit;
-	dragHandleProps?: any;
+	dragHandleProps?: () => void;
 	onEditClick?: () => void;
 };
 

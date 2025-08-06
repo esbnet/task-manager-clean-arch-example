@@ -5,7 +5,7 @@ export class TaskTitle {
 		if (!title || title.trim().length === 0) {
 			throw new Error("Title cannot be empty");
 		}
-		
+
 		if (title.trim().length > 100) {
 			throw new Error("Title cannot exceed 100 characters");
 		}

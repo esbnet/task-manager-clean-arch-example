@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { useTodoSubtaskContext } from "@/contexts/todo-subtask-context";
 import type { TodoSubtask } from "@/types";
 import { toast } from "sonner";
-import { useTodoSubtaskContext } from "@/contexts/todo-subtask-context";
 
 interface TodoSubtaskListProps {
 	todoId: string;
@@ -31,14 +31,18 @@ export function TodoSubtaskList({
 		onSubtasksChange?.(newSubtasks);
 	};
 
-	const { createSubtask, updateSubtask, deleteSubtask } = useTodoSubtaskContext();
+	const { createSubtask, updateSubtask, deleteSubtask } =
+		useTodoSubtaskContext();
 
-	const addSubtask = async (e?: React.FormEvent) => {
-		if (e) e.preventDefault();
+	const addSubtask = async () => {
 		if (!newTaskTitle.trim()) return;
 
 		try {
-			const newSubtask = await createSubtask(newTaskTitle, todoId, subtasks.length);
+			const newSubtask = await createSubtask(
+				newTaskTitle,
+				todoId,
+				subtasks.length,
+			);
 			updateSubtasks([...subtasks, newSubtask]);
 			setNewTaskTitle("");
 		} catch (error) {
@@ -51,7 +55,12 @@ export function TodoSubtaskList({
 		try {
 			const updated = { ...subtask, completed: !subtask.completed };
 			await updateSubtask(updated);
-			updateSubtasks(subtasks.map((s) => (s.id === subtask.id ? updated : s)));
+			updateSubtasks(
+				subtasks.map((s) => (s.id === subtask.id ? updated : s)),
+			);
+			toast.success(
+				`Tarefa "${subtask.title}" ${updated.completed ? "concluída" : "reaberta"}!`,
+			);
 		} catch (error) {
 			console.error("Error toggling subtask:", error);
 			toast.error("Erro ao atualizar tarefa");
@@ -75,11 +84,16 @@ export function TodoSubtaskList({
 				<Input
 					value={newTaskTitle}
 					onChange={(e) => setNewTaskTitle(e.target.value)}
-					onKeyDown={(e) => e.key === "Enter" && addSubtask(e)}
+					onKeyDown={(e) => {
+						if (e.key === "Enter") {
+							e.preventDefault();
+							addSubtask();
+						}
+					}}
 					placeholder="Nova tarefa..."
 					className="flex-1"
 				/>
-				<Button onClick={(e) => addSubtask(e)} size="sm" type="button">
+				<Button onClick={addSubtask} size="sm" type="button">
 					<Plus size={16} />
 				</Button>
 			</div>
@@ -88,7 +102,8 @@ export function TodoSubtaskList({
 				{subtasks.map((subtask) => (
 					<div
 						key={subtask.id}
-						className="flex items-center gap-2 bg-background/20 rounded"
+						className="flex items-center gap-2 bg-background/20 px-1 rounded"
+						onClick={(e) => e.stopPropagation()}
 					>
 						<Checkbox
 							checked={subtask.completed}

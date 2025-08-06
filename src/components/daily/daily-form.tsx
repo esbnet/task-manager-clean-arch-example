@@ -42,7 +42,7 @@ setDefaultOptions({ locale: ptBR });
 
 interface DailyFormProps {
 	daily: Daily;
-	dragHandleProps?: any;
+	dragHandleProps?: any; // Adjust type as needed
 }
 
 export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
@@ -51,7 +51,7 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 
 	const [title, setTitle] = useState(daily.title || "");
 	const [observations, setObservations] = useState(daily.observations || "");
-	const [tasks, setTasks] = useState<string[]>(daily.tasks || []);
+	const [tasks] = useState<string[]>(daily.tasks || []);
 	const [difficulty, setDifficulty] = useState<DailyDifficulty>(
 		daily.difficulty || "Fácil",
 	);
@@ -65,8 +65,6 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 		daily.repeat.frequency || 1,
 	);
 	const [tags, setTags] = useState<string[]>(daily.tags || []);
-
-	// const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
 	const [open, setOpen] = useState(false);
 

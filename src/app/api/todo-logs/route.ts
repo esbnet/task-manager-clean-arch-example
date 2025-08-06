@@ -1,15 +1,19 @@
 import { PrismaTodoLogRepository } from "@/infra/repositories/database/prisma-todo-log-repository";
-import { CompleteTodoUseCase } from "@/use-cases/todo/complete-todo/complete-todo-use-case";
 import type { NextRequest } from "next/server";
 
-// const todoLogRepository = new InJsonFileTodoLogRepository();
 const todoLogRepository = new PrismaTodoLogRepository();
 
 export async function POST(request: NextRequest) {
-	const { todo } = await request.json();
-	const useCase = new CompleteTodoUseCase(todoLogRepository);
-	const result = await useCase.execute({ todo });
-	return Response.json(result, { status: 201 });
+	const { todoId, todoTitle, difficulty, tags, completedAt } =
+		await request.json();
+	const log = await todoLogRepository.create({
+		todoId,
+		todoTitle,
+		difficulty,
+		tags,
+		completedAt: completedAt ? new Date(completedAt) : new Date(),
+	});
+	return Response.json({ log }, { status: 201 });
 }
 
 export async function GET() {

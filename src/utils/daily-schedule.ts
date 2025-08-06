@@ -1,12 +1,5 @@
 import type { Daily } from "@/types";
-import {
-	addDays,
-	addMonths,
-	addWeeks,
-	addYears,
-	isAfter,
-	isSameDay,
-} from "date-fns";
+import { addMonths, addWeeks, addYears, isAfter, isSameDay } from "date-fns";
 
 export function shouldShowDailyToday(daily: Daily): boolean {
 	const today = new Date();
@@ -18,18 +11,24 @@ export function shouldShowDailyToday(daily: Daily): boolean {
 	}
 
 	// Se foi concluída hoje, não mostrar
-	if (daily.lastCompletedDate === today.toISOString().split("T")[0]) {
+	const todayString = today.toISOString().split("T")[0];
+	if (daily.lastCompletedDate === todayString) {
 		return false;
 	}
 
 	// Para tarefas diárias, sempre mostrar se não foi concluída hoje
-	if (daily.repeat.type === "Diariamente") {
+	if (daily.repeat?.type === "Diariamente") {
 		return true;
 	}
 
 	// Se é o primeiro dia (data de início)
 	if (isSameDay(startDate, today)) {
 		return true;
+	}
+
+	// Se não tem configuração de repetição, mostrar apenas no primeiro dia
+	if (!daily.repeat) {
+		return isSameDay(startDate, today);
 	}
 
 	const { type, frequency } = daily.repeat;

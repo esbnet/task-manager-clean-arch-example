@@ -42,7 +42,7 @@ setDefaultOptions({ locale: ptBR });
 
 interface TodoFormProps {
 	todo: Todo;
-	dragHandleProps?: any;
+	dragHandleProps?: () => void;
 }
 
 export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
@@ -82,33 +82,6 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 			console.error("Erro ao atualizar tarefa", error);
 		}
 	}
-
-	// async function handleAddTodo() {
-	// 	if (!title.trim()) {
-	// 		toast.warning("Título da tarefa é obrigatório");
-	// 		return;
-	// 	}
-
-	// 	try {
-	// 		await addTodo({
-	// 			title,
-	// 			observations: todo.observations || "",
-	// 			tasks: [] as string[],
-	// 			difficulty: difficulty,
-	// 			startDate: new Date(),
-	// 			tags: [] as string[],
-	// 		} as Todo);
-
-	// 		setTitle("");
-	// 		setDifficult(difficulty);
-	// 		setTags(tags);
-	// 		toast.success("Hábito criada com sucesso!");
-	// 		setOpen(false);
-	// 	} catch (error) {
-	// 		toast.error(`Erro ao criar hábito ${error}`);
-	// 		console.error("Erro ao criar hábito", error);
-	// 	}
-	// }
 
 	return (
 		<>
