@@ -1,4 +1,4 @@
-export type HabitDificult = "Trivial" | "Fácil" | "Médio" | "Difícil";
+export type HabitDifficulty = "Trivial" | "Fácil" | "Médio" | "Difícil";
 
 export type HabitReset = "Diariamente" | "Semanalmente" | "Mensalmente";
 
@@ -7,7 +7,7 @@ export type HabitOutput = {
 		id: string;
 		title: string;
 		observations: string;
-		difficulty: HabitDificult;
+		difficulty: HabitDifficulty;
 		tags: string[];
 		reset: HabitReset;
 		createdAt: Date;

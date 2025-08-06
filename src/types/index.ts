@@ -10,11 +10,18 @@ import type { TodoLog } from "./todo-log";
 import type { TodoSubtask } from "./todo-subtask";
 
 export type {
-	Daily, DailyDifficulty, DailyLog,
+	Daily,
+	DailyDifficulty,
+	DailyLog,
 	DailyRepeat,
-	DailySubtask, Habit, HabitDifficulty,
-	HabitLog, HabitReset, Tag,
-	Todo, TodoDifficulty, TodoLog,
-	TodoSubtask
+	DailySubtask,
+	Habit,
+	HabitDifficulty,
+	HabitLog,
+	HabitReset,
+	Tag,
+	Todo,
+	TodoDifficulty,
+	TodoLog,
+	TodoSubtask,
 };
-

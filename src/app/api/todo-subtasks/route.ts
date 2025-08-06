@@ -6,18 +6,21 @@ const subtaskRepo = new PrismaTodoSubtaskRepository();
 export async function GET(request: NextRequest) {
 	try {
 		const { searchParams } = new URL(request.url);
-		const todoId = searchParams.get('todoId');
-		
+		const todoId = searchParams.get("todoId");
+
 		if (todoId) {
 			const subtasks = await subtaskRepo.listByTodoId(todoId);
 			return Response.json({ subtasks });
 		}
-		
+
 		const subtasks = await subtaskRepo.list();
 		return Response.json({ subtasks });
 	} catch (error) {
-		console.error('Error in GET /api/todo-subtasks:', error);
-		return Response.json({ error: 'Failed to fetch subtasks', subtasks: [] }, { status: 500 });
+		console.error("Error in GET /api/todo-subtasks:", error);
+		return Response.json(
+			{ error: "Failed to fetch subtasks", subtasks: [] },
+			{ status: 500 },
+		);
 	}
 }
 
@@ -28,12 +31,15 @@ export async function POST(request: NextRequest) {
 			title,
 			completed: false,
 			todoId,
-			order: order ?? 0
+			order: order ?? 0,
 		});
 		return Response.json({ subtask }, { status: 201 });
 	} catch (error) {
-		console.error('Error creating subtask:', error);
-		return Response.json({ error: 'Failed to create subtask' }, { status: 500 });
+		console.error("Error creating subtask:", error);
+		return Response.json(
+			{ error: "Failed to create subtask" },
+			{ status: 500 },
+		);
 	}
 }
 

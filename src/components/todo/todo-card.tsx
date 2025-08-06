@@ -1,8 +1,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { GripVertical } from "lucide-react";
-import type { Todo } from "../../types";
-import { toast } from "sonner";
 import { useTodoContext } from "@/contexts/todo-context";
+import { GripVertical } from "lucide-react";
+import { toast } from "sonner";
+import type { Todo } from "../../types";
 
 type Props = {
 	todo: Todo;
@@ -11,7 +11,13 @@ type Props = {
 };
 
 export function TodoCard({ todo, dragHandleProps, onEditClick }: Props) {
-	return <TodoItem todo={todo} dragHandleProps={dragHandleProps} onEditClick={onEditClick} />;
+	return (
+		<TodoItem
+			todo={todo}
+			dragHandleProps={dragHandleProps}
+			onEditClick={onEditClick}
+		/>
+	);
 }
 
 function TodoItem({ todo, dragHandleProps, onEditClick }: Props) {

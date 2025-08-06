@@ -5,4 +5,5 @@ export interface TodoLog {
 	completedAt: Date;
 	difficulty: string;
 	tags: string[];
+	createdAt: Date;
 }

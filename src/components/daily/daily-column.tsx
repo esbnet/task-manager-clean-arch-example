@@ -1,7 +1,12 @@
 import { useDailyContext } from "@/contexts/daily-context";
 import type { Daily } from "@/types";
-import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
-import { SortableContext, arrayMove, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { DndContext, type DragEndEvent, closestCenter } from "@dnd-kit/core";
+import {
+	SortableContext,
+	arrayMove,
+	useSortable,
+	verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Loading } from "../ui/loading";
 import AddDaily from "./add-daily";
@@ -52,11 +57,19 @@ const Daily = () => {
 	};
 
 	return (
-		<DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-			<SortableContext items={daily.map(d => d.id)} strategy={verticalListSortingStrategy}>
+		<DndContext
+			collisionDetection={closestCenter}
+			onDragEnd={handleDragEnd}
+		>
+			<SortableContext
+				items={daily.map((d) => d.id)}
+				strategy={verticalListSortingStrategy}
+			>
 				<div className="flex flex-col gap-2">
 					{daily.map((daily: Daily) => {
-						return <SortableDailyItem key={daily.id} daily={daily} />;
+						return (
+							<SortableDailyItem key={daily.id} daily={daily} />
+						);
 					})}
 				</div>
 			</SortableContext>

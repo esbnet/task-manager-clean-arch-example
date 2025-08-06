@@ -5,19 +5,20 @@ import { prisma } from "@/infra/database/prisma-client";
 export class PrismaHabitLogRepository implements HabitLogRepository {
 	async list(): Promise<HabitLog[]> {
 		const logs = await prisma.habitLog.findMany({
-			orderBy: { completedAt: 'desc' }
+			orderBy: { completedAt: "desc" },
 		});
 		return logs.map(this.toDomain);
 	}
 
-	async create(data: Omit<HabitLog, "id" | "completedAt">): Promise<HabitLog> {
+	async create(data: Omit<HabitLog, "id" | "createdAt">): Promise<HabitLog> {
 		const log = await prisma.habitLog.create({
 			data: {
 				habitId: data.habitId,
 				habitTitle: data.habitTitle,
 				difficulty: data.difficulty,
-				tags: data.tags
-			}
+				tags: data.tags,
+				completedAt: data.completedAt,
+			},
 		});
 		return this.toDomain(log);
 	}
@@ -41,7 +42,8 @@ export class PrismaHabitLogRepository implements HabitLogRepository {
 			habitTitle: log.habitTitle,
 			difficulty: log.difficulty,
 			tags: log.tags,
-			completedAt: log.completedAt
+			completedAt: log.completedAt,
+			createdAt: log.createdAt,
 		};
 	}
 }

@@ -1,8 +1,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { GripVertical } from "lucide-react";
-import type { Habit } from "../../types";
-import { toast } from "sonner";
 import { useHabitContext } from "@/contexts/habit-context";
+import { GripVertical } from "lucide-react";
+import { toast } from "sonner";
+import type { Habit } from "../../types";
 
 type Props = {
 	habit: Habit;
@@ -11,7 +11,13 @@ type Props = {
 };
 
 export function HabitCard({ habit, dragHandleProps, onEditClick }: Props) {
-	return <HabitItem habit={habit} dragHandleProps={dragHandleProps} onEditClick={onEditClick} />;
+	return (
+		<HabitItem
+			habit={habit}
+			dragHandleProps={dragHandleProps}
+			onEditClick={onEditClick}
+		/>
+	);
 }
 
 function HabitItem({ habit, dragHandleProps, onEditClick }: Props) {

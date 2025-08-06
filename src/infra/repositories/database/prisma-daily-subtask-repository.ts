@@ -5,7 +5,7 @@ import { prisma } from "@/infra/database/prisma-client";
 export class PrismaDailySubtaskRepository implements DailySubtaskRepository {
 	async list(): Promise<DailySubtask[]> {
 		const subtasks = await prisma.dailySubtask.findMany({
-			orderBy: { order: 'asc' }
+			orderBy: { order: "asc" },
 		});
 		return subtasks.map(this.toDomain);
 	}
@@ -13,19 +13,21 @@ export class PrismaDailySubtaskRepository implements DailySubtaskRepository {
 	async listByDailyId(dailyId: string): Promise<DailySubtask[]> {
 		const subtasks = await prisma.dailySubtask.findMany({
 			where: { dailyId },
-			orderBy: { order: 'asc' }
+			orderBy: { order: "asc" },
 		});
 		return subtasks.map(this.toDomain);
 	}
 
-	async create(data: Omit<DailySubtask, "id" | "createdAt">): Promise<DailySubtask> {
+	async create(
+		data: Omit<DailySubtask, "id" | "createdAt">,
+	): Promise<DailySubtask> {
 		const subtask = await prisma.dailySubtask.create({
 			data: {
 				title: data.title,
 				completed: data.completed,
 				dailyId: data.dailyId,
-				order: data.order
-			}
+				order: data.order,
+			},
 		});
 		return this.toDomain(subtask);
 	}
@@ -36,8 +38,8 @@ export class PrismaDailySubtaskRepository implements DailySubtaskRepository {
 			data: {
 				title: subtask.title,
 				completed: subtask.completed,
-				order: subtask.order
-			}
+				order: subtask.order,
+			},
 		});
 		return this.toDomain(updated);
 	}
@@ -45,10 +47,10 @@ export class PrismaDailySubtaskRepository implements DailySubtaskRepository {
 	async toggleComplete(id: string): Promise<DailySubtask> {
 		const subtask = await prisma.dailySubtask.findUnique({ where: { id } });
 		if (!subtask) throw new Error("Subtask not found");
-		
+
 		const updated = await prisma.dailySubtask.update({
 			where: { id },
-			data: { completed: !subtask.completed }
+			data: { completed: !subtask.completed },
 		});
 		return this.toDomain(updated);
 	}
@@ -64,7 +66,7 @@ export class PrismaDailySubtaskRepository implements DailySubtaskRepository {
 			completed: subtask.completed,
 			dailyId: subtask.dailyId,
 			order: subtask.order,
-			createdAt: subtask.createdAt
+			createdAt: subtask.createdAt,
 		};
 	}
 }

@@ -13,6 +13,8 @@ import type { Todo } from "@/types";
 import { ApiTodoRepository } from "@/infra/repositories/backend/api-todo-repository";
 import { CreateTodoUseCase } from "@/use-cases/todo/create-todo/create-todo-use-case";
 import { UpdateTodoUseCase } from "@/use-cases/todo/update-todo/update-todo-use-case";
+import { DeleteTodoUseCase } from "@/use-cases/todo/delete-todo-use-case/delete-todo-use-case";
+import { ListTodoUseCase } from "@/use-cases/todo/list-todo-use-case/list-todo-use-case";
 
 interface TodoContextType {
 	todos: Todo[];
@@ -41,12 +43,14 @@ export function TodoProvider({ children }: TodoProviderProps) {
 	const todoRepository = new ApiTodoRepository();
 	const createTodoUseCase = new CreateTodoUseCase(todoRepository);
 	const updateTodoUseCase = new UpdateTodoUseCase(todoRepository);
+	const deleteTodoUseCase = new DeleteTodoUseCase(todoRepository);
+	const listTodoUseCase = new ListTodoUseCase(todoRepository);
 
 	const fetchTodos = async () => {
 		try {
 			setIsLoading(true);
-			const fetchedTodos = await todoRepository.list();
-			setTodos(fetchedTodos as unknown as Todo[]);
+			const result = await listTodoUseCase.execute();
+			setTodos(result.todos as unknown as Todo[]);
 			setError(null);
 		} catch (err) {
 			setError("Failed to fetch todos");
@@ -72,7 +76,10 @@ export function TodoProvider({ children }: TodoProviderProps) {
 				tags: todo.tags || [],
 				createdAt: new Date(),
 			});
-			setTodos((prevTodos) => [...prevTodos, result.todo as unknown as Todo]);
+			setTodos((prevTodos) => [
+				...prevTodos,
+				result.todo as unknown as Todo,
+			]);
 		} catch (err) {
 			setError("Failed to add todo");
 			console.error(err);
@@ -99,7 +106,7 @@ export function TodoProvider({ children }: TodoProviderProps) {
 
 	const deleteTodo = async (id: string) => {
 		try {
-			await todoRepository.delete(id);
+			await deleteTodoUseCase.execute({ id });
 			setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
 		} catch (err) {
 			setError("Failed to delete todo");
@@ -134,9 +141,9 @@ export function TodoProvider({ children }: TodoProviderProps) {
 				...todo,
 				order: index,
 			}));
-			
+
 			setTodos(todosWithOrder);
-			
+
 			for (const todo of todosWithOrder) {
 				await updateTodoUseCase.execute(todo);
 			}
@@ -148,18 +155,14 @@ export function TodoProvider({ children }: TodoProviderProps) {
 
 	const completeTodo = async (todo: Todo) => {
 		try {
-			await fetch("/api/todo-logs", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ todo }),
-			});
+			const completeTodoWithLogUseCase = new (await import("@/use-cases/todo/complete-todo-with-log/complete-todo-with-log-use-case")).CompleteTodoWithLogUseCase(
+				todoRepository,
+				new (await import("@/infra/repositories/database/prisma-todo-log-repository")).PrismaTodoLogRepository()
+			);
 			
-			const today = new Date().toISOString().split('T')[0];
-			const updatedTodo = { ...todo, lastCompletedDate: today };
-			await updateTodoUseCase.execute(updatedTodo);
-			
-			setTodos(prevTodos => 
-				prevTodos.map(t => t.id === todo.id ? updatedTodo : t)
+			const result = await completeTodoWithLogUseCase.execute({ todo });
+			setTodos((prevTodos) =>
+				prevTodos.map((t) => (t.id === todo.id ? result.updatedTodo : t)),
 			);
 		} catch (err) {
 			setError("Failed to complete todo");
@@ -167,8 +170,10 @@ export function TodoProvider({ children }: TodoProviderProps) {
 		}
 	};
 
-	const today = new Date().toISOString().split('T')[0];
-	const visibleTodos = todos.filter(todo => todo.lastCompletedDate !== today);
+	const today = new Date().toISOString().split("T")[0];
+	const visibleTodos = todos.filter(
+		(todo) => todo.lastCompletedDate !== today,
+	);
 
 	const value = {
 		todos: visibleTodos.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),

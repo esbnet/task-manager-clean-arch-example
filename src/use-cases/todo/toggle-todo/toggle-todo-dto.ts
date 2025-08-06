@@ -1,4 +1,4 @@
-export type TodoDificult = "Trivial" | "Fácil" | "Médio" | "Difícil";
+export type TodoDifficulty = "Trivial" | "Fácil" | "Médio" | "Difícil";
 
 export type TodoReset = "Diária" | "Semanal" | "Mensal";
 
@@ -8,7 +8,7 @@ export type TodoOutput = {
 		title: string;
 		observations: string;
 		tasks: string[];
-		difficulty: TodoDificult;
+		difficulty: TodoDifficulty;
 		startDate: Date;
 		tags: string[];
 		createdAt: Date;

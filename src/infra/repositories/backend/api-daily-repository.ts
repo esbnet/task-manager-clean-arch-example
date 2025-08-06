@@ -1,53 +1,37 @@
 import type { Daily } from "@/domain/entities/daily";
 import type { DailyRepository } from "@/domain/repositories/all-repository";
+import type { HttpClient } from "@/infra/services/http-client";
+import { FetchHttpClient } from "@/infra/services/http-client";
 
 export class ApiDailyRepository implements DailyRepository {
 	private baseUrl = "/api/daily";
+	private httpClient: HttpClient;
+
+	constructor(httpClient?: HttpClient) {
+		this.httpClient = httpClient || new FetchHttpClient();
+	}
 
 	async list(): Promise<Daily[]> {
-		const res = await fetch(this.baseUrl);
-		const json = await res.json();
+		const json = await this.httpClient.get<{ daily: Daily[] }>(this.baseUrl);
 		return json.daily || [];
 	}
 
 	async create(data: Omit<Daily, "id" | "createdAt">): Promise<Daily> {
-		const res = await fetch(this.baseUrl, {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(data),
-		});
-
-		const json = await res.json();
+		const json = await this.httpClient.post<{ daily: Daily }>(this.baseUrl, data);
 		return json.daily;
 	}
 
 	async update(daily: Daily): Promise<Daily> {
-		const res = await fetch(`${this.baseUrl}`, {
-			method: "PATCH",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ daily }),
-		});
-
-		const json = await res.json();
+		const json = await this.httpClient.patch<{ daily: Daily }>(this.baseUrl, { daily });
 		return json.daily;
 	}
 
 	async toggleComplete(id: string): Promise<Daily> {
-		await fetch(this.baseUrl, {
-			method: "PATCH",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ id }),
-		});
-
-		// biome-ignore lint/style/noNonNullAssertion: <explanation>
+		await this.httpClient.patch(this.baseUrl, { id });
 		return (await this.list()).find((t) => t.id === id)!;
 	}
 
 	async delete(id: string): Promise<void> {
-		await fetch(this.baseUrl, {
-			method: "DELETE",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ id }),
-		});
+		await this.httpClient.delete(`${this.baseUrl}?id=${id}`);
 	}
 }

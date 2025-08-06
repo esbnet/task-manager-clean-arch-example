@@ -1,8 +1,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import type { Daily } from "../../types";
+import { useDailyContext } from "@/contexts/daily-context";
 import { GripVertical } from "lucide-react";
 import { toast } from "sonner";
-import { useDailyContext } from "@/contexts/daily-context";
+import type { Daily } from "../../types";
 
 type Props = {
 	daily: Daily;
@@ -11,7 +11,13 @@ type Props = {
 };
 
 export function DailyCard({ daily, dragHandleProps, onEditClick }: Props) {
-	return <DailyItem daily={daily} dragHandleProps={dragHandleProps} onEditClick={onEditClick} />;
+	return (
+		<DailyItem
+			daily={daily}
+			dragHandleProps={dragHandleProps}
+			onEditClick={onEditClick}
+		/>
+	);
 }
 
 function DailyItem({ daily, dragHandleProps, onEditClick }: Props) {

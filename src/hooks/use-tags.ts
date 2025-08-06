@@ -1,28 +1,10 @@
-import { useState, useEffect } from "react";
-import type { Tag } from "@/types";
+import { useTagsContext } from "@/contexts/tags-context";
 
 export function useTags() {
-	const [tags, setTags] = useState<Tag[]>([]);
+	const { tags, tagOptions, isLoading, refetch } = useTagsContext();
 
-	useEffect(() => {
-		fetchTags();
-	}, []);
+	const getTagColor = (tagName: string) =>
+		tags.find((t) => t.name === tagName)?.color;
 
-	const fetchTags = async () => {
-		try {
-			const response = await fetch("/api/tags");
-			const data = await response.json();
-			setTags(data.tags || []);
-		} catch (error) {
-			console.error("Error fetching tags:", error);
-		}
-	};
-
-	const tagOptions = tags.map(tag => ({
-		label: tag.name,
-		value: tag.name,
-		color: tag.color
-	}));
-
-	return { tags, tagOptions, refetch: fetchTags, getTagColor: (tagName: string) => tags.find(t => t.name === tagName)?.color };
+	return { tags, tagOptions, isLoading, refetch, getTagColor };
 }

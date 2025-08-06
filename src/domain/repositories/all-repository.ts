@@ -11,7 +11,8 @@ import type { GenericRepository } from "./generic-repository";
 
 export interface DailyRepository extends GenericRepository<Daily> {}
 export interface DailyLogRepository extends GenericRepository<DailyLog> {}
-export interface DailySubtaskRepository extends GenericRepository<DailySubtask> {
+export interface DailySubtaskRepository
+	extends GenericRepository<DailySubtask> {
 	listByDailyId(dailyId: string): Promise<DailySubtask[]>;
 }
 export interface HabitRepository extends GenericRepository<Habit> {}

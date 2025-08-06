@@ -8,8 +8,6 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import type { Habit, HabitReset } from "../../types";
-import { SaveIcon, Trash2 } from "lucide-react";
 import {
 	Select,
 	SelectContent,
@@ -17,17 +15,19 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { SaveIcon, Trash2 } from "lucide-react";
+import type { Habit, HabitReset } from "../../types";
 
-import { Button } from ".././ui/button";
-import { HabitCard } from "./habit-card";
+import { useHabitContext } from "@/contexts/habit-context";
+import { useTags } from "@/hooks/use-tags";
 import type { HabitDifficulty } from "@/types/habit";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Button } from ".././ui/button";
 import { Input } from ".././ui/input";
 import { Label } from "../ui/label";
 import { MultiSelect } from "../ui/multi-select";
-import { toast } from "sonner";
-import { useHabitContext } from "@/contexts/habit-context";
-import { useState } from "react";
-import { useTags } from "@/hooks/use-tags";
+import { HabitCard } from "./habit-card";
 
 interface HabitFormProps {
 	habit: Habit;
@@ -43,7 +43,7 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 	const [difficulty, setDifficult] = useState<HabitDifficulty>(
 		habit.difficulty || "Fácil",
 	);
-	const [tags, setTags] = useState<string[]>(habit.tags || [] as string[]);
+	const [tags, setTags] = useState<string[]>(habit.tags || ([] as string[]));
 	const [reset, setReset] = useState<HabitReset>(
 		habit.reset || "Diariamente",
 	);
@@ -76,7 +76,11 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 
 	return (
 		<>
-			<HabitCard habit={habit} dragHandleProps={dragHandleProps} onEditClick={() => setOpen(true)} />
+			<HabitCard
+				habit={habit}
+				dragHandleProps={dragHandleProps}
+				onEditClick={() => setOpen(true)}
+			/>
 			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogContent className="flex flex-col gap-4 opacity-90 shadow-xl backdrop-blur-sm backdrop-opacity-0">
 					<DialogHeader className="flex flex-col gap-1">
@@ -92,7 +96,8 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 
 					<form
 						onSubmit={handleUpdateHabit}
-						className="flex flex-col gap-4 bg-gray-100/20 p-2 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]">
+						className="flex flex-col gap-4 bg-gray-100/20 p-2 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]"
+					>
 						<div className="flex flex-col gap-1">
 							<Label className="font-bold" htmlFor="title">
 								Título
@@ -112,7 +117,9 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 							<Input
 								id="observations"
 								value={observations}
-								onChange={(e) => setObservations(e.target.value)}
+								onChange={(e) =>
+									setObservations(e.target.value)
+								}
 								placeholder="Adicionar observações"
 							/>
 						</div>
@@ -138,10 +145,18 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 									className="w-full"
 									defaultValue={difficulty}
 								>
-									<SelectItem value="Trivial">Trivial ⭐</SelectItem>
-									<SelectItem value="Fácil">Fácil ⭐⭐</SelectItem>
-									<SelectItem value="Média">Média ⭐⭐⭐</SelectItem>
-									<SelectItem value="Difícil">Difícil ⭐⭐⭐⭐</SelectItem>
+									<SelectItem value="Trivial">
+										Trivial ⭐
+									</SelectItem>
+									<SelectItem value="Fácil">
+										Fácil ⭐⭐
+									</SelectItem>
+									<SelectItem value="Média">
+										Média ⭐⭐⭐
+									</SelectItem>
+									<SelectItem value="Difícil">
+										Difícil ⭐⭐⭐⭐
+									</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
@@ -182,9 +197,15 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 									className="w-full"
 									defaultValue={reset}
 								>
-									<SelectItem value="Diariamente">Diariamente</SelectItem>
-									<SelectItem value="Semanalmente">Semanalmente</SelectItem>
-									<SelectItem value="Mensalmente">Mensalmente</SelectItem>
+									<SelectItem value="Diariamente">
+										Diariamente
+									</SelectItem>
+									<SelectItem value="Semanalmente">
+										Semanalmente
+									</SelectItem>
+									<SelectItem value="Mensalmente">
+										Mensalmente
+									</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
@@ -198,7 +219,6 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 								Salvar
 							</Button>
 						</div>
-
 					</form>
 					<div className="flex justify-right items-center">
 						<DialogConfirmDelete id={habit.id} />
@@ -230,7 +250,9 @@ function DialogConfirmDelete({ id }: { id: string }) {
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-[425px]">
 				<DialogHeader>
-					<DialogTitle className="text-destructive" >Você tem certeza?</DialogTitle>
+					<DialogTitle className="text-destructive">
+						Você tem certeza?
+					</DialogTitle>
 					<DialogDescription className="text-destructive">
 						Ao confirmar, essa tarefa será excluída permanentemente.
 					</DialogDescription>

@@ -1,13 +1,13 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
-import { Plus, Trash2, Edit } from "lucide-react";
-import { useState, useEffect } from "react";
-import { toast } from "sonner";
 import type { Tag } from "@/types";
+import { Edit, Plus, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export function TagsSettings() {
 	const [tags, setTags] = useState<Tag[]>([]);
@@ -33,8 +33,8 @@ export function TagsSettings() {
 			headers: { "Content-Type": "application/json" },
 			body: JSON.stringify({
 				name: newTagName,
-				color: newTagColor
-			})
+				color: newTagColor,
+			}),
 		});
 
 		const data = await response.json();
@@ -50,10 +50,10 @@ export function TagsSettings() {
 		await fetch("/api/tags", {
 			method: "PATCH",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ tag: editingTag })
+			body: JSON.stringify({ tag: editingTag }),
 		});
 
-		setTags(tags.map(t => t.id === editingTag.id ? editingTag : t));
+		setTags(tags.map((t) => (t.id === editingTag.id ? editingTag : t)));
 		setEditingTag(null);
 		toast.success("Tag atualizada com sucesso!");
 	};
@@ -62,10 +62,10 @@ export function TagsSettings() {
 		await fetch("/api/tags", {
 			method: "DELETE",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ id })
+			body: JSON.stringify({ id }),
 		});
 
-		setTags(tags.filter(t => t.id !== id));
+		setTags(tags.filter((t) => t.id !== id));
 		toast.success(`Tag "${name}" removida com sucesso!`);
 	};
 
@@ -74,7 +74,8 @@ export function TagsSettings() {
 			<div>
 				<h2 className="text-2xl font-semibold mb-4">Gerenciar Tags</h2>
 				<p className="text-muted-foreground mb-6">
-					Crie e gerencie tags para organizar suas tarefas, hábitos e atividades diárias.
+					Crie e gerencie tags para organizar suas tarefas, hábitos e
+					atividades diárias.
 				</p>
 			</div>
 
@@ -111,29 +112,53 @@ export function TagsSettings() {
 				<h3 className="text-lg font-medium">Tags Existentes</h3>
 				<div className="grid gap-2">
 					{tags.map((tag) => (
-						<div key={tag.id} className="flex items-center justify-between p-3 border rounded-lg">
+						<div
+							key={tag.id}
+							className="flex items-center justify-between p-3 border rounded-lg"
+						>
 							{editingTag?.id === tag.id ? (
 								<div className="flex gap-2 items-center flex-1">
 									<Input
 										value={editingTag.name}
-										onChange={(e) => setEditingTag({...editingTag, name: e.target.value})}
+										onChange={(e) =>
+											setEditingTag({
+												...editingTag,
+												name: e.target.value,
+											})
+										}
 										className="flex-1"
 									/>
 									<Input
 										type="color"
 										value={editingTag.color}
-										onChange={(e) => setEditingTag({...editingTag, color: e.target.value})}
+										onChange={(e) =>
+											setEditingTag({
+												...editingTag,
+												color: e.target.value,
+											})
+										}
 										className="w-16"
 									/>
-									<Button onClick={updateTag} size="sm">Salvar</Button>
-									<Button onClick={() => setEditingTag(null)} variant="outline" size="sm">
+									<Button onClick={updateTag} size="sm">
+										Salvar
+									</Button>
+									<Button
+										onClick={() => setEditingTag(null)}
+										variant="outline"
+										size="sm"
+									>
 										Cancelar
 									</Button>
 								</div>
 							) : (
 								<>
 									<div className="flex items-center gap-3">
-										<Badge style={{ backgroundColor: tag.color, color: 'white' }}>
+										<Badge
+											style={{
+												backgroundColor: tag.color,
+												color: "white",
+											}}
+										>
 											{tag.name}
 										</Badge>
 									</div>
@@ -146,7 +171,9 @@ export function TagsSettings() {
 											<Edit size={14} />
 										</Button>
 										<Button
-											onClick={() => deleteTag(tag.id, tag.name)}
+											onClick={() =>
+												deleteTag(tag.id, tag.name)
+											}
 											size="sm"
 											variant="ghost"
 											className="text-destructive"

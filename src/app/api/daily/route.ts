@@ -7,7 +7,7 @@ import type { NextRequest } from "next/server";
 
 // Instância única do repositório
 // const dailyRepo = new InJsonFileDailyRepository();
- const dailyRepo = new PrismaDailyRepository();
+const dailyRepo = new PrismaDailyRepository();
 
 export async function GET() {
 	const useCase = new ListDailyUseCase(dailyRepo);

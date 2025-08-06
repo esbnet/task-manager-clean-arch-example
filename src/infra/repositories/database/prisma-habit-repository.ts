@@ -5,7 +5,7 @@ import { prisma } from "@/infra/database/prisma-client";
 export class PrismaHabitRepository implements HabitRepository {
 	async list(): Promise<Habit[]> {
 		const habits = await prisma.habit.findMany({
-			orderBy: { order: 'asc' }
+			orderBy: { order: "asc" },
 		});
 		return habits.map(this.toDomain);
 	}
@@ -13,9 +13,13 @@ export class PrismaHabitRepository implements HabitRepository {
 	async create(data: Omit<Habit, "id" | "createdAt">): Promise<Habit> {
 		const habit = await prisma.habit.create({
 			data: {
-				...data,
-				order: data.order ?? 0
-			}
+				title: data.title,
+				observations: data.observations,
+				difficulty: data.difficulty,
+				tags: data.tags,
+				reset: data.reset,
+				order: data.order ?? 0,
+			},
 		});
 		return this.toDomain(habit);
 	}
@@ -30,8 +34,8 @@ export class PrismaHabitRepository implements HabitRepository {
 				tags: habit.tags,
 				reset: habit.reset,
 				order: habit.order,
-				lastCompletedDate: habit.lastCompletedDate
-			}
+				lastCompletedDate: habit.lastCompletedDate,
+			},
 		});
 		return this.toDomain(updated);
 	}
@@ -39,10 +43,10 @@ export class PrismaHabitRepository implements HabitRepository {
 	async toggleComplete(id: string): Promise<Habit> {
 		const habit = await prisma.habit.findUnique({ where: { id } });
 		if (!habit) throw new Error("Habit not found");
-		
+
 		const updated = await prisma.habit.update({
 			where: { id },
-			data: { lastCompletedDate: new Date().toISOString().split('T')[0] }
+			data: { lastCompletedDate: new Date().toISOString().split("T")[0] },
 		});
 		return this.toDomain(updated);
 	}
@@ -61,7 +65,7 @@ export class PrismaHabitRepository implements HabitRepository {
 			reset: habit.reset,
 			order: habit.order,
 			lastCompletedDate: habit.lastCompletedDate,
-			createdAt: habit.createdAt
+			createdAt: habit.createdAt,
 		};
 	}
 }

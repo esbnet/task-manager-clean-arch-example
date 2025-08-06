@@ -1,5 +1,3 @@
-import { Calendar as CalendarIcon, SaveIcon, Trash2 } from "lucide-react";
-import type { DailyDifficulty, DailyRepeatType } from "@/types/daily";
 import {
 	Dialog,
 	DialogClose,
@@ -22,21 +20,23 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import type { DailyDifficulty, DailyRepeatType } from "@/types/daily";
 import { format, setDefaultOptions } from "date-fns";
+import { Calendar as CalendarIcon, SaveIcon, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import type { Daily } from "@/types";
-import { DailyCard } from "./daily-card";
-import { DailySubtaskList } from "./daily-subtask-list";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { ptBR } from "date-fns/locale";
-import { toast } from "sonner";
 import { useDailyContext } from "@/contexts/daily-context";
-import { useState } from "react";
 import { useTags } from "@/hooks/use-tags";
+import type { Daily } from "@/types";
+import { ptBR } from "date-fns/locale";
+import { useState } from "react";
+import { toast } from "sonner";
+import { DailyCard } from "./daily-card";
+import { DailySubtaskList } from "./daily-subtask-list";
 
 setDefaultOptions({ locale: ptBR });
 
@@ -100,7 +100,11 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 
 	return (
 		<>
-			<DailyCard daily={daily} dragHandleProps={dragHandleProps} onEditClick={() => setOpen(true)} />
+			<DailyCard
+				daily={daily}
+				dragHandleProps={dragHandleProps}
+				onEditClick={() => setOpen(true)}
+			/>
 			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
 					<DialogHeader className="flex flex-col gap-1">
@@ -127,13 +131,18 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 							<Label>Observação</Label>
 							<Input
 								value={observations}
-								onChange={(e) => setObservations(e.target.value)}
+								onChange={(e) =>
+									setObservations(e.target.value)
+								}
 								placeholder="Adicionar observações"
 							/>
 						</div>
 						<div className="flex flex-col gap-1">
 							<Label>Lista de tarefas</Label>
-							<DailySubtaskList dailyId={daily.id} />
+							<DailySubtaskList
+								dailyId={daily.id}
+								initialSubtasks={daily.subtasks || []}
+							/>
 						</div>
 						<div className="flex flex-col gap-1">
 							<Label>Dificuldade</Label>
@@ -153,10 +162,18 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 									className="w-full"
 									defaultValue={difficulty}
 								>
-									<SelectItem value="Trivial">Trival ⭐</SelectItem>
-									<SelectItem value="Fácil">Fácil ⭐⭐</SelectItem>
-									<SelectItem value="Média">Média ⭐⭐⭐</SelectItem>
-									<SelectItem value="Difícil">Difícil ⭐⭐⭐⭐</SelectItem>
+									<SelectItem value="Trivial">
+										Trival ⭐
+									</SelectItem>
+									<SelectItem value="Fácil">
+										Fácil ⭐⭐
+									</SelectItem>
+									<SelectItem value="Média">
+										Média ⭐⭐⭐
+									</SelectItem>
+									<SelectItem value="Difícil">
+										Difícil ⭐⭐⭐⭐
+									</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>
@@ -231,7 +248,9 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 									onChange={(e) =>
 										setRepeatFrequency(
 											e.target.value
-												? Number.parseInt(e.target.value)
+												? Number.parseInt(
+														e.target.value,
+													)
 												: 1,
 										)
 									}

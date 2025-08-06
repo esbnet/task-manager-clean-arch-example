@@ -234,8 +234,9 @@ export const MultiSelect = React.forwardRef<
 													)}
 													style={{
 														animationDuration: `${animation}s`,
-														backgroundColor: option?.color,
-														color: 'white'
+														backgroundColor:
+															option?.color,
+														color: "white",
 													}}
 												>
 													{IconComponent && (
@@ -363,9 +364,12 @@ export const MultiSelect = React.forwardRef<
 											)}
 											<div className="flex items-center gap-2">
 												{option.color && (
-													<div 
-														className="w-3 h-3 rounded-full" 
-														style={{ backgroundColor: option.color }}
+													<div
+														className="w-3 h-3 rounded-full"
+														style={{
+															backgroundColor:
+																option.color,
+														}}
 													/>
 												)}
 												<span>{option.label}</span>

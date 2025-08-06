@@ -5,4 +5,5 @@ export interface DailyLog {
 	completedAt: Date;
 	difficulty: string;
 	tags: string[];
+	createdAt: Date;
 }

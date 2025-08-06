@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
 	const { name, color } = await request.json();
 	const tag = await tagRepo.create({
 		name,
-		color: color || "#3b82f6"
+		color: color || "#3b82f6",
 	});
 	return Response.json({ tag }, { status: 201 });
 }

@@ -1,4 +1,3 @@
-import { CalendarIcon, SaveIcon, Trash2 } from "lucide-react";
 import {
 	Dialog,
 	DialogClose,
@@ -22,21 +21,22 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { format, setDefaultOptions } from "date-fns";
+import { CalendarIcon, SaveIcon, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MultiSelect } from "../ui/multi-select";
-import type { Todo } from "../../types";
-import { TodoCard } from "./todo-card";
-import type { TodoDifficulty } from "@/types/todo";
-import { TodoSubtaskList } from "./todo-subtask-list";
-import { ptBR } from "date-fns/locale";
-import { toast } from "sonner";
-import { useState } from "react";
-import { useTags } from "@/hooks/use-tags";
 import { useTodoContext } from "@/contexts/todo-context";
+import { useTags } from "@/hooks/use-tags";
+import type { TodoDifficulty } from "@/types/todo";
+import { ptBR } from "date-fns/locale";
+import { useState } from "react";
+import { toast } from "sonner";
+import type { Todo } from "../../types";
+import { MultiSelect } from "../ui/multi-select";
+import { TodoCard } from "./todo-card";
+import { TodoSubtaskList } from "./todo-subtask-list";
 
 setDefaultOptions({ locale: ptBR });
 
@@ -112,7 +112,11 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 
 	return (
 		<>
-			<TodoCard todo={todo} dragHandleProps={dragHandleProps} onEditClick={() => setOpen(true)} />
+			<TodoCard
+				todo={todo}
+				dragHandleProps={dragHandleProps}
+				onEditClick={() => setOpen(true)}
+			/>
 			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
 					<DialogHeader className="flex flex-col gap-1">
@@ -140,13 +144,20 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 							<Label className="font-bold">Observação</Label>
 							<Input
 								value={observations}
-								onChange={(e) => setObservations(e.target.value)}
+								onChange={(e) =>
+									setObservations(e.target.value)
+								}
 								placeholder="Adicionar observações"
 							/>
 						</div>
 						<div className="flex flex-col gap-1">
-							<Label className="font-bold">Lista de tarefas</Label>
-							<TodoSubtaskList todoId={todo.id} />
+							<Label className="font-bold">
+								Lista de tarefas
+							</Label>
+							<TodoSubtaskList
+								todoId={todo.id}
+								initialSubtasks={todo.subtasks || []}
+							/>
 						</div>
 						<div className="flex flex-col gap-1">
 							<Label className="font-bold" htmlFor="tags">
@@ -181,10 +192,18 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 									className="w-full"
 									defaultValue={difficulty || "Fácil"}
 								>
-									<SelectItem value="Trivial"	>Trival ⭐</SelectItem>
-									<SelectItem value="Fácil">Fácil ⭐⭐</SelectItem>
-									<SelectItem value="Média">Média ⭐⭐⭐	</SelectItem>
-									<SelectItem value="Difícil">Difícil ⭐⭐⭐⭐</SelectItem>
+									<SelectItem value="Trivial">
+										Trival ⭐
+									</SelectItem>
+									<SelectItem value="Fácil">
+										Fácil ⭐⭐
+									</SelectItem>
+									<SelectItem value="Média">
+										Média ⭐⭐⭐{" "}
+									</SelectItem>
+									<SelectItem value="Difícil">
+										Difícil ⭐⭐⭐⭐
+									</SelectItem>
 								</SelectContent>
 							</Select>
 						</div>

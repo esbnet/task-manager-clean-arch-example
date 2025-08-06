@@ -5,7 +5,7 @@ import { prisma } from "@/infra/database/prisma-client";
 export class PrismaTagRepository implements TagRepository {
 	async list(): Promise<Tag[]> {
 		const tags = await prisma.tag.findMany({
-			orderBy: { name: 'asc' }
+			orderBy: { name: "asc" },
 		});
 		return tags.map(this.toDomain);
 	}
@@ -14,8 +14,8 @@ export class PrismaTagRepository implements TagRepository {
 		const tag = await prisma.tag.create({
 			data: {
 				name: data.name,
-				color: data.color
-			}
+				color: data.color,
+			},
 		});
 		return this.toDomain(tag);
 	}
@@ -25,8 +25,8 @@ export class PrismaTagRepository implements TagRepository {
 			where: { id: tag.id },
 			data: {
 				name: tag.name,
-				color: tag.color
-			}
+				color: tag.color,
+			},
 		});
 		return this.toDomain(updated);
 	}
@@ -44,7 +44,7 @@ export class PrismaTagRepository implements TagRepository {
 			id: tag.id,
 			name: tag.name,
 			color: tag.color,
-			createdAt: tag.createdAt
+			createdAt: tag.createdAt,
 		};
 	}
 }

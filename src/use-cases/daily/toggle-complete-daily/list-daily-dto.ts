@@ -1,4 +1,4 @@
-export type Dailydifficulty = "Trivial" | "Fácil" | "Médio" | "Difícil";
+export type DailyDifficulty = "Trivial" | "Fácil" | "Médio" | "Difícil";
 
 type DailyRepeatType =
 	| "Diariamente"
@@ -17,7 +17,7 @@ export type DailyOutput = {
 		title: string;
 		observations: string;
 		tasks: string[];
-		difficulty: DailyDifficult;
+		difficulty: DailyDifficulty;
 		startDate: Date;
 		repeat: DailyRepeat;
 		tags: string[];

@@ -5,7 +5,7 @@ import { prisma } from "@/infra/database/prisma-client";
 export class PrismaTodoSubtaskRepository implements TodoSubtaskRepository {
 	async list(): Promise<TodoSubtask[]> {
 		const subtasks = await prisma.todoSubtask.findMany({
-			orderBy: { order: 'asc' }
+			orderBy: { order: "asc" },
 		});
 		return subtasks.map(this.toDomain);
 	}
@@ -13,19 +13,21 @@ export class PrismaTodoSubtaskRepository implements TodoSubtaskRepository {
 	async listByTodoId(todoId: string): Promise<TodoSubtask[]> {
 		const subtasks = await prisma.todoSubtask.findMany({
 			where: { todoId },
-			orderBy: { order: 'asc' }
+			orderBy: { order: "asc" },
 		});
 		return subtasks.map(this.toDomain);
 	}
 
-	async create(data: Omit<TodoSubtask, "id" | "createdAt">): Promise<TodoSubtask> {
+	async create(
+		data: Omit<TodoSubtask, "id" | "createdAt">,
+	): Promise<TodoSubtask> {
 		const subtask = await prisma.todoSubtask.create({
 			data: {
 				title: data.title,
 				completed: data.completed,
 				todoId: data.todoId,
-				order: data.order
-			}
+				order: data.order,
+			},
 		});
 		return this.toDomain(subtask);
 	}
@@ -36,8 +38,8 @@ export class PrismaTodoSubtaskRepository implements TodoSubtaskRepository {
 			data: {
 				title: subtask.title,
 				completed: subtask.completed,
-				order: subtask.order
-			}
+				order: subtask.order,
+			},
 		});
 		return this.toDomain(updated);
 	}
@@ -45,10 +47,10 @@ export class PrismaTodoSubtaskRepository implements TodoSubtaskRepository {
 	async toggleComplete(id: string): Promise<TodoSubtask> {
 		const subtask = await prisma.todoSubtask.findUnique({ where: { id } });
 		if (!subtask) throw new Error("Subtask not found");
-		
+
 		const updated = await prisma.todoSubtask.update({
 			where: { id },
-			data: { completed: !subtask.completed }
+			data: { completed: !subtask.completed },
 		});
 		return this.toDomain(updated);
 	}
@@ -64,7 +66,7 @@ export class PrismaTodoSubtaskRepository implements TodoSubtaskRepository {
 			completed: subtask.completed,
 			todoId: subtask.todoId,
 			order: subtask.order,
-			createdAt: subtask.createdAt
+			createdAt: subtask.createdAt,
 		};
 	}
 }

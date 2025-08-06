@@ -3,71 +3,71 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import type { DailySubtask } from "@/types";
 import { Input } from "@/components/ui/input";
+import type { DailySubtask } from "@/types";
 import { toast } from "sonner";
+import { useDailySubtaskContext } from "@/contexts/daily-subtask-context";
 
-interface SubtaskListProps {
+interface DailySubtaskListProps {
 	dailyId: string;
+	initialSubtasks?: DailySubtask[];
+	onSubtasksChange?: (subtasks: DailySubtask[]) => void;
 }
 
-export function DailySubtaskList({ dailyId }: SubtaskListProps) {
-	const [subtasks, setSubtasks] = useState<DailySubtask[]>([]);
+export function DailySubtaskList({
+	dailyId,
+	initialSubtasks = [],
+	onSubtasksChange,
+}: DailySubtaskListProps) {
+	const [subtasks, setSubtasks] = useState<DailySubtask[]>(initialSubtasks);
 	const [newTaskTitle, setNewTaskTitle] = useState("");
 
 	useEffect(() => {
-		fetchSubtasks();
-	}, [dailyId]);
+		setSubtasks(initialSubtasks);
+	}, [initialSubtasks]);
 
-	const fetchSubtasks = async () => {
-		const response = await fetch(`/api/daily-subtasks?dailyId=${dailyId}`);
-		const data = await response.json();
-		setSubtasks(data.subtasks || []);
+	const updateSubtasks = (newSubtasks: DailySubtask[]) => {
+		setSubtasks(newSubtasks);
+		onSubtasksChange?.(newSubtasks);
 	};
+
+	const { createSubtask, updateSubtask, deleteSubtask } = useDailySubtaskContext();
 
 	const addSubtask = async (e?: React.FormEvent) => {
 		if (e) e.preventDefault();
 		if (!newTaskTitle.trim()) return;
 
-		const response = await fetch("/api/daily-subtasks", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				title: newTaskTitle,
-				dailyId,
-				order: subtasks.length
-			})
-		});
-
-		const data = await response.json();
-		setSubtasks([...subtasks, data.subtask]);
-		setNewTaskTitle("");
+		try {
+			const newSubtask = await createSubtask(newTaskTitle, dailyId, subtasks.length);
+			updateSubtasks([...subtasks, newSubtask]);
+			setNewTaskTitle("");
+		} catch (error) {
+			console.error("Error adding subtask:", error);
+			toast.error("Erro ao criar tarefa");
+		}
 	};
 
 	const toggleSubtask = async (subtask: DailySubtask) => {
-		const updated = { ...subtask, completed: !subtask.completed };
-
-		await fetch("/api/daily-subtasks", {
-			method: "PATCH",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ subtask: updated })
-		});
-
-		setSubtasks(subtasks.map(s => s.id === subtask.id ? updated : s));
+		try {
+			const updated = { ...subtask, completed: !subtask.completed };
+			await updateSubtask(updated);
+			updateSubtasks(subtasks.map((s) => (s.id === subtask.id ? updated : s)));
+		} catch (error) {
+			console.error("Error toggling subtask:", error);
+			toast.error("Erro ao atualizar tarefa");
+		}
 	};
 
-	const deleteSubtask = async (id: string, title: string) => {
-		await fetch("/api/daily-subtasks", {
-			method: "DELETE",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ id })
-		});
-
-		setSubtasks(subtasks.filter(s => s.id !== id));
-		toast.success(`Tarefa "${title}" removida com sucesso!`);
+	const handleDeleteSubtask = async (id: string, title: string) => {
+		try {
+			await deleteSubtask(id);
+			updateSubtasks(subtasks.filter((s) => s.id !== id));
+			toast.success(`Tarefa "${title}" removida com sucesso!`);
+		} catch (error) {
+			console.error("Error deleting subtask:", error);
+			toast.error("Erro ao deletar tarefa");
+		}
 	};
-
-
 
 	return (
 		<div className="flex flex-col gap-2">
@@ -86,18 +86,23 @@ export function DailySubtaskList({ dailyId }: SubtaskListProps) {
 
 			<div className="flex flex-col gap-0.5 max-h-32 overflow-y-auto">
 				{subtasks.map((subtask) => (
-					<div key={subtask.id} className="flex items-center gap-2 bg-background/20 rounded">
+					<div
+						key={subtask.id}
+						className="flex items-center gap-2 bg-background/20 rounded"
+					>
 						<Checkbox
 							checked={subtask.completed}
 							onCheckedChange={() => toggleSubtask(subtask)}
 						/>
-						<span className={`flex-1 text-sm ${subtask.completed ? 'line-through text-muted-foreground' : ''}`}>
+						<span
+							className={`flex-1 text-sm ${subtask.completed ? "line-through text-muted-foreground" : ""}`}
+						>
 							{subtask.title}
 						</span>
 						<Button
 							onClick={(e) => {
 								e.stopPropagation();
-								deleteSubtask(subtask.id, subtask.title);
+								handleDeleteSubtask(subtask.id, subtask.title);
 							}}
 							size="sm"
 							variant="ghost"
