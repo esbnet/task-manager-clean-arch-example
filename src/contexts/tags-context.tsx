@@ -1,8 +1,6 @@
 "use client";
 
 import type { Tag } from "@/types";
-import { ListTagUseCase } from "@/use-cases/tag/list-tag/list-tag-use-case";
-import { PrismaTagRepository } from "@/infra/repositories/database/prisma-tag-repository";
 import {
 	type ReactNode,
 	createContext,
@@ -20,8 +18,7 @@ interface TagsContextType {
 
 const TagsContext = createContext<TagsContextType | undefined>(undefined);
 
-const tagRepository = new PrismaTagRepository();
-const listTagUseCase = new ListTagUseCase(tagRepository);
+
 
 interface TagsProviderProps {
 	children: ReactNode;
@@ -34,10 +31,12 @@ export function TagsProvider({ children }: TagsProviderProps) {
 	const fetchTags = async () => {
 		try {
 			setIsLoading(true);
-			const result = await listTagUseCase.execute();
-			setTags(result.tags);
+			const response = await fetch('/api/tags');
+			const data = await response.json();
+			setTags(data.tags || []);
 		} catch (error) {
 			console.error("Error fetching tags:", error);
+			setTags([]);
 		} finally {
 			setIsLoading(false);
 		}

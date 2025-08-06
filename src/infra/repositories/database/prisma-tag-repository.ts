@@ -4,10 +4,64 @@ import { prisma } from "@/infra/database/prisma-client";
 
 export class PrismaTagRepository implements TagRepository {
 	async list(): Promise<Tag[]> {
-		const tags = await prisma.tag.findMany({
-			orderBy: { name: "asc" },
-		});
-		return tags.map(this.toDomain);
+		try {
+			const tags = await prisma.tag.findMany({
+				orderBy: { name: "asc" },
+			});
+			
+			// Se não há tags, criar algumas padrão baseadas nas tarefas existentes
+			if (tags.length === 0) {
+				// Buscar tags únicas das tarefas existentes
+				const [todos, dailies, habits] = await Promise.all([
+					prisma.todo.findMany({ select: { tags: true } }),
+					prisma.daily.findMany({ select: { tags: true } }),
+					prisma.habit.findMany({ select: { tags: true } })
+				]);
+				
+				const allTags = new Set<string>();
+				[...todos, ...dailies, ...habits].forEach(item => {
+					if (Array.isArray(item.tags)) {
+						item.tags.forEach(tag => allTags.add(tag));
+					}
+				});
+				
+				const colors = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4"];
+				let colorIndex = 0;
+				
+				for (const tagName of allTags) {
+					await prisma.tag.create({ 
+						data: { 
+							name: tagName, 
+							color: colors[colorIndex % colors.length] 
+						} 
+					});
+					colorIndex++;
+				}
+				
+				// Se ainda não há tags, criar algumas padrão
+				if (allTags.size === 0) {
+					const defaultTags = [
+						{ name: "Trabalho", color: "#3b82f6" },
+						{ name: "Estudo", color: "#10b981" },
+						{ name: "Pessoal", color: "#f59e0b" },
+					];
+					
+					for (const tag of defaultTags) {
+						await prisma.tag.create({ data: tag });
+					}
+				}
+				
+				const newTags = await prisma.tag.findMany({
+					orderBy: { name: "asc" },
+				});
+				return newTags.map(this.toDomain);
+			}
+			
+			return tags.map(this.toDomain);
+		} catch (error) {
+			console.error('Error listing tags:', error);
+			return [];
+		}
 	}
 
 	async create(data: Omit<Tag, "id" | "createdAt">): Promise<Tag> {

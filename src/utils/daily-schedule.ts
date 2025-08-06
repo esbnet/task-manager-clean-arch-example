@@ -22,6 +22,11 @@ export function shouldShowDailyToday(daily: Daily): boolean {
 		return false;
 	}
 
+	// Para tarefas diárias, sempre mostrar se não foi concluída hoje
+	if (daily.repeat.type === "Diariamente") {
+		return true;
+	}
+
 	// Se é o primeiro dia (data de início)
 	if (isSameDay(startDate, today)) {
 		return true;
@@ -37,9 +42,6 @@ export function shouldShowDailyToday(daily: Daily): boolean {
 		}
 
 		switch (type) {
-			case "Diariamente":
-				nextDate = addDays(nextDate, frequency);
-				break;
 			case "Semanalmente":
 				nextDate = addWeeks(nextDate, frequency);
 				break;

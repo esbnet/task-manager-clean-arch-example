@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, type ReactNode } from "react";
-import { PrismaDailySubtaskRepository } from "@/infra/repositories/database/prisma-daily-subtask-repository";
+import { ApiDailySubtaskRepository } from "@/infra/repositories/backend/api-daily-subtask-repository";
 import { CreateDailySubtaskUseCase } from "@/use-cases/daily-subtask/create-daily-subtask/create-daily-subtask-use-case";
 import { UpdateDailySubtaskUseCase } from "@/use-cases/daily-subtask/update-daily-subtask/update-daily-subtask-use-case";
 import { DeleteDailySubtaskUseCase } from "@/use-cases/daily-subtask/delete-daily-subtask/delete-daily-subtask-use-case";
@@ -17,7 +17,7 @@ interface DailySubtaskContextType {
 
 const DailySubtaskContext = createContext<DailySubtaskContextType | undefined>(undefined);
 
-const repository = new PrismaDailySubtaskRepository();
+const repository = new ApiDailySubtaskRepository();
 const createUseCase = new CreateDailySubtaskUseCase(repository);
 const updateUseCase = new UpdateDailySubtaskUseCase(repository);
 const deleteUseCase = new DeleteDailySubtaskUseCase(repository);

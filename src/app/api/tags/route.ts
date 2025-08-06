@@ -4,8 +4,13 @@ import type { NextRequest } from "next/server";
 const tagRepo = new PrismaTagRepository();
 
 export async function GET() {
-	const tags = await tagRepo.list();
-	return Response.json({ tags });
+	try {
+		const tags = await tagRepo.list();
+		return Response.json({ tags });
+	} catch (error) {
+		console.error('Error in tags API:', error);
+		return Response.json({ tags: [] });
+	}
 }
 
 export async function POST(request: NextRequest) {

@@ -50,7 +50,13 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-	const { id } = await request.json();
+	const url = new URL(request.url);
+	const id = url.searchParams.get('id');
+	
+	if (!id) {
+		return Response.json({ error: 'ID is required' }, { status: 400 });
+	}
+	
 	await subtaskRepo.delete(id);
 	return new Response(null, { status: 204 });
 }

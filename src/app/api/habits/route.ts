@@ -1,7 +1,7 @@
 import { PrismaHabitRepository } from "@/infra/repositories/database/prisma-habit-repository";
 import { CreateHabitUseCase } from "@/use-cases/habit/create-habit/create-habit-use-case";
-import { DeleteHabitUseCase } from "@/use-cases/habit/delete-habit/toggle-delete-use-case";
-import { ListHabitsUseCase } from "@/use-cases/habit/list-habit/list-task-use-case";
+import { DeleteHabitUseCase } from "@/use-cases/habit/delete-habit-use-case/delete-habit-use-case";
+import { ListHabitUseCase } from "@/use-cases/habit/list-habit-use-case/list-habit-use-case";
 import { ToggleCompleteUseCase } from "@/use-cases/habit/toggle-complete-habit/toggle-complete-use-case";
 import { UpdateHabitUseCase } from "@/use-cases/habit/update-habit/update-habit-use-case";
 import type { NextRequest } from "next/server";
@@ -11,9 +11,9 @@ import type { NextRequest } from "next/server";
 const habitRepository = new PrismaHabitRepository();
 
 export async function GET() {
-	const useCase = new ListHabitsUseCase(habitRepository);
+	const useCase = new ListHabitUseCase(habitRepository);
 	const result = await useCase.execute();
-	return Response.json(result);
+	return Response.json({ habits: result.habits });
 }
 
 export async function POST(request: NextRequest) {
@@ -46,8 +46,14 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-	const { id } = await request.json();
+	const url = new URL(request.url);
+	const id = url.searchParams.get('id');
+	
+	if (!id) {
+		return Response.json({ error: 'ID is required' }, { status: 400 });
+	}
+	
 	const useCase = new DeleteHabitUseCase(habitRepository);
-	await useCase.execute(id);
+	await useCase.execute({ id });
 	return new Response(null, { status: 204 });
 }

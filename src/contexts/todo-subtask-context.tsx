@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, type ReactNode } from "react";
-import { PrismaTodoSubtaskRepository } from "@/infra/repositories/database/prisma-todo-subtask-repository";
+import { ApiTodoSubtaskRepository } from "@/infra/repositories/backend/api-todo-subtask-repository";
 import { CreateTodoSubtaskUseCase } from "@/use-cases/todo-subtask/create-todo-subtask/create-todo-subtask-use-case";
 import { UpdateTodoSubtaskUseCase } from "@/use-cases/todo-subtask/update-todo-subtask/update-todo-subtask-use-case";
 import { DeleteTodoSubtaskUseCase } from "@/use-cases/todo-subtask/delete-todo-subtask/delete-todo-subtask-use-case";
@@ -17,7 +17,7 @@ interface TodoSubtaskContextType {
 
 const TodoSubtaskContext = createContext<TodoSubtaskContextType | undefined>(undefined);
 
-const repository = new PrismaTodoSubtaskRepository();
+const repository = new ApiTodoSubtaskRepository();
 const createUseCase = new CreateTodoSubtaskUseCase(repository);
 const updateUseCase = new UpdateTodoSubtaskUseCase(repository);
 const deleteUseCase = new DeleteTodoSubtaskUseCase(repository);

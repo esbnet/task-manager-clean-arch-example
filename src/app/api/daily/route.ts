@@ -1,6 +1,6 @@
 import { PrismaDailyRepository } from "@/infra/repositories/database/prisma-daily-repository";
 import { CreateDailyUseCase } from "@/use-cases/daily/create-daily/create-daily-use-case";
-import { DeleteDailyUseCase } from "@/use-cases/daily/delete-daily/toggle-delete-use-case";
+import { DeleteDailyUseCase } from "@/use-cases/daily/delete-daily-use-case/delete-daily-use-case";
 import { ListDailyUseCase } from "@/use-cases/daily/list-daily/list-daily-use-case";
 import { UpdateDailyUseCase } from "@/use-cases/daily/update-daily/update-daily-use-case";
 import type { NextRequest } from "next/server";
@@ -12,7 +12,7 @@ const dailyRepo = new PrismaDailyRepository();
 export async function GET() {
 	const useCase = new ListDailyUseCase(dailyRepo);
 	const result = await useCase.execute();
-	return Response.json(result);
+	return Response.json({ daily: result.daily });
 }
 
 export async function POST(request: NextRequest) {
@@ -50,8 +50,14 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-	const { id } = await request.json();
+	const url = new URL(request.url);
+	const id = url.searchParams.get('id');
+	
+	if (!id) {
+		return Response.json({ error: 'ID is required' }, { status: 400 });
+	}
+	
 	const useCase = new DeleteDailyUseCase(dailyRepo);
-	await useCase.execute(id);
+	await useCase.execute({ id });
 	return new Response(null, { status: 204 });
 }
