@@ -1,7 +1,7 @@
 import type { Daily } from "@/domain/entities/daily";
 import type { DailyRepository } from "@/domain/repositories/all-repository";
-import type { HttpClient } from "@/infra/services/http-client";
 import { FetchHttpClient } from "@/infra/services/http-client";
+import type { HttpClient } from "@/infra/services/http-client";
 
 export class ApiDailyRepository implements DailyRepository {
 	private baseUrl = "/api/daily";
@@ -12,23 +12,31 @@ export class ApiDailyRepository implements DailyRepository {
 	}
 
 	async list(): Promise<Daily[]> {
-		const json = await this.httpClient.get<{ daily: Daily[] }>(this.baseUrl);
+		const json = await this.httpClient.get<{ daily: Daily[] }>(
+			this.baseUrl,
+		);
 		return json.daily || [];
 	}
 
 	async create(data: Omit<Daily, "id" | "createdAt">): Promise<Daily> {
-		const json = await this.httpClient.post<{ daily: Daily }>(this.baseUrl, data);
+		const json = await this.httpClient.post<{ daily: Daily }>(
+			this.baseUrl,
+			data,
+		);
 		return json.daily;
 	}
 
 	async update(daily: Daily): Promise<Daily> {
-		const json = await this.httpClient.patch<{ daily: Daily }>(this.baseUrl, { daily });
+		const json = await this.httpClient.patch<{ daily: Daily }>(
+			this.baseUrl,
+			{ daily },
+		);
 		return json.daily;
 	}
 
 	async toggleComplete(id: string): Promise<Daily> {
 		await this.httpClient.patch(this.baseUrl, { id });
-		return (await this.list()).find((t) => t.id === id)!;
+		return (await this.list()).find((t) => t.id === id)!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
 	}
 
 	async delete(id: string): Promise<void> {

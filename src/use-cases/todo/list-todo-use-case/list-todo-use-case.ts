@@ -1,5 +1,5 @@
-import type { TodoRepository } from "@/domain/repositories/all-repository";
 import type { Todo } from "@/domain/entities/todo";
+import type { TodoRepository } from "@/domain/repositories/all-repository";
 
 export interface ListTodoOutput {
 	todos: Todo[];

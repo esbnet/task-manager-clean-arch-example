@@ -1,5 +1,5 @@
-import type { TodoSubtaskRepository } from "@/domain/repositories/all-repository";
 import type { TodoSubtask } from "@/domain/entities/todo-subtask";
+import type { TodoSubtaskRepository } from "@/domain/repositories/all-repository";
 
 export interface CreateTodoSubtaskInput {
 	title: string;
@@ -14,12 +14,14 @@ export interface CreateTodoSubtaskOutput {
 export class CreateTodoSubtaskUseCase {
 	constructor(private todoSubtaskRepository: TodoSubtaskRepository) {}
 
-	async execute(input: CreateTodoSubtaskInput): Promise<CreateTodoSubtaskOutput> {
+	async execute(
+		input: CreateTodoSubtaskInput,
+	): Promise<CreateTodoSubtaskOutput> {
 		const subtask = await this.todoSubtaskRepository.create({
 			title: input.title,
 			completed: false,
 			todoId: input.todoId,
-			order: input.order
+			order: input.order,
 		});
 
 		return { subtask };

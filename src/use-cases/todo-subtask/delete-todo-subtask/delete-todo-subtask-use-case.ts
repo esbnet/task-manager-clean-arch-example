@@ -11,7 +11,9 @@ export interface DeleteTodoSubtaskOutput {
 export class DeleteTodoSubtaskUseCase {
 	constructor(private todoSubtaskRepository: TodoSubtaskRepository) {}
 
-	async execute(input: DeleteTodoSubtaskInput): Promise<DeleteTodoSubtaskOutput> {
+	async execute(
+		input: DeleteTodoSubtaskInput,
+	): Promise<DeleteTodoSubtaskOutput> {
 		await this.todoSubtaskRepository.delete(input.id);
 		return { success: true };
 	}

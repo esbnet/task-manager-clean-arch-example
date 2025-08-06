@@ -1,5 +1,8 @@
-import type { HabitRepository, HabitLogRepository } from "@/domain/repositories/all-repository";
 import type { Habit } from "@/domain/entities/habit";
+import type {
+	HabitLogRepository,
+	HabitRepository,
+} from "@/domain/repositories/all-repository";
 
 export interface CompleteHabitWithLogInput {
 	habit: Habit;
@@ -13,10 +16,12 @@ export interface CompleteHabitWithLogOutput {
 export class CompleteHabitWithLogUseCase {
 	constructor(
 		private habitRepository: HabitRepository,
-		private habitLogRepository: HabitLogRepository
+		private habitLogRepository: HabitLogRepository,
 	) {}
 
-	async execute(input: CompleteHabitWithLogInput): Promise<CompleteHabitWithLogOutput> {
+	async execute(
+		input: CompleteHabitWithLogInput,
+	): Promise<CompleteHabitWithLogOutput> {
 		// Create log
 		await this.habitLogRepository.create({
 			habitId: input.habit.id,

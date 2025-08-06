@@ -1,5 +1,5 @@
-import type { TagRepository } from "@/domain/repositories/all-repository";
 import type { Tag } from "@/domain/entities/tag";
+import type { TagRepository } from "@/domain/repositories/all-repository";
 
 export interface UpdateTagInput {
 	tag: Tag;

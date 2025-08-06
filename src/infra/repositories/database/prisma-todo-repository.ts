@@ -15,8 +15,10 @@ export class PrismaTodoRepository implements TodoRepository {
 		return todos.map(this.toDomain);
 	}
 
-	async create(data: Omit<Todo, "id" | "createdAt">): Promise<Todo> {
-		const { subtasks, ...todoData } = data;
+	async create(
+		data: Omit<Todo, "id" | "createdAt" | "subtasks">,
+	): Promise<Todo> {
+		const { ...todoData } = data;
 		const todo = await prisma.todo.create({
 			data: {
 				...todoData,

@@ -18,8 +18,6 @@ interface TagsContextType {
 
 const TagsContext = createContext<TagsContextType | undefined>(undefined);
 
-
-
 interface TagsProviderProps {
 	children: ReactNode;
 }
@@ -31,7 +29,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 	const fetchTags = async () => {
 		try {
 			setIsLoading(true);
-			const response = await fetch('/api/tags');
+			const response = await fetch("/api/tags");
 			const data = await response.json();
 			setTags(data.tags || []);
 		} catch (error) {

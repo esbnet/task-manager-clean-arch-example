@@ -28,14 +28,17 @@ export class PrismaDailyLogRepository implements DailyLogRepository {
 	}
 
 	async toggleComplete(id: string): Promise<DailyLog> {
+		// TODO: Implement toggleComplete logic
+		console.log(`Toggling complete for daily log with id: ${id}`);
 		throw new Error("Toggle complete not implemented for daily logs");
 	}
 
 	async delete(id: string): Promise<void> {
+		console.log(`Deleting daily log with id: ${id}`);
 		await prisma.dailyLog.delete({ where: { id } });
 	}
 
-	private toDomain(log: any): DailyLog {
+	private toDomain(log: DailyLog): DailyLog {
 		return {
 			id: log.id,
 			dailyId: log.dailyId,

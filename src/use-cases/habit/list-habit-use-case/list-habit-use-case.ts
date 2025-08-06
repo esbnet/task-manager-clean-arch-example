@@ -1,5 +1,5 @@
-import type { HabitRepository } from "@/domain/repositories/all-repository";
 import type { Habit } from "@/domain/entities/habit";
+import type { HabitRepository } from "@/domain/repositories/all-repository";
 
 export interface ListHabitOutput {
 	habits: Habit[];

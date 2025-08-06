@@ -6,7 +6,7 @@ import type { Todo } from "../../types";
 
 type Props = {
 	todo: Todo;
-	dragHandleProps?: any;
+	dragHandleProps?: () => void;
 	onEditClick?: () => void;
 };
 

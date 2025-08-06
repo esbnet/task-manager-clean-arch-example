@@ -1,5 +1,8 @@
-import type { TodoRepository, TodoLogRepository } from "@/domain/repositories/all-repository";
 import type { Todo } from "@/domain/entities/todo";
+import type {
+	TodoLogRepository,
+	TodoRepository,
+} from "@/domain/repositories/all-repository";
 
 export interface CompleteTodoWithLogInput {
 	todo: Todo;
@@ -13,10 +16,12 @@ export interface CompleteTodoWithLogOutput {
 export class CompleteTodoWithLogUseCase {
 	constructor(
 		private todoRepository: TodoRepository,
-		private todoLogRepository: TodoLogRepository
+		private todoLogRepository: TodoLogRepository,
 	) {}
 
-	async execute(input: CompleteTodoWithLogInput): Promise<CompleteTodoWithLogOutput> {
+	async execute(
+		input: CompleteTodoWithLogInput,
+	): Promise<CompleteTodoWithLogOutput> {
 		// Create log
 		await this.todoLogRepository.create({
 			todoId: input.todo.id,

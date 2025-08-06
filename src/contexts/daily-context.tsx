@@ -11,12 +11,14 @@ import {
 import type { Daily } from "@/types";
 import { shouldShowDailyToday } from "@/utils/daily-schedule";
 
+import { ApiDailyLogRepository } from "@/infra/repositories/backend/api-daily-log-repository";
 import { ApiDailyRepository } from "@/infra/repositories/backend/api-daily-repository";
 import type { DailyDifficulty, DailyRepeatType } from "@/types/daily";
+import { CompleteDailyWithLogUseCase } from "@/use-cases/daily/complete-daily-with-log/complete-daily-with-log-use-case";
 import { CreateDailyUseCase } from "@/use-cases/daily/create-daily/create-daily-use-case";
-import { UpdateDailyUseCase } from "@/use-cases/daily/update-daily/update-daily-use-case";
 import { DeleteDailyUseCase } from "@/use-cases/daily/delete-daily-use-case/delete-daily-use-case";
 import { ListDailyUseCase } from "@/use-cases/daily/list-daily-use-case/list-daily-use-case";
+import { UpdateDailyUseCase } from "@/use-cases/daily/update-daily/update-daily-use-case";
 
 interface DailyContextType {
 	daily: Daily[];
@@ -62,7 +64,6 @@ export function DailyProvider({ children }: DailyProviderProps) {
 		}
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
 	useEffect(() => {
 		fetchDaily();
 	}, []);
@@ -165,14 +166,16 @@ export function DailyProvider({ children }: DailyProviderProps) {
 
 	const completeDaily = async (daily: Daily) => {
 		try {
-			const completeDailyWithLogUseCase = new (await import("@/use-cases/daily/complete-daily-with-log/complete-daily-with-log-use-case")).CompleteDailyWithLogUseCase(
+			const completeDailyWithLogUseCase = new CompleteDailyWithLogUseCase(
 				dailyRepository,
-				new (await import("@/infra/repositories/database/prisma-daily-log-repository")).PrismaDailyLogRepository()
+				new ApiDailyLogRepository(),
 			);
-			
+
 			const result = await completeDailyWithLogUseCase.execute({ daily });
 			setDaily((prevDaily) =>
-				prevDaily.map((d) => (d.id === daily.id ? result.updatedDaily : d)),
+				prevDaily.map((d) =>
+					d.id === daily.id ? result.updatedDaily : d,
+				),
 			);
 		} catch (err) {
 			setError("Failed to complete daily");

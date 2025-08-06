@@ -1,13 +1,14 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { useDailyContext } from "@/contexts/daily-context";
 import { GripVertical } from "lucide-react";
+import type { MouseEventHandler } from "react";
 import { toast } from "sonner";
 import type { Daily } from "../../types";
 
 type Props = {
 	daily: Daily;
-	dragHandleProps?: any;
-	onEditClick?: () => void;
+	dragHandleProps?: () => void;
+	onEditClick?: MouseEventHandler | undefined;
 };
 
 export function DailyCard({ daily, dragHandleProps, onEditClick }: Props) {

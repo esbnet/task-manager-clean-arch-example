@@ -59,7 +59,7 @@ export class PrismaDailySubtaskRepository implements DailySubtaskRepository {
 		await prisma.dailySubtask.delete({ where: { id } });
 	}
 
-	private toDomain(subtask: any): DailySubtask {
+	private toDomain(subtask: DailySubtask): DailySubtask {
 		return {
 			id: subtask.id,
 			title: subtask.title,
