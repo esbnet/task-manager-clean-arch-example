@@ -1,11 +1,16 @@
-import AddHabitForm from "./add-habit";
-import type { Habit } from "@/types";
-import { HabitForm } from "./habit-form";
-import { Loading } from "../ui/loading";
 import { useHabitContext } from "@/contexts/habit-context";
-import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy, arrayMove, useSortable } from "@dnd-kit/sortable";
+import type { Habit } from "@/types";
+import { DndContext, type DragEndEvent, closestCenter } from "@dnd-kit/core";
+import {
+	SortableContext,
+	arrayMove,
+	useSortable,
+	verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Loading } from "../ui/loading";
+import AddHabitForm from "./add-habit";
+import { HabitForm } from "./habit-form";
 
 export const HabitColumn = () => {
 	return (
@@ -52,11 +57,19 @@ const Habits = () => {
 	};
 
 	return (
-		<DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-			<SortableContext items={habits.map(h => h.id)} strategy={verticalListSortingStrategy}>
+		<DndContext
+			collisionDetection={closestCenter}
+			onDragEnd={handleDragEnd}
+		>
+			<SortableContext
+				items={habits.map((h) => h.id)}
+				strategy={verticalListSortingStrategy}
+			>
 				<div className="flex flex-col gap-2">
 					{habits.map((habit: Habit) => {
-						return <SortableHabitItem key={habit.id} habit={habit} />;
+						return (
+							<SortableHabitItem key={habit.id} habit={habit} />
+						);
 					})}
 				</div>
 			</SortableContext>

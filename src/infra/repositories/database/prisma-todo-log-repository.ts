@@ -5,19 +5,20 @@ import { prisma } from "@/infra/database/prisma-client";
 export class PrismaTodoLogRepository implements TodoLogRepository {
 	async list(): Promise<TodoLog[]> {
 		const logs = await prisma.todoLog.findMany({
-			orderBy: { completedAt: 'desc' }
+			orderBy: { completedAt: "desc" },
 		});
 		return logs.map(this.toDomain);
 	}
 
-	async create(data: Omit<TodoLog, "id" | "completedAt">): Promise<TodoLog> {
+	async create(data: Omit<TodoLog, "id" | "createdAt">): Promise<TodoLog> {
 		const log = await prisma.todoLog.create({
 			data: {
 				todoId: data.todoId,
 				todoTitle: data.todoTitle,
 				difficulty: data.difficulty,
-				tags: data.tags
-			}
+				tags: data.tags,
+				completedAt: data.completedAt,
+			},
 		});
 		return this.toDomain(log);
 	}
@@ -41,7 +42,8 @@ export class PrismaTodoLogRepository implements TodoLogRepository {
 			todoTitle: log.todoTitle,
 			difficulty: log.difficulty,
 			tags: log.tags,
-			completedAt: log.completedAt
+			completedAt: log.completedAt,
+			createdAt: log.createdAt,
 		};
 	}
 }

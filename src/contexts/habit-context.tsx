@@ -14,6 +14,8 @@ import { ApiHabitRepository } from "@/infra/repositories/backend/api-habit-repos
 import type { HabitDifficulty } from "@/types/habit";
 import { CreateHabitUseCase } from "@/use-cases/habit/create-habit/create-habit-use-case";
 import { UpdateHabitUseCase } from "@/use-cases/habit/update-habit/update-habit-use-case";
+import { DeleteHabitUseCase } from "@/use-cases/habit/delete-habit-use-case/delete-habit-use-case";
+import { ListHabitUseCase } from "@/use-cases/habit/list-habit-use-case/list-habit-use-case";
 
 interface HabitContextType {
 	habits: Habit[];
@@ -42,12 +44,14 @@ export function HabitProvider({ children }: HabitProviderProps) {
 	const habitRepository = new ApiHabitRepository();
 	const createHabitUseCase = new CreateHabitUseCase(habitRepository);
 	const updateHabitUseCase = new UpdateHabitUseCase(habitRepository);
+	const deleteHabitUseCase = new DeleteHabitUseCase(habitRepository);
+	const listHabitUseCase = new ListHabitUseCase(habitRepository);
 
 	const fetchHabits = async () => {
 		try {
 			setIsLoading(true);
-			const fetchedHabits = await habitRepository.list();
-			setHabits(fetchedHabits as unknown as Habit[]);
+			const result = await listHabitUseCase.execute();
+			setHabits(result.habits as unknown as Habit[]);
 			setError(null);
 		} catch (err) {
 			setError("Failed to fetch habits");
@@ -62,14 +66,16 @@ export function HabitProvider({ children }: HabitProviderProps) {
 		fetchHabits();
 	}, []);
 
-	const addHabit = async (habit: Omit<Habit, "id" | "createdAt">): Promise<void> => {
+	const addHabit = async (
+		habit: Omit<Habit, "id" | "createdAt">,
+	): Promise<void> => {
 		try {
 			const result = await createHabitUseCase.execute({
 				title: habit.title,
 				observations: habit.observations || "",
-				difficulty: habit.difficulty as HabitDifficulty || "Fácil",
+				difficulty: (habit.difficulty as HabitDifficulty) || "Fácil",
 				tags: habit.tags || [],
-				reset: habit.reset as HabitReset || "Diariamente",
+				reset: (habit.reset as HabitReset) || "Diariamente",
 				createdAt: new Date(),
 			});
 
@@ -100,7 +106,7 @@ export function HabitProvider({ children }: HabitProviderProps) {
 
 	const deleteHabit = async (id: string) => {
 		try {
-			await habitRepository.delete(id);
+			await deleteHabitUseCase.execute({ id });
 			setHabits((prevHabits) =>
 				prevHabits.filter((habit) => habit.id !== id),
 			);
@@ -140,9 +146,9 @@ export function HabitProvider({ children }: HabitProviderProps) {
 				...habit,
 				order: index,
 			}));
-			
+
 			setHabits(habitsWithOrder);
-			
+
 			// Salvar a nova ordem no backend
 			for (const habit of habitsWithOrder) {
 				await updateHabitUseCase.execute(habit);
@@ -155,21 +161,14 @@ export function HabitProvider({ children }: HabitProviderProps) {
 
 	const completeHabit = async (habit: Habit) => {
 		try {
-			// Salva no log
-			await fetch("/api/habit-logs", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ habit }),
-			});
+			const completeHabitWithLogUseCase = new (await import("@/use-cases/habit/complete-habit-with-log/complete-habit-with-log-use-case")).CompleteHabitWithLogUseCase(
+				habitRepository,
+				new (await import("@/infra/repositories/database/prisma-habit-log-repository")).PrismaHabitLogRepository()
+			);
 			
-			// Atualiza o hábito com a data de conclusão
-			const today = new Date().toISOString().split('T')[0];
-			const updatedHabit = { ...habit, lastCompletedDate: today };
-			await updateHabitUseCase.execute(updatedHabit);
-			
-			// Atualiza o estado local
-			setHabits(prevHabits => 
-				prevHabits.map(h => h.id === habit.id ? updatedHabit : h)
+			const result = await completeHabitWithLogUseCase.execute({ habit });
+			setHabits((prevHabits) =>
+				prevHabits.map((h) => (h.id === habit.id ? result.updatedHabit : h)),
 			);
 		} catch (err) {
 			setError("Failed to complete habit");
@@ -177,8 +176,10 @@ export function HabitProvider({ children }: HabitProviderProps) {
 		}
 	};
 
-	const today = new Date().toISOString().split('T')[0];
-	const visibleHabits = habits.filter(habit => habit.lastCompletedDate !== today);
+	const today = new Date().toISOString().split("T")[0];
+	const visibleHabits = habits.filter(
+		(habit) => habit.lastCompletedDate !== today,
+	);
 
 	const value = {
 		habits: visibleHabits.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),

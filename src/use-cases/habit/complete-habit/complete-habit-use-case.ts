@@ -1,5 +1,5 @@
-import type { HabitLogRepository } from "@/domain/repositories/all-repository";
 import type { Habit } from "@/domain/entities/habit";
+import type { HabitLogRepository } from "@/domain/repositories/all-repository";
 
 export interface CompleteHabitInput {
 	habit: Habit;
@@ -19,6 +19,7 @@ export class CompleteHabitUseCase {
 			habitTitle: input.habit.title,
 			difficulty: input.habit.difficulty,
 			tags: input.habit.tags,
+			completedAt: new Date(),
 		});
 
 		return {

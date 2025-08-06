@@ -12,12 +12,6 @@ const lobster = Lobster({
 	variable: "--font-lobster",
 });
 
-// const syneMono = Syne_Mono({
-// 	subsets: ["latin"],
-// 	weight: "400", // Lobster geralmente só tem peso 400
-// 	variable: "--font-syne-mono",
-// });
-
 const kodeMono = Kode_Mono({
 	subsets: ["latin"],
 	weight: "400", // Lobster geralmente só tem peso 400
@@ -35,15 +29,19 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="pt-BR" className="dark">
+		<html lang="pt-BR" suppressHydrationWarning>
 			<body
 				className={` ${lobster.className}  ${kodeMono.className} antialiased `}
 			>
 				<ThemeProvider
 					attribute="class"
-					defaultTheme="system"
+					defaultTheme="dark"
 					enableSystem
 					disableTransitionOnChange
+					value={{
+						light: "light",
+						dark: "dark",
+					}}
 				>
 					{children}
 					<Toaster richColors />

@@ -24,7 +24,7 @@ export class InMemoryDailyRepository
 				},
 				tags: ["example", "daily"],
 				createdAt: new Date(),
-			}
+			},
 		];
 	}
 }

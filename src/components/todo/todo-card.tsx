@@ -11,7 +11,13 @@ type Props = {
 };
 
 export function TodoCard({ todo, dragHandleProps, onEditClick }: Props) {
-	return <TodoItem todo={todo} dragHandleProps={dragHandleProps} onEditClick={onEditClick} />;
+	return (
+		<TodoItem
+			todo={todo}
+			dragHandleProps={dragHandleProps}
+			onEditClick={onEditClick}
+		/>
+	);
 }
 
 function TodoItem({ todo, dragHandleProps, onEditClick }: Props) {
@@ -40,9 +46,10 @@ function TodoItem({ todo, dragHandleProps, onEditClick }: Props) {
 						className="hover:bg-foreground/10 border-foreground/30 focus-visible:ring-0 focus-visible:ring-offset-0 w-5 h-5 focus-visible:bg-accent-foreground hover:cursor-pointer"
 						onClick={(e) => e.stopPropagation()}
 					/>
-					<span 
-						className="text-foreground/60 text-justify cursor-pointer hover:text-foreground/80"
+					<span
+						className="text-foreground/60 hover:text-foreground/80 text-justify line-clamp-1 cursor-pointer"
 						onClick={onEditClick}
+						title={todo.title}
 					>
 						{todo.title}
 					</span>

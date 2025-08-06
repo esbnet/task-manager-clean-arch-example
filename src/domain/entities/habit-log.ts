@@ -5,4 +5,5 @@ export interface HabitLog {
 	completedAt: Date;
 	difficulty: string;
 	tags: string[];
+	createdAt: Date;
 }

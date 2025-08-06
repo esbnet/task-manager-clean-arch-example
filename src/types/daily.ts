@@ -23,4 +23,14 @@ export interface Daily {
 	createdAt: Date;
 	order?: number;
 	lastCompletedDate?: string;
+	subtasks?: DailySubtask[];
+}
+
+export interface DailySubtask {
+	id: string;
+	title: string;
+	completed: boolean;
+	dailyId: string;
+	order: number;
+	createdAt: Date;
 }

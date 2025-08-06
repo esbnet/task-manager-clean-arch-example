@@ -1,5 +1,5 @@
-import type { DailyLogRepository } from "@/domain/repositories/all-repository";
 import type { Daily } from "@/domain/entities/daily";
+import type { DailyLogRepository } from "@/domain/repositories/all-repository";
 
 export interface CompleteDailyInput {
 	daily: Daily;
@@ -19,6 +19,7 @@ export class CompleteDailyUseCase {
 			dailyTitle: input.daily.title,
 			difficulty: input.daily.difficulty,
 			tags: input.daily.tags,
+			completedAt: new Date(),
 		});
 
 		return {

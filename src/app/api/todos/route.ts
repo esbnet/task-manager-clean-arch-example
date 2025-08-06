@@ -1,7 +1,7 @@
 import { PrismaTodoRepository } from "@/infra/repositories/database/prisma-todo-repository";
 import { CreateTodoUseCase } from "@/use-cases/todo/create-todo/create-todo-use-case";
-import { DeleteTodoUseCase } from "@/use-cases/todo/delete-todo/toggle-delete-use-case";
-import { ListTodosUseCase } from "@/use-cases/todo/list-todo/list-todo-use-case";
+import { DeleteTodoUseCase } from "@/use-cases/todo/delete-todo-use-case/delete-todo-use-case";
+import { ListTodoUseCase } from "@/use-cases/todo/list-todo-use-case/list-todo-use-case";
 import { UpdateTodoUseCase } from "@/use-cases/todo/update-todo/update-todo-use-case";
 import type { NextRequest } from "next/server";
 
@@ -10,9 +10,9 @@ import type { NextRequest } from "next/server";
 const todoRepo = new PrismaTodoRepository();
 
 export async function GET() {
-	const useCase = new ListTodosUseCase(todoRepo);
+	const useCase = new ListTodoUseCase(todoRepo);
 	const result = await useCase.execute();
-	return Response.json(result);
+	return Response.json({ todos: result.todos });
 }
 
 export async function POST(request: NextRequest) {
@@ -46,8 +46,14 @@ export async function PATCH(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
-	const { id } = await request.json();
+	const url = new URL(request.url);
+	const id = url.searchParams.get('id');
+	
+	if (!id) {
+		return Response.json({ error: 'ID is required' }, { status: 400 });
+	}
+	
 	const useCase = new DeleteTodoUseCase(todoRepo);
-	await useCase.execute(id);
+	await useCase.execute({ id });
 	return new Response(null, { status: 204 });
 }

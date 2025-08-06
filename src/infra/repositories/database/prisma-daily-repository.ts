@@ -4,10 +4,15 @@ import { prisma } from "@/infra/database/prisma-client";
 
 export class PrismaDailyRepository implements DailyRepository {
 	async list(): Promise<Daily[]> {
-		const dailys = await prisma.daily.findMany({
-			orderBy: { order: 'asc' }
+		const daily = await prisma.daily.findMany({
+			include: {
+				subtasks: {
+					orderBy: { order: "asc" },
+				},
+			},
+			orderBy: { order: "asc" },
 		});
-		return dailys.map(this.toDomain);
+		return daily.map(this.toDomain);
 	}
 
 	async create(data: Omit<Daily, "id" | "createdAt">): Promise<Daily> {
@@ -21,8 +26,8 @@ export class PrismaDailyRepository implements DailyRepository {
 				repeatType: data.repeat.type,
 				repeatFrequency: data.repeat.frequency,
 				tags: data.tags,
-				order: data.order ?? 0
-			}
+				order: data.order ?? 0,
+			},
 		});
 		return this.toDomain(daily);
 	}
@@ -40,8 +45,8 @@ export class PrismaDailyRepository implements DailyRepository {
 				repeatFrequency: daily.repeat.frequency,
 				tags: daily.tags,
 				order: daily.order,
-				lastCompletedDate: daily.lastCompletedDate
-			}
+				lastCompletedDate: daily.lastCompletedDate,
+			},
 		});
 		return this.toDomain(updated);
 	}
@@ -49,10 +54,10 @@ export class PrismaDailyRepository implements DailyRepository {
 	async toggleComplete(id: string): Promise<Daily> {
 		const daily = await prisma.daily.findUnique({ where: { id } });
 		if (!daily) throw new Error("Daily not found");
-		
+
 		const updated = await prisma.daily.update({
 			where: { id },
-			data: { lastCompletedDate: new Date().toISOString().split('T')[0] }
+			data: { lastCompletedDate: new Date().toISOString().split("T")[0] },
 		});
 		return this.toDomain(updated);
 	}
@@ -71,12 +76,21 @@ export class PrismaDailyRepository implements DailyRepository {
 			startDate: daily.startDate,
 			repeat: {
 				type: daily.repeatType,
-				frequency: daily.repeatFrequency
+				frequency: daily.repeatFrequency,
 			},
 			tags: daily.tags,
 			order: daily.order,
 			lastCompletedDate: daily.lastCompletedDate,
-			createdAt: daily.createdAt
+			createdAt: daily.createdAt,
+			subtasks:
+				daily.subtasks?.map((s: any) => ({
+					id: s.id,
+					title: s.title,
+					completed: s.completed,
+					dailyId: s.dailyId,
+					order: s.order,
+					createdAt: s.createdAt,
+				})) || [],
 		};
 	}
 }

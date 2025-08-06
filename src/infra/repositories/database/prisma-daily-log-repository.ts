@@ -5,19 +5,20 @@ import { prisma } from "@/infra/database/prisma-client";
 export class PrismaDailyLogRepository implements DailyLogRepository {
 	async list(): Promise<DailyLog[]> {
 		const logs = await prisma.dailyLog.findMany({
-			orderBy: { completedAt: 'desc' }
+			orderBy: { completedAt: "desc" },
 		});
 		return logs.map(this.toDomain);
 	}
 
-	async create(data: Omit<DailyLog, "id" | "completedAt">): Promise<DailyLog> {
+	async create(data: Omit<DailyLog, "id" | "createdAt">): Promise<DailyLog> {
 		const log = await prisma.dailyLog.create({
 			data: {
 				dailyId: data.dailyId,
 				dailyTitle: data.dailyTitle,
 				difficulty: data.difficulty,
-				tags: data.tags
-			}
+				tags: data.tags,
+				completedAt: data.completedAt,
+			},
 		});
 		return this.toDomain(log);
 	}
@@ -41,7 +42,8 @@ export class PrismaDailyLogRepository implements DailyLogRepository {
 			dailyTitle: log.dailyTitle,
 			difficulty: log.difficulty,
 			tags: log.tags,
-			completedAt: log.completedAt
+			completedAt: log.completedAt,
+			createdAt: log.createdAt,
 		};
 	}
 }

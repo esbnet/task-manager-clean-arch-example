@@ -5,17 +5,23 @@ import { prisma } from "@/infra/database/prisma-client";
 export class PrismaTodoRepository implements TodoRepository {
 	async list(): Promise<Todo[]> {
 		const todos = await prisma.todo.findMany({
-			orderBy: { order: 'asc' }
+			include: {
+				subtasks: {
+					orderBy: { order: "asc" },
+				},
+			},
+			orderBy: { order: "asc" },
 		});
 		return todos.map(this.toDomain);
 	}
 
 	async create(data: Omit<Todo, "id" | "createdAt">): Promise<Todo> {
+		const { subtasks, ...todoData } = data;
 		const todo = await prisma.todo.create({
 			data: {
-				...data,
-				order: data.order ?? 0
-			}
+				...todoData,
+				order: data.order ?? 0,
+			},
 		});
 		return this.toDomain(todo);
 	}
@@ -31,8 +37,8 @@ export class PrismaTodoRepository implements TodoRepository {
 				startDate: todo.startDate,
 				tags: todo.tags,
 				order: todo.order,
-				lastCompletedDate: todo.lastCompletedDate
-			}
+				lastCompletedDate: todo.lastCompletedDate,
+			},
 		});
 		return this.toDomain(updated);
 	}
@@ -40,10 +46,10 @@ export class PrismaTodoRepository implements TodoRepository {
 	async toggleComplete(id: string): Promise<Todo> {
 		const todo = await prisma.todo.findUnique({ where: { id } });
 		if (!todo) throw new Error("Todo not found");
-		
+
 		const updated = await prisma.todo.update({
 			where: { id },
-			data: { lastCompletedDate: new Date().toISOString().split('T')[0] }
+			data: { lastCompletedDate: new Date().toISOString().split("T")[0] },
 		});
 		return this.toDomain(updated);
 	}
@@ -63,7 +69,16 @@ export class PrismaTodoRepository implements TodoRepository {
 			tags: todo.tags,
 			order: todo.order,
 			lastCompletedDate: todo.lastCompletedDate,
-			createdAt: todo.createdAt
+			createdAt: todo.createdAt,
+			subtasks:
+				todo.subtasks?.map((s: any) => ({
+					id: s.id,
+					title: s.title,
+					completed: s.completed,
+					todoId: s.todoId,
+					order: s.order,
+					createdAt: s.createdAt,
+				})) || [],
 		};
 	}
 }

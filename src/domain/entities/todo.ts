@@ -9,4 +9,16 @@ export interface Todo {
 	startDate: Date;
 	tags: string[];
 	createdAt: Date;
+	order?: number;
+	lastCompletedDate?: string;
+	subtasks?: TodoSubtask[];
+}
+
+export interface TodoSubtask {
+	id: string;
+	title: string;
+	completed: boolean;
+	todoId: string;
+	order: number;
+	createdAt: Date;
 }

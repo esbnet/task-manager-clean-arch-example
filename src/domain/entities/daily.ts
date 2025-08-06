@@ -18,4 +18,16 @@ export interface Daily {
 	repeat: DailyRepeat;
 	tags: string[];
 	createdAt: Date;
+	order?: number;
+	lastCompletedDate?: string;
+	subtasks?: DailySubtask[];
+}
+
+export interface DailySubtask {
+	id: string;
+	title: string;
+	completed: boolean;
+	dailyId: string;
+	order: number;
+	createdAt: Date;
 }

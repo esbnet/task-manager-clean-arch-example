@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -58,8 +57,22 @@ model Daily {
   createdAt          DateTime  @default(now())
   
   logs               DailyLog[]
+  subtasks           DailySubtask[]
   
   @@map("dailys")
+}
+
+model DailySubtask {
+  id          String   @id @default(cuid())
+  title       String
+  completed   Boolean  @default(false)
+  dailyId     String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  
+  daily       Daily    @relation(fields: [dailyId], references: [id], onDelete: Cascade)
+  
+  @@map("daily_subtasks")
 }
 
 model DailyLog {
@@ -88,6 +101,7 @@ model Todo {
   createdAt          DateTime  @default(now())
   
   logs               TodoLog[]
+  subtasks           TodoSubtask[]
   
   @@map("todos")
 }
@@ -103,4 +117,26 @@ model TodoLog {
   todo        Todo     @relation(fields: [todoId], references: [id], onDelete: Cascade)
   
   @@map("todo_logs")
+}
+
+model TodoSubtask {
+  id          String   @id @default(cuid())
+  title       String
+  completed   Boolean  @default(false)
+  todoId      String
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  
+  todo        Todo     @relation(fields: [todoId], references: [id], onDelete: Cascade)
+  
+  @@map("todo_subtasks")
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  color     String   @default("#3b82f6")
+  createdAt DateTime @default(now())
+  
+  @@map("tags")
 }

@@ -9,11 +9,14 @@ import {
 } from "react";
 
 import type { Daily } from "@/types";
+import { shouldShowDailyToday } from "@/utils/daily-schedule";
 
 import { ApiDailyRepository } from "@/infra/repositories/backend/api-daily-repository";
 import type { DailyDifficulty, DailyRepeatType } from "@/types/daily";
 import { CreateDailyUseCase } from "@/use-cases/daily/create-daily/create-daily-use-case";
 import { UpdateDailyUseCase } from "@/use-cases/daily/update-daily/update-daily-use-case";
+import { DeleteDailyUseCase } from "@/use-cases/daily/delete-daily-use-case/delete-daily-use-case";
+import { ListDailyUseCase } from "@/use-cases/daily/list-daily-use-case/list-daily-use-case";
 
 interface DailyContextType {
 	daily: Daily[];
@@ -42,12 +45,14 @@ export function DailyProvider({ children }: DailyProviderProps) {
 	const dailyRepository = new ApiDailyRepository();
 	const createDailyUseCase = new CreateDailyUseCase(dailyRepository);
 	const updateDailyUseCase = new UpdateDailyUseCase(dailyRepository);
+	const deleteDailyUseCase = new DeleteDailyUseCase(dailyRepository);
+	const listDailyUseCase = new ListDailyUseCase(dailyRepository);
 
 	const fetchDaily = async () => {
 		try {
 			setIsLoading(true);
-			const fetchedDaily = await dailyRepository.list();
-			setDaily(fetchedDaily as Daily[]);
+			const result = await listDailyUseCase.execute();
+			setDaily(result.daily as Daily[]);
 			setError(null);
 		} catch (err) {
 			setError("Failed to fetch daily");
@@ -106,7 +111,7 @@ export function DailyProvider({ children }: DailyProviderProps) {
 
 	const deleteDaily = async (id: string) => {
 		try {
-			await dailyRepository.delete(id);
+			await deleteDailyUseCase.execute({ id });
 			setDaily((prevDaily) =>
 				prevDaily.filter((daily) => daily.id !== id),
 			);
@@ -160,18 +165,14 @@ export function DailyProvider({ children }: DailyProviderProps) {
 
 	const completeDaily = async (daily: Daily) => {
 		try {
-			await fetch("/api/daily-logs", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ daily }),
-			});
-
-			const today = new Date().toISOString().split('T')[0];
-			const updatedDaily = { ...daily, lastCompletedDate: today };
-			await updateDailyUseCase.execute(updatedDaily);
-
-			setDaily(prevDaily =>
-				prevDaily.map(d => d.id === daily.id ? updatedDaily : d)
+			const completeDailyWithLogUseCase = new (await import("@/use-cases/daily/complete-daily-with-log/complete-daily-with-log-use-case")).CompleteDailyWithLogUseCase(
+				dailyRepository,
+				new (await import("@/infra/repositories/database/prisma-daily-log-repository")).PrismaDailyLogRepository()
+			);
+			
+			const result = await completeDailyWithLogUseCase.execute({ daily });
+			setDaily((prevDaily) =>
+				prevDaily.map((d) => (d.id === daily.id ? result.updatedDaily : d)),
 			);
 		} catch (err) {
 			setError("Failed to complete daily");
@@ -179,11 +180,10 @@ export function DailyProvider({ children }: DailyProviderProps) {
 		}
 	};
 
-	const today = new Date().toISOString().split('T')[0];
-	const visibleDaily = daily.filter(daily => daily.lastCompletedDate !== today);
-
 	const value = {
-		daily: visibleDaily.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
+		daily: daily
+			.filter(shouldShowDailyToday)
+			.sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
 		isLoading,
 		error,
 		addDaily,

@@ -1,5 +1,5 @@
-import type { TodoLogRepository } from "@/domain/repositories/all-repository";
 import type { Todo } from "@/domain/entities/todo";
+import type { TodoLogRepository } from "@/domain/repositories/all-repository";
 
 export interface CompleteTodoInput {
 	todo: Todo;
@@ -19,6 +19,7 @@ export class CompleteTodoUseCase {
 			todoTitle: input.todo.title,
 			difficulty: input.todo.difficulty,
 			tags: input.todo.tags,
+			completedAt: new Date(),
 		});
 
 		return {

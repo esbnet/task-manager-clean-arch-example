@@ -70,6 +70,8 @@ interface MultiSelectProps
 		value: string;
 		/** Optional icon component to display alongside the option. */
 		icon?: React.ComponentType<{ className?: string }>;
+		/** Optional color for the option. */
+		color?: string;
 	}[];
 
 	/**
@@ -232,6 +234,9 @@ export const MultiSelect = React.forwardRef<
 													)}
 													style={{
 														animationDuration: `${animation}s`,
+														backgroundColor:
+															option?.color,
+														color: "white",
 													}}
 												>
 													{IconComponent && (
@@ -357,7 +362,18 @@ export const MultiSelect = React.forwardRef<
 											{option.icon && (
 												<option.icon className="mr-2 w-4 h-4 text-muted-foreground" />
 											)}
-											<span>{option.label}</span>
+											<div className="flex items-center gap-2">
+												{option.color && (
+													<div
+														className="w-3 h-3 rounded-full"
+														style={{
+															backgroundColor:
+																option.color,
+														}}
+													/>
+												)}
+												<span>{option.label}</span>
+											</div>
 										</CommandItem>
 									);
 								})}

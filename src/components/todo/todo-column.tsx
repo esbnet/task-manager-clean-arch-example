@@ -1,11 +1,16 @@
-import AddTodo from "./add-todo";
-import { Loading } from "../ui/loading";
-import type { Todo } from "@/types";
-import { TodoForm } from "./todo-form";
 import { useTodoContext } from "@/contexts/todo-context";
-import { DndContext, DragEndEvent, closestCenter } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy, arrayMove, useSortable } from "@dnd-kit/sortable";
+import type { Todo } from "@/types";
+import { DndContext, type DragEndEvent, closestCenter } from "@dnd-kit/core";
+import {
+	SortableContext,
+	arrayMove,
+	useSortable,
+	verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Loading } from "../ui/loading";
+import AddTodo from "./add-todo";
+import { TodoForm } from "./todo-form";
 
 export const TodoColumn = () => {
 	return (
@@ -52,8 +57,14 @@ const Todos = () => {
 	};
 
 	return (
-		<DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-			<SortableContext items={todos.map(t => t.id)} strategy={verticalListSortingStrategy}>
+		<DndContext
+			collisionDetection={closestCenter}
+			onDragEnd={handleDragEnd}
+		>
+			<SortableContext
+				items={todos.map((t) => t.id)}
+				strategy={verticalListSortingStrategy}
+			>
 				<div className="flex flex-col gap-2">
 					{todos.map((todo: Todo) => {
 						return <SortableTodoItem key={todo.id} todo={todo} />;

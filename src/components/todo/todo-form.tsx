@@ -28,7 +28,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTodoContext } from "@/contexts/todo-context";
-import { tagsNew } from "@/types/tags";
+import { useTags } from "@/hooks/use-tags";
 import type { TodoDifficulty } from "@/types/todo";
 import { ptBR } from "date-fns/locale";
 import { useState } from "react";
@@ -36,6 +36,7 @@ import { toast } from "sonner";
 import type { Todo } from "../../types";
 import { MultiSelect } from "../ui/multi-select";
 import { TodoCard } from "./todo-card";
+import { TodoSubtaskList } from "./todo-subtask-list";
 
 setDefaultOptions({ locale: ptBR });
 
@@ -46,6 +47,7 @@ interface TodoFormProps {
 
 export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 	const { updateTodo } = useTodoContext();
+	const { tagOptions } = useTags();
 
 	const [title, setTitle] = useState(todo.title || "");
 	const [observations, setObservations] = useState(todo.observations || "");
@@ -110,132 +112,144 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 
 	return (
 		<>
-			<TodoCard todo={todo} dragHandleProps={dragHandleProps} onEditClick={() => setOpen(true)} />
+			<TodoCard
+				todo={todo}
+				dragHandleProps={dragHandleProps}
+				onEditClick={() => setOpen(true)}
+			/>
 			<Dialog open={open} onOpenChange={setOpen}>
 				<DialogContent className="flex flex-col gap-4 opacity-80 shadow-xl backdrop-blur-sm backdrop-opacity-0">
-				<DialogHeader className="flex flex-col gap-1">
-					<DialogTitle>Editar Afazer</DialogTitle>
+					<DialogHeader className="flex flex-col gap-1">
+						<DialogTitle>Editar Afazer</DialogTitle>
 
-					<DialogDescription className="text-zinc-400 text-sm">
-						Altere os detalhes da tarefa
-					</DialogDescription>
-				</DialogHeader>
+						<DialogDescription className="text-zinc-400 text-sm">
+							Altere os detalhes da tarefa
+						</DialogDescription>
+					</DialogHeader>
 
-				<form
-					onSubmit={handleUpdateTodo}
-					className="flex flex-col gap-4 bg-gray-100/20 p-2 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]"
-				>
-					<div className="flex flex-col gap-1">
-						<Label className="font-bold">Título</Label>
-						<Input
-							value={title}
-							onChange={(e) => setTitle(e.target.value)}
-							placeholder="Nova diária"
-							required
-						/>
-					</div>
-					<div className="flex flex-col gap-1">
-						<Label className="font-bold">Observação</Label>
-						<Input
-							value={observations}
-							onChange={(e) => setObservations(e.target.value)}
-							placeholder="Adicionar observações"
-						/>
-					</div>
-					<div className="flex flex-col gap-1">
-						<Label className="font-bold" htmlFor="tags">
-							Etiquetas
-						</Label>
-						<MultiSelect
-							id="tags"
-							options={tagsNew}
-							onValueChange={(value) => setTags(value)}
-							defaultValue={tags || []}
-							placeholder="Adicionar etiquetas"
-							variant="inverted"
-							maxCount={3}
-						/>
-					</div>
+					<form
+						onSubmit={handleUpdateTodo}
+						className="flex flex-col gap-4 bg-gray-100/20 p-2 rounded-lg animate-[fadeIn_1s_ease-in-out_forwards]"
+					>
+						<div className="flex flex-col gap-1">
+							<Label className="font-bold">Título</Label>
+							<Input
+								value={title}
+								onChange={(e) => setTitle(e.target.value)}
+								placeholder="Nova diária"
+								required
+							/>
+						</div>
+						<div className="flex flex-col gap-1">
+							<Label className="font-bold">Observação</Label>
+							<Input
+								value={observations}
+								onChange={(e) =>
+									setObservations(e.target.value)
+								}
+								placeholder="Adicionar observações"
+							/>
+						</div>
+						<div className="flex flex-col gap-1">
+							<Label className="font-bold">
+								Lista de tarefas
+							</Label>
+							<TodoSubtaskList
+								todoId={todo.id}
+								initialSubtasks={todo.subtasks || []}
+							/>
+						</div>
+						<div className="flex flex-col gap-1">
+							<Label className="font-bold" htmlFor="tags">
+								Etiquetas
+							</Label>
+							<MultiSelect
+								id="tags"
+								options={tagOptions}
+								onValueChange={(value) => setTags(value)}
+								defaultValue={tags || []}
+								placeholder="Adicionar etiquetas"
+								variant="inverted"
+								maxCount={3}
+							/>
+						</div>
 
-					<div className="flex flex-col gap-1">
-						<Label className="font-bold">Dificuldade</Label>
-						<Select
-							onValueChange={(value) =>
-								setDifficult(value as TodoDifficulty)
-							}
-							value={difficulty || "Fácil"}
-						>
-							<SelectTrigger className="w-full">
-								<SelectValue
-									placeholder="Dificuldade"
-									className="text-zinc-300"
-								/>
-							</SelectTrigger>
-							<SelectContent
-								className="w-full"
-								defaultValue={difficulty || "Fácil"}
+						<div className="flex flex-col gap-1">
+							<Label className="font-bold">Dificuldade</Label>
+							<Select
+								onValueChange={(value) =>
+									setDifficult(value as TodoDifficulty)
+								}
+								value={difficulty || "Fácil"}
 							>
-								<SelectItem
-									value="Trivial"
-									className="justify-between"
+								<SelectTrigger className="w-full">
+									<SelectValue
+										placeholder="Dificuldade"
+										className="text-zinc-300"
+									/>
+								</SelectTrigger>
+								<SelectContent
+									className="w-full"
+									defaultValue={difficulty || "Fácil"}
 								>
-									Trival ⭐
-								</SelectItem>
-								<SelectItem value="Fácil">
-									Fácil ⭐⭐
-								</SelectItem>
-								<SelectItem value="Média">
-									Média ⭐⭐⭐
-								</SelectItem>
-								<SelectItem value="Difícil">
-									Difícil ⭐⭐⭐⭐
-								</SelectItem>
-							</SelectContent>
-						</Select>
-					</div>
+									<SelectItem value="Trivial">
+										Trival ⭐
+									</SelectItem>
+									<SelectItem value="Fácil">
+										Fácil ⭐⭐
+									</SelectItem>
+									<SelectItem value="Média">
+										Média ⭐⭐⭐{" "}
+									</SelectItem>
+									<SelectItem value="Difícil">
+										Difícil ⭐⭐⭐⭐
+									</SelectItem>
+								</SelectContent>
+							</Select>
+						</div>
 
-					<div className="flex flex-col gap-1">
-						<Label className="font-bold">Data de início</Label>
-						<Popover>
-							<PopoverTrigger asChild>
-								<Button
-									variant="outline"
-									data-empty={!startDate}
-									className="justify-start w-full font-normal data-[empty=true]:text-muted-foreground text-left"
-								>
-									<CalendarIcon />
-									{startDate ? (
-										format(startDate, "PPP", {
-											locale: ptBR,
-										})
-									) : (
-										<span>Pick a date</span>
-									)}
-								</Button>
-							</PopoverTrigger>
-							<PopoverContent className="p-0 w-auto">
-								<Calendar
-									mode="single"
-									required={true}
-									selected={startDate}
-									onSelect={setStartDate}
-								/>
-							</PopoverContent>
-						</Popover>
-					</div>
+						<div className="flex flex-col gap-1">
+							<Label className="font-bold">Data de início</Label>
+							<Popover>
+								<PopoverTrigger asChild>
+									<Button
+										variant="outline"
+										data-empty={!startDate}
+										className="justify-start w-full font-normal data-[empty=true]:text-muted-foreground text-left"
+									>
+										<CalendarIcon />
+										{startDate ? (
+											format(startDate, "PPP", {
+												locale: ptBR,
+											})
+										) : (
+											<span>Pick a date</span>
+										)}
+									</Button>
+								</PopoverTrigger>
+								<PopoverContent className="p-0 w-auto">
+									<Calendar
+										mode="single"
+										required={true}
+										selected={startDate}
+										onSelect={setStartDate}
+									/>
+								</PopoverContent>
+							</Popover>
+						</div>
 
-					<div className="flex gap-1 mt-2">
-						<DialogClose asChild>
-							<Button variant="link">Cancel</Button>
-						</DialogClose>
-						<Button type="submit" className="flex-1">
-							<SaveIcon />
-							Salvar
-						</Button>
-					</div>
-				</form>
-				<div className="flex justify-right items-center">
-					<DialogConfirmDelete id={todo.id} />
+						<div className="flex gap-1 mt-2">
+							<DialogClose asChild>
+								<Button variant="link">Cancel</Button>
+							</DialogClose>
+							<Button type="submit" className="flex-1">
+								<SaveIcon />
+								Salvar
+							</Button>
+						</div>
+					</form>
+					<div className="flex justify-right items-center">
+						<DialogConfirmDelete id={todo.id} />
 					</div>
 				</DialogContent>
 			</Dialog>
