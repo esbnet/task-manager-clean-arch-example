@@ -278,3 +278,44 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 ---
 
 ⭐ **Se este projeto te ajudou, deixe uma estrela!**
+
+
+=========================
+
+🔧 Configuração Atual:
+Desenvolvimento (Local):
+Provider: postgresql
+
+Database: postgresql://admin:admin123@localhost:5432/taskmanager
+
+Usa directUrl para melhor performance
+
+Produção (Supabase):
+Provider: postgresql
+
+Database: Supabase PostgreSQL na nuvem
+
+Connection pooling otimizado
+
+📋 Scripts disponíveis:
+```bash
+# Configurar para desenvolvimento (PostgreSQL local)
+npm run db:dev
+
+# Configurar para produção (PostgreSQL Supabase)
+npm run db:prod
+
+# Push do schema para desenvolvimento
+npm run db:push:dev
+
+# Push do schema para produção  
+npm run db:push:prod
+```
+
+Copy
+🎯 Benefícios:
+✅ Consistência: PostgreSQL em ambos ambientes
+✅ Recursos avançados: Arrays, JSON, etc. em desenvolvimento
+✅ Paridade: Mesmo comportamento local e produção
+✅ Alternância fácil: Scripts automatizados
+
