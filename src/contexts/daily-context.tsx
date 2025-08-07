@@ -66,6 +66,7 @@ export function DailyProvider({ children }: DailyProviderProps) {
 
 	useEffect(() => {
 		fetchDaily();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const addDaily = async (daily: Omit<Daily, "id" | "createdAt">) => {

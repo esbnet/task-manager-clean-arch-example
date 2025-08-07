@@ -6,7 +6,7 @@ import type { Habit } from "../../types";
 
 type Props = {
 	habit: Habit;
-	dragHandleProps?: () => void;
+	dragHandleProps?: any;
 	onEditClick?: () => void;
 };
 
@@ -47,7 +47,7 @@ function HabitItem({ habit, dragHandleProps, onEditClick }: Props) {
 						onClick={(e) => e.stopPropagation()}
 					/>
 					<span
-						className="text-foreground/60 hover:text-foreground/80 text-justify line-clamp-1 cursor-pointer"
+						className="overflow-hidden text-foreground/60 hover:text-foreground/80 line-clamp-1 hyphens-auto cursor-pointer"
 						onClick={onEditClick}
 						title={habit.title}
 					>

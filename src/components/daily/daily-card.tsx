@@ -7,7 +7,7 @@ import type { Daily } from "../../types";
 
 type Props = {
 	daily: Daily;
-	dragHandleProps?: () => void;
+	dragHandleProps?: any;
 	onEditClick?: MouseEventHandler | undefined;
 };
 
@@ -48,7 +48,7 @@ function DailyItem({ daily, dragHandleProps, onEditClick }: Props) {
 						onClick={(e) => e.stopPropagation()}
 					/>
 					<span
-						className="text-foreground/60 hover:text-foreground/80 text-justify line-clamp-1 cursor-pointer"
+						className="overflow-hidden text-foreground/60 hover:text-foreground/80 line-clamp-1 hyphens-auto cursor-pointer"
 						onClick={onEditClick}
 						title={daily.title}
 					>

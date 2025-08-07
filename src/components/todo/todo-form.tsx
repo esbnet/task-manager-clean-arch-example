@@ -1,3 +1,5 @@
+'use client';
+
 import {
 	Dialog,
 	DialogClose,
@@ -59,12 +61,15 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 
 	// const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [open, setOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	async function handleUpdateTodo(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 
 		if (!title.trim()) return;
+		if (isLoading) return;
 
+		setIsLoading(true);
 		try {
 			await updateTodo({
 				...todo,
@@ -80,6 +85,8 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 		} catch (error) {
 			toast.error(`Erro ao atualizar tarefa${error}`);
 			console.error("Erro ao atualizar tarefa", error);
+		} finally {
+			setIsLoading(false);
 		}
 	}
 
@@ -215,9 +222,9 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 							<DialogClose asChild>
 								<Button variant="link">Cancel</Button>
 							</DialogClose>
-							<Button type="submit" className="flex-1">
+							<Button type="submit" className="flex-1" disabled={isLoading}>
 								<SaveIcon />
-								Salvar
+								{isLoading ? "Salvando..." : "Salvar"}
 							</Button>
 						</div>
 					</form>
@@ -232,9 +239,17 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 
 function DialogConfirmDelete({ id }: { id: string }) {
 	const { deleteTodo } = useTodoContext();
+	const [isDeleting, setIsDeleting] = useState(false);
+	
 	const onDelete = async () => {
-		await deleteTodo(id);
-		toast.success("Tarefa excluída com sucesso!");
+		if (isDeleting) return;
+		setIsDeleting(true);
+		try {
+			await deleteTodo(id);
+			toast.success("Tarefa excluída com sucesso!");
+		} finally {
+			setIsDeleting(false);
+		}
 	};
 
 	return (
@@ -263,8 +278,9 @@ function DialogConfirmDelete({ id }: { id: string }) {
 						type="submit"
 						variant={"destructive"}
 						onClick={onDelete}
+						disabled={isDeleting}
 					>
-						Excluir
+						{isDeleting ? "Excluindo..." : "Excluir"}
 					</Button>
 					<DialogClose asChild>
 						<Button variant="outline">Cancel</Button>

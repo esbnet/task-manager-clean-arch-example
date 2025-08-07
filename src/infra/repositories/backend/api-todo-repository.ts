@@ -33,7 +33,9 @@ export class ApiTodoRepository implements TodoRepository {
 
 	async toggleComplete(id: string): Promise<Todo> {
 		await this.httpClient.patch(this.baseUrl, { id });
-		return (await this.list()).find((t) => t.id === id)!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+		const todo = (await this.list()).find((t) => t.id === id);
+		if (!todo) throw new Error(`Todo with id ${id} not found`);
+		return todo;
 	}
 
 	async delete(id: string): Promise<void> {

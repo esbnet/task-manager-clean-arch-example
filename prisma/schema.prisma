@@ -1,137 +1,202 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
-}
+            provider  = "postgresql"
+            url       = env("DATABASE_URL")
+            directUrl = env("DIRECT_URL")
+        }
 
 model Habit {
-  id                 String    @id @default(cuid())
-  title              String
-  observations       String    @default("")
-  difficulty         String
-  tags               String[]
-  reset              String
-  order              Int       @default(0)
-  lastCompletedDate  String?
-  createdAt          DateTime  @default(now())
-  
-  logs               HabitLog[]
-  
-  @@map("habits")
+    id                String   @id @default(cuid())
+    title             String
+    observations      String   @default("")
+    difficulty        String
+    tags              String[]
+    reset             String
+    order             Int      @default(0)
+    lastCompletedDate String?
+    userId            String
+    createdAt         DateTime @default(now())
+
+    user User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    logs HabitLog[]
+
+    @@map("habits")
 }
 
 model HabitLog {
-  id          String   @id @default(cuid())
-  habitId     String
-  habitTitle  String
-  difficulty  String
-  tags        String[]
-  completedAt DateTime @default(now())
-  
-  habit       Habit    @relation(fields: [habitId], references: [id], onDelete: Cascade)
-  
-  @@map("habit_logs")
+    id          String   @id @default(cuid())
+    habitId     String
+    habitTitle  String
+    difficulty  String
+    tags        String[]
+    completedAt DateTime @default(now())
+
+    habit Habit @relation(fields: [habitId], references: [id], onDelete: Cascade)
+
+    @@map("habit_logs")
 }
 
 model Daily {
-  id                 String    @id @default(cuid())
-  title              String
-  observations       String    @default("")
-  tasks              String[]
-  difficulty         String
-  startDate          DateTime
-  repeatType         String
-  repeatFrequency    Int       @default(1)
-  tags               String[]
-  order              Int       @default(0)
-  lastCompletedDate  String?
-  createdAt          DateTime  @default(now())
-  
-  logs               DailyLog[]
-  subtasks           DailySubtask[]
-  
-  @@map("dailys")
+    id                String   @id @default(cuid())
+    title             String
+    observations      String   @default("")
+    tasks             String[]
+    difficulty        String
+    startDate         DateTime
+    repeatType        String
+    repeatFrequency   Int      @default(1)
+    tags              String[]
+    order             Int      @default(0)
+    lastCompletedDate String?
+    userId            String
+    createdAt         DateTime @default(now())
+
+    user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    logs     DailyLog[]
+    subtasks DailySubtask[]
+
+    @@map("dailys")
 }
 
 model DailySubtask {
-  id          String   @id @default(cuid())
-  title       String
-  completed   Boolean  @default(false)
-  dailyId     String
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  
-  daily       Daily    @relation(fields: [dailyId], references: [id], onDelete: Cascade)
-  
-  @@map("daily_subtasks")
+    id        String   @id @default(cuid())
+    title     String
+    completed Boolean  @default(false)
+    dailyId   String
+    order     Int      @default(0)
+    createdAt DateTime @default(now())
+
+    daily Daily @relation(fields: [dailyId], references: [id], onDelete: Cascade)
+
+    @@map("daily_subtasks")
 }
 
 model DailyLog {
-  id          String   @id @default(cuid())
-  dailyId     String
-  dailyTitle  String
-  difficulty  String
-  tags        String[]
-  completedAt DateTime @default(now())
-  
-  daily       Daily    @relation(fields: [dailyId], references: [id], onDelete: Cascade)
-  
-  @@map("daily_logs")
+    id          String   @id @default(cuid())
+    dailyId     String
+    dailyTitle  String
+    difficulty  String
+    tags        String[]
+    completedAt DateTime @default(now())
+
+    daily Daily @relation(fields: [dailyId], references: [id], onDelete: Cascade)
+
+    @@map("daily_logs")
 }
 
 model Todo {
-  id                 String    @id @default(cuid())
-  title              String
-  observations       String    @default("")
-  tasks              String[]
-  difficulty         String
-  startDate          DateTime
-  tags               String[]
-  order              Int       @default(0)
-  lastCompletedDate  String?
-  createdAt          DateTime  @default(now())
-  
-  logs               TodoLog[]
-  subtasks           TodoSubtask[]
-  
-  @@map("todos")
+    id                String   @id @default(cuid())
+    title             String
+    observations      String   @default("")
+    tasks             String[]
+    difficulty        String
+    startDate         DateTime
+    tags              String[]
+    order             Int      @default(0)
+    lastCompletedDate String?
+    userId            String
+    createdAt         DateTime @default(now())
+
+    user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    logs     TodoLog[]
+    subtasks TodoSubtask[]
+
+    @@map("todos")
 }
 
 model TodoLog {
-  id          String   @id @default(cuid())
-  todoId      String
-  todoTitle   String
-  difficulty  String
-  tags        String[]
-  completedAt DateTime @default(now())
-  
-  todo        Todo     @relation(fields: [todoId], references: [id], onDelete: Cascade)
-  
-  @@map("todo_logs")
+    id          String   @id @default(cuid())
+    todoId      String
+    todoTitle   String
+    difficulty  String
+    tags        String[]
+    completedAt DateTime @default(now())
+
+    todo Todo @relation(fields: [todoId], references: [id], onDelete: Cascade)
+
+    @@map("todo_logs")
 }
 
 model TodoSubtask {
-  id          String   @id @default(cuid())
-  title       String
-  completed   Boolean  @default(false)
-  todoId      String
-  order       Int      @default(0)
-  createdAt   DateTime @default(now())
-  
-  todo        Todo     @relation(fields: [todoId], references: [id], onDelete: Cascade)
-  
-  @@map("todo_subtasks")
+    id        String   @id @default(cuid())
+    title     String
+    completed Boolean  @default(false)
+    todoId    String
+    order     Int      @default(0)
+    createdAt DateTime @default(now())
+
+    todo Todo @relation(fields: [todoId], references: [id], onDelete: Cascade)
+
+    @@map("todo_subtasks")
 }
 
 model Tag {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  color     String   @default("#3b82f6")
-  createdAt DateTime @default(now())
-  
-  @@map("tags")
+    id        String   @id @default(cuid())
+    name      String
+    color     String   @default("#3b82f6")
+    userId    String
+    createdAt DateTime @default(now())
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([name, userId])
+    @@map("tags")
+}
+
+model Account {
+    id                String  @id @default(cuid())
+    userId            String  @map("user_id")
+    type              String
+    provider          String
+    providerAccountId String  @map("provider_account_id")
+    refresh_token     String? @db.Text
+    access_token      String? @db.Text
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String? @db.Text
+    session_state     String?
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+    @@map("accounts")
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    sessionToken String   @unique @map("session_token")
+    userId       String   @map("user_id")
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("sessions")
+}
+
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime? @map("email_verified")
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+    habits        Habit[]
+    dailies       Daily[]
+    todos         Todo[]
+    tags          Tag[]
+
+    @@map("users")
+}
+
+model VerificationToken {
+    identifier String
+    token      String
+    expires    DateTime
+
+    @@unique([identifier, token])
+    @@map("verification_tokens")
 }

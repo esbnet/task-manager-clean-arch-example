@@ -13,13 +13,16 @@ export class ApiTodoLogRepository implements TodoLogRepository {
 	list(): Promise<TodoLog[]> {
 		throw new Error("Method not implemented.");
 	}
-	update(entity: TodoLog): Promise<TodoLog> {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	update(_entity: TodoLog): Promise<TodoLog> {
 		throw new Error("Method not implemented.");
 	}
-	toggleComplete(id: string): Promise<TodoLog> {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	toggleComplete(_id: string): Promise<TodoLog> {
 		throw new Error("Method not implemented.");
 	}
-	delete(id: string): Promise<void> {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	delete(_id: string): Promise<void> {
 		throw new Error("Method not implemented.");
 	}
 

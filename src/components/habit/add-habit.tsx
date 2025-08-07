@@ -1,3 +1,5 @@
+'use client';
+
 import { useHabitContext } from "@/contexts/habit-context";
 import type { Habit } from "@/types";
 import { useState } from "react";
@@ -35,6 +37,8 @@ export default function AddHabit() {
 
 		// Usar o objeto criado diretamente
 		addHabit(newHabit);
+
+		toast.success("Hábito adicionado com sucesso!");
 
 		// Atualizar o estado e limpar o formulário
 		setHabit({

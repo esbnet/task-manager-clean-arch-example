@@ -1,3 +1,5 @@
+'use client';
+
 import {
 	Dialog,
 	DialogClose,
@@ -67,12 +69,15 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 	const [tags, setTags] = useState<string[]>(daily.tags || []);
 
 	const [open, setOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	async function handleUpdateDaily(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 
 		if (!title.trim()) return;
+		if (isLoading) return;
 
+		setIsLoading(true);
 		try {
 			await updateDaily({
 				...daily,
@@ -93,6 +98,8 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 		} catch (error) {
 			toast.error(`Erro ao atualizar hábito${error}`);
 			console.error("Erro ao atualizar hábito", error);
+		} finally {
+			setIsLoading(false);
 		}
 	}
 
@@ -247,8 +254,8 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 										setRepeatFrequency(
 											e.target.value
 												? Number.parseInt(
-														e.target.value,
-													)
+													e.target.value,
+												)
 												: 1,
 										)
 									}
@@ -285,9 +292,9 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 							<DialogClose asChild>
 								<Button variant="link">Cancel</Button>
 							</DialogClose>
-							<Button type="submit" className="flex-1">
+							<Button type="submit" className="flex-1" disabled={isLoading}>
 								<SaveIcon />
-								Salvar
+								{isLoading ? "Salvando..." : "Salvar"}
 							</Button>
 						</div>
 					</form>
@@ -302,9 +309,17 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 
 function DialogConfirmDelete({ id }: { id: string }) {
 	const { deleteDaily } = useDailyContext();
+	const [isDeleting, setIsDeleting] = useState(false);
+	
 	const onDelete = async () => {
-		await deleteDaily(id);
-		toast.success("Tarefa excluída com sucesso!");
+		if (isDeleting) return;
+		setIsDeleting(true);
+		try {
+			await deleteDaily(id);
+			toast.success("Tarefa excluída com sucesso!");
+		} finally {
+			setIsDeleting(false);
+		}
 	};
 
 	return (
@@ -333,8 +348,9 @@ function DialogConfirmDelete({ id }: { id: string }) {
 						type="submit"
 						variant={"destructive"}
 						onClick={onDelete}
+						disabled={isDeleting}
 					>
-						Excluir
+						{isDeleting ? "Excluindo..." : "Excluir"}
 					</Button>
 					<DialogClose asChild>
 						<Button variant="outline">Cancel</Button>

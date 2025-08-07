@@ -1,16 +1,31 @@
 import type { Habit } from "@/domain/entities/habit";
 import type { HabitRepository } from "@/domain/repositories/all-repository";
 import { prisma } from "@/infra/database/prisma-client";
+import { getCurrentUserId } from "@/hooks/use-current-user";
 
 export class PrismaHabitRepository implements HabitRepository {
 	async list(): Promise<Habit[]> {
+		const userId = await getCurrentUserId();
+		if (!userId) return [];
+		
 		const habits = await prisma.habit.findMany({
+			where: { userId },
 			orderBy: { order: "asc" },
 		});
 		return habits.map(this.toDomain);
 	}
 
 	async create(data: Omit<Habit, "id" | "createdAt">): Promise<Habit> {
+		const userId = await getCurrentUserId();
+		if (!userId) throw new Error("User not authenticated");
+		
+		// Verificar se o usuário existe, se não, criar
+		await prisma.user.upsert({
+			where: { id: userId },
+			update: {},
+			create: { id: userId },
+		});
+		
 		const habit = await prisma.habit.create({
 			data: {
 				title: data.title,
@@ -19,14 +34,18 @@ export class PrismaHabitRepository implements HabitRepository {
 				tags: data.tags,
 				reset: data.reset,
 				order: data.order ?? 0,
+				userId,
 			},
 		});
 		return this.toDomain(habit);
 	}
 
 	async update(habit: Habit): Promise<Habit> {
+		const userId = await getCurrentUserId();
+		if (!userId) throw new Error("User not authenticated");
+		
 		const updated = await prisma.habit.update({
-			where: { id: habit.id },
+			where: { id: habit.id, userId },
 			data: {
 				title: habit.title,
 				observations: habit.observations,
@@ -41,20 +60,27 @@ export class PrismaHabitRepository implements HabitRepository {
 	}
 
 	async toggleComplete(id: string): Promise<Habit> {
-		const habit = await prisma.habit.findUnique({ where: { id } });
+		const userId = await getCurrentUserId();
+		if (!userId) throw new Error("User not authenticated");
+		
+		const habit = await prisma.habit.findUnique({ where: { id, userId } });
 		if (!habit) throw new Error("Habit not found");
 
 		const updated = await prisma.habit.update({
-			where: { id },
+			where: { id, userId },
 			data: { lastCompletedDate: new Date().toISOString().split("T")[0] },
 		});
 		return this.toDomain(updated);
 	}
 
 	async delete(id: string): Promise<void> {
-		await prisma.habit.delete({ where: { id } });
+		const userId = await getCurrentUserId();
+		if (!userId) throw new Error("User not authenticated");
+		
+		await prisma.habit.delete({ where: { id, userId } });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private toDomain(habit: any): Habit {
 		return {
 			id: habit.id,

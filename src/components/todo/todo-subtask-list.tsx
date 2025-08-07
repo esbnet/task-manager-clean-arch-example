@@ -26,10 +26,7 @@ export function TodoSubtaskList({
 		setSubtasks(initialSubtasks);
 	}, [initialSubtasks]);
 
-	const updateSubtasks = (newSubtasks: TodoSubtask[]) => {
-		setSubtasks(newSubtasks);
-		onSubtasksChange?.(newSubtasks);
-	};
+
 
 	const { createSubtask, updateSubtask, deleteSubtask } =
 		useTodoSubtaskContext();
@@ -43,7 +40,9 @@ export function TodoSubtaskList({
 				todoId,
 				subtasks.length,
 			);
-			updateSubtasks([...subtasks, newSubtask]);
+			const updatedSubtasks = [...subtasks, newSubtask];
+			setSubtasks(updatedSubtasks);
+			onSubtasksChange?.(updatedSubtasks);
 			setNewTaskTitle("");
 		} catch (error) {
 			console.error("Error adding subtask:", error);
@@ -55,9 +54,9 @@ export function TodoSubtaskList({
 		try {
 			const updated = { ...subtask, completed: !subtask.completed };
 			await updateSubtask(updated);
-			updateSubtasks(
-				subtasks.map((s) => (s.id === subtask.id ? updated : s)),
-			);
+			const updatedSubtasks = subtasks.map((s) => (s.id === subtask.id ? updated : s));
+			setSubtasks(updatedSubtasks);
+			onSubtasksChange?.(updatedSubtasks);
 			toast.success(
 				`Tarefa "${subtask.title}" ${updated.completed ? "concluída" : "reaberta"}!`,
 			);
@@ -70,7 +69,9 @@ export function TodoSubtaskList({
 	const handleDeleteSubtask = async (id: string, title: string) => {
 		try {
 			await deleteSubtask(id);
-			updateSubtasks(subtasks.filter((s) => s.id !== id));
+			const updatedSubtasks = subtasks.filter((s) => s.id !== id);
+			setSubtasks(updatedSubtasks);
+			onSubtasksChange?.(updatedSubtasks);
 			toast.success(`Tarefa "${title}" removida com sucesso!`);
 		} catch (error) {
 			console.error("Error deleting subtask:", error);

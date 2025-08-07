@@ -12,11 +12,11 @@ import { Loading } from "../ui/loading";
 import AddHabitForm from "./add-habit";
 import { HabitForm } from "./habit-form";
 
-export const HabitColumn = () => {
+export function HabitColumn() {
 	return (
 		<div
 			key={"HABITS"}
-			className="flex flex-col flex-1 gap-4 bg-background/20 opacity-0 shadow-lg backdrop-blur-md p-2 rounded-lg max-h-full overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
+			className="flex flex-col flex-1 gap-4 bg-background/20 opacity-0 shadow-lg backdrop-blur-md p-2 rounded-lg overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
 		>
 			<h2 className="top-0 sticky bg-background/30 shadow-sm p-2 rounded-lg font-semibold text-foreground/40 text-2xl text-center">
 				Hábitos
@@ -39,7 +39,7 @@ const Habits = () => {
 	if (habits.length === 0) {
 		return (
 			<div className="flex flex-1 justify-center items-center font-lg text-muted-foreground">
-				Nenhum ativo...{" "}
+				Nenhum hábito ativo...
 			</div>
 		);
 	}

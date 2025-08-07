@@ -36,7 +36,9 @@ export class ApiDailyRepository implements DailyRepository {
 
 	async toggleComplete(id: string): Promise<Daily> {
 		await this.httpClient.patch(this.baseUrl, { id });
-		return (await this.list()).find((t) => t.id === id)!; // eslint-disable-line @typescript-eslint/no-non-null-assertion
+		const daily = (await this.list()).find((t) => t.id === id);
+		if (!daily) throw new Error(`Daily with id ${id} not found`);
+		return daily;
 	}
 
 	async delete(id: string): Promise<void> {

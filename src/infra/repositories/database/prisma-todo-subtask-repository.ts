@@ -59,6 +59,7 @@ export class PrismaTodoSubtaskRepository implements TodoSubtaskRepository {
 		await prisma.todoSubtask.delete({ where: { id } });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private toDomain(subtask: any): TodoSubtask {
 		return {
 			id: subtask.id,
