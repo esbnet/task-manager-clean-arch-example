@@ -53,6 +53,7 @@ export function DailySubtaskProvider({ children }: { children: ReactNode }) {
 	): Promise<DailySubtask> => {
 		try {
 			const result = await updateUseCase.execute({ subtask });
+
 			return result.subtask;
 		} catch (error) {
 			ErrorHandler.logError(error, "DailySubtaskContext.updateSubtask");
