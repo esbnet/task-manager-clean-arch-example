@@ -9,15 +9,15 @@ export class PrismaDailyRepository implements DailyRepository {
 		if (!userId) {
 			return [];
 		}
-		
+
+		// retornar todos os dailies do user
 		const daily = await prisma.daily.findMany({
 			where: { userId },
 			include: {
 				subtasks: {
 					orderBy: { order: "asc" },
-				},
-			},
-			orderBy: { order: "asc" },
+				}
+			}
 		});
 		return daily.map(this.toDomain);
 	}

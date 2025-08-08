@@ -1,7 +1,6 @@
-import { ClientProviders } from "@/components/providers/client-providers";
-import { ModeToggleButton } from "@/components/mode-toggle-button";
-import { UserAvatar } from "@/components/auth/user-avatar";
 import { auth } from "@/auth";
+import { ModeToggleButton } from "@/components/mode-toggle-button";
+import { ClientProviders } from "@/components/providers/client-providers";
 
 export default async function Home() {
 	const session = await auth();
@@ -45,9 +44,9 @@ export default async function Home() {
 					<div className="flex-1 bg-clip-text bg-gradient-to-br from-10% from-indigo-500 via-30% via-sky-500 to-90% to-emerald-500 font-bold text-transparent text-6xl text-center">
 						Gerenciador de Tarefas
 					</div>
-					<div className="flex items-center gap-2">
+					{/* <div className="flex items-center gap-2">
 						<UserAvatar user={session.user ?? { name: "", email: "", image: "" }} />
-					</div>
+					</div> */}
 				</div>
 			</div>
 
