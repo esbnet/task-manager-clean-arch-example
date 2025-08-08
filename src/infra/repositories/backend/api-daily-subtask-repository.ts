@@ -1,7 +1,7 @@
 import type { DailySubtask } from "@/domain/entities/daily-subtask";
 import type { DailySubtaskRepository } from "@/domain/repositories/all-repository";
-import type { HttpClient } from "@/infra/services/http-client";
 import { FetchHttpClient } from "@/infra/services/http-client";
+import type { HttpClient } from "@/infra/services/http-client";
 
 export class ApiDailySubtaskRepository implements DailySubtaskRepository {
 	private baseUrl = "/api/daily-subtasks";
@@ -9,6 +9,12 @@ export class ApiDailySubtaskRepository implements DailySubtaskRepository {
 
 	constructor(httpClient?: HttpClient) {
 		this.httpClient = httpClient || new FetchHttpClient();
+	}
+	list(): Promise<DailySubtask[]> {
+		throw new Error("Method not implemented.");
+	}
+	toggleComplete(id: string): Promise<DailySubtask> {
+		throw new Error("Method not implemented.");
 	}
 
 	async listByDailyId(dailyId: string): Promise<DailySubtask[]> {

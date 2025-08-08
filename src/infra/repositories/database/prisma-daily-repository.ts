@@ -1,12 +1,14 @@
 import type { Daily } from "@/domain/entities/daily";
 import type { DailyRepository } from "@/domain/repositories/all-repository";
-import { prisma } from "@/infra/database/prisma-client";
 import { getCurrentUserId } from "@/hooks/use-current-user";
+import { prisma } from "@/infra/database/prisma-client";
 
 export class PrismaDailyRepository implements DailyRepository {
 	async list(): Promise<Daily[]> {
 		const userId = await getCurrentUserId();
-		if (!userId) return [];
+		if (!userId) {
+			return [];
+		}
 		
 		const daily = await prisma.daily.findMany({
 			where: { userId },

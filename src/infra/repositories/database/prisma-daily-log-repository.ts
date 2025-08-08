@@ -18,6 +18,8 @@ export class PrismaDailyLogRepository implements DailyLogRepository {
 				difficulty: data.difficulty,
 				tags: data.tags,
 				completedAt: data.completedAt,
+				createdAt: new Date(),
+				
 			},
 		});
 		return this.toDomain(log);
@@ -34,7 +36,6 @@ export class PrismaDailyLogRepository implements DailyLogRepository {
 	}
 
 	async delete(id: string): Promise<void> {
-		console.log(`Deleting daily log with id: ${id}`);
 		await prisma.dailyLog.delete({ where: { id } });
 	}
 

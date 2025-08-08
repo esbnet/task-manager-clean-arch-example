@@ -14,16 +14,13 @@ export class ApiDailyLogRepository implements DailyLogRepository {
 		throw new Error("Method not implemented.");
 	}
 	update(entity: DailyLog): Promise<DailyLog> {
-		console.log("update", entity);
 		throw new Error("Method not implemented.");
 	}
 
 	toggleComplete(id: string): Promise<DailyLog> {
-		console.log("toggleComplete", id);
 		throw new Error("Method not implemented.");
 	}
 	delete(id: string): Promise<void> {
-		console.log("delete", id);
 		throw new Error("Method not implemented.");
 	}
 

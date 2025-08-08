@@ -1,28 +1,25 @@
-import { auth } from "@/auth";
-import { SignOutButton } from "@/components/auth/sign-out-button";
-import { ModeToggleButton } from "@/components/mode-toggle-button";
 import { ClientProviders } from "@/components/providers/client-providers";
+import { ModeToggleButton } from "@/components/mode-toggle-button";
+import { UserAvatar } from "@/components/auth/user-avatar";
+import { auth } from "@/auth";
 
 export default async function Home() {
 	const session = await auth();
-	
-	// Debug: mostrar informações da sessão
-	console.log('Session:', session);
-	
+
 	// Se não estiver logado, mostrar página de login
 	if (!session) {
 		return (
-			<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-500 via-sky-500 to-emerald-500">
-				<div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-xl">
+			<div className="flex justify-center items-center bg-gradient-to-br from-indigo-500 via-sky-500 to-emerald-500 min-h-screen">
+				<div className="space-y-8 bg-white shadow-xl p-8 rounded-lg w-full max-w-md">
 					<div className="text-center">
-						<h2 className="text-3xl font-bold text-gray-900">
+						<h2 className="font-bold text-gray-900 text-3xl">
 							Gerenciador de Tarefas
 						</h2>
 						<p className="mt-2 text-gray-600">
 							Faça login para acessar suas tarefas
 						</p>
 					</div>
-					
+
 					<div className="space-y-4">
 						<form
 							action={async () => {
@@ -31,7 +28,7 @@ export default async function Home() {
 								await signIn("google", { redirectTo: "/" })
 							}}
 						>
-							<button type="submit" className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+							<button type="submit" className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded w-full text-white">
 								Entrar com Google
 							</button>
 						</form>
@@ -40,7 +37,7 @@ export default async function Home() {
 			</div>
 		);
 	}
-	
+
 	return (
 		<main className="relative flex flex-col gap-4 bg-gradient-to-br from-10% from-indigo-500 via-30% via-sky-500 to-90% to-emerald-500 m-auto p-2 lg:max-w-[80vw] min-h-screen">
 			<div className="flex bg-background/80 shadow-xl rounded-lg text-center animate-[fadeIn_1s_ease-in-out_forwards]">
@@ -49,12 +46,7 @@ export default async function Home() {
 						Gerenciador de Tarefas
 					</div>
 					<div className="flex items-center gap-2">
-						{session?.user?.name && (
-							<span className="text-muted-foreground text-sm">
-								Olá, {session.user.name}
-							</span>
-						)}
-						<SignOutButton />
+						<UserAvatar user={session.user ?? { name: "", email: "", image: "" }} />
 					</div>
 				</div>
 			</div>
