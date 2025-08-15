@@ -55,7 +55,7 @@ export function HabitProvider({ children }: HabitProviderProps) {
 			setError(null);
 		} catch (err) {
 			setError("Failed to fetch habits");
-			console.error(err);
+			console.error('Habit fetch error:', err);
 		} finally {
 			setIsLoading(false);
 		}
@@ -63,6 +63,7 @@ export function HabitProvider({ children }: HabitProviderProps) {
 
 	useEffect(() => {
 		fetchHabits();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const addHabit = async (

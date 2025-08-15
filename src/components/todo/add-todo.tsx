@@ -1,3 +1,5 @@
+'use client';
+
 import { useTodoContext } from "@/contexts/todo-context";
 import type { Todo } from "@/types";
 import { useState } from "react";
@@ -37,6 +39,8 @@ export default function AddTodo() {
 
 		// Usar o objeto criado diretamente
 		addTodo(newTodo);
+
+		toast.success("Afazer adicionado com sucesso!");
 
 		// Atualizar o estado e limpar o formulário
 		setTodo({

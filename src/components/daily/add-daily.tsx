@@ -1,3 +1,5 @@
+'use client';
+
 import type { Daily, DailyRepeat } from "@/types";
 
 import { useDailyContext } from "@/contexts/daily-context";
@@ -46,6 +48,8 @@ export default function AddDaily() {
 
 		// Usar o objeto criado diretamente
 		addDaily(newDaily);
+
+		toast.success("Diária adicionada com sucesso!");
 
 		// Atualizar o estado e limpar o formulário
 		setDaily({

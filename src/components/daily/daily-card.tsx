@@ -1,13 +1,13 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { useDailyContext } from "@/contexts/daily-context";
+import type { Daily } from "../../types";
 import { GripVertical } from "lucide-react";
 import type { MouseEventHandler } from "react";
 import { toast } from "sonner";
-import type { Daily } from "../../types";
+import { useDailyContext } from "@/contexts/daily-context";
 
 type Props = {
 	daily: Daily;
-	dragHandleProps?: () => void;
+	dragHandleProps?: any;
 	onEditClick?: MouseEventHandler | undefined;
 };
 
@@ -32,9 +32,9 @@ function DailyItem({ daily, dragHandleProps, onEditClick }: Props) {
 	};
 
 	return (
-		<div className="flex justify-between items-center gap-2 bg-background/30 shadow-sm hover:shadow-md p-1 rounded-sm transition-all duration-200 ease-in-out">
+		<div className="flex justify-between items-center gap-2 bg-background/30 shadow-sm hover:shadow-md p-1 border-amber-300 border-l-4 rounded-sm transition-all duration-200 ease-in-out">
 			<div
-				className="hover:bg-background/10 px-1 py-2 rounded-sm cursor-grab"
+				className="hover:bg-background/10 py-2 rounded-sm cursor-grab"
 				{...dragHandleProps}
 				title="Arraste para mover a tarefa"
 			>
@@ -48,7 +48,7 @@ function DailyItem({ daily, dragHandleProps, onEditClick }: Props) {
 						onClick={(e) => e.stopPropagation()}
 					/>
 					<span
-						className="text-foreground/60 hover:text-foreground/80 text-justify line-clamp-1 cursor-pointer"
+						className="overflow-hidden text-foreground/60 hover:text-foreground/80 line-clamp-1 hyphens-auto cursor-pointer"
 						onClick={onEditClick}
 						title={daily.title}
 					>

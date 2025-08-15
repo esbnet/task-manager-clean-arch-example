@@ -1,11 +1,16 @@
 import type { Tag } from "@/domain/entities/tag";
 import type { TagRepository } from "@/domain/repositories/all-repository";
 import { prisma } from "@/infra/database/prisma-client";
+import { getCurrentUserId } from "@/hooks/use-current-user";
 
 export class PrismaTagRepository implements TagRepository {
 	async list(): Promise<Tag[]> {
 		try {
+			const userId = await getCurrentUserId();
+			if (!userId) return [];
+			
 			const tags = await prisma.tag.findMany({
+				where: { userId },
 				orderBy: { name: "asc" },
 			});
 
@@ -40,6 +45,7 @@ export class PrismaTagRepository implements TagRepository {
 						data: {
 							name: tagName,
 							color: colors[colorIndex % colors.length],
+							userId,
 						},
 					});
 					colorIndex++;
@@ -54,7 +60,12 @@ export class PrismaTagRepository implements TagRepository {
 					];
 
 					for (const tag of defaultTags) {
-						await prisma.tag.create({ data: tag });
+						await prisma.tag.create({ 
+							data: { 
+								...tag, 
+								userId 
+							} 
+						});
 					}
 				}
 
@@ -72,10 +83,21 @@ export class PrismaTagRepository implements TagRepository {
 	}
 
 	async create(data: Omit<Tag, "id" | "createdAt">): Promise<Tag> {
+		const userId = await getCurrentUserId();
+		if (!userId) throw new Error("User not authenticated");
+		
+		// Verificar se o usuário existe, se não, criar
+		await prisma.user.upsert({
+			where: { id: userId },
+			update: {},
+			create: { id: userId },
+		});
+		
 		const tag = await prisma.tag.create({
 			data: {
 				name: data.name,
 				color: data.color,
+				userId,
 			},
 		});
 		return this.toDomain(tag);
@@ -92,7 +114,8 @@ export class PrismaTagRepository implements TagRepository {
 		return this.toDomain(updated);
 	}
 
-	async toggleComplete(id: string): Promise<Tag> {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	async toggleComplete(_id: string): Promise<Tag> {
 		throw new Error("Toggle complete not implemented for tags");
 	}
 
@@ -100,6 +123,7 @@ export class PrismaTagRepository implements TagRepository {
 		await prisma.tag.delete({ where: { id } });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private toDomain(tag: any): Tag {
 		return {
 			id: tag.id,

@@ -1,7 +1,7 @@
+import { FetchHttpClient } from "@/infra/services/http-client";
+import type { HttpClient } from "@/infra/services/http-client";
 import type { TodoSubtask } from "@/domain/entities/todo-subtask";
 import type { TodoSubtaskRepository } from "@/domain/repositories/all-repository";
-import type { HttpClient } from "@/infra/services/http-client";
-import { FetchHttpClient } from "@/infra/services/http-client";
 
 export class ApiTodoSubtaskRepository implements TodoSubtaskRepository {
 	private baseUrl = "/api/todo-subtasks";
@@ -9,6 +9,13 @@ export class ApiTodoSubtaskRepository implements TodoSubtaskRepository {
 
 	constructor(httpClient?: HttpClient) {
 		this.httpClient = httpClient || new FetchHttpClient();
+	}
+	
+	list(): Promise<TodoSubtask[]> {
+		throw new Error("Method not implemented.");
+	}
+	toggleComplete(id: string): Promise<TodoSubtask> {
+		throw new Error("Method not implemented.");
 	}
 
 	async listByTodoId(todoId: string): Promise<TodoSubtask[]> {

@@ -4,5 +4,6 @@
 	"avdmanager.sdkPath": "/home/esbdev/android_sdk",
 	"avdmanager.executable": "/home/esbdev/android_sdk/cmdline-tools/latest/bin/avdmanager",
 	"avdmanager.sdkManager": "/home/esbdev/android_sdk/cmdline-tools/latest/bin/sdkmanager",
-	"MutableAI.upsell": true
+	"MutableAI.upsell": true,
+	"CodeGPT.apiKey": "OpenAI"
 }

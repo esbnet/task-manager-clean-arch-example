@@ -1,3 +1,5 @@
+'use client';
+
 import {
 	Dialog,
 	DialogClose,
@@ -31,7 +33,7 @@ import { HabitCard } from "./habit-card";
 
 interface HabitFormProps {
 	habit: Habit;
-	dragHandleProps?: () => void;
+	dragHandleProps?: any;
 }
 
 export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
@@ -50,12 +52,15 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 
 	// const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [open, setOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	async function handleUpdateHabit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 
 		if (!title.trim()) return;
+		if (isLoading) return;
 
+		setIsLoading(true);
 		try {
 			await updateHabit({
 				...habit,
@@ -71,6 +76,8 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 		} catch (error) {
 			toast.error(`Erro ao atualizar hábito${error}`);
 			console.error("Erro ao atualizar hábito", error);
+		} finally {
+			setIsLoading(false);
 		}
 	}
 
@@ -214,9 +221,9 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 							<DialogClose asChild>
 								<Button variant="link">Cancel</Button>
 							</DialogClose>
-							<Button type="submit" className="flex-1">
+							<Button type="submit" className="flex-1" disabled={isLoading}>
 								<SaveIcon />
-								Salvar
+								{isLoading ? "Salvando..." : "Salvar"}
 							</Button>
 						</div>
 					</form>
@@ -231,9 +238,17 @@ export function HabitForm({ habit, dragHandleProps }: HabitFormProps) {
 
 function DialogConfirmDelete({ id }: { id: string }) {
 	const { deleteHabit } = useHabitContext();
+	const [isDeleting, setIsDeleting] = useState(false);
+	
 	const onDelete = async () => {
-		await deleteHabit(id);
-		toast.success("Tarefa excluída com sucesso!");
+		if (isDeleting) return;
+		setIsDeleting(true);
+		try {
+			await deleteHabit(id);
+			toast.success("Tarefa excluída com sucesso!");
+		} finally {
+			setIsDeleting(false);
+		}
 	};
 
 	return (
@@ -262,8 +277,9 @@ function DialogConfirmDelete({ id }: { id: string }) {
 						type="submit"
 						variant={"destructive"}
 						onClick={onDelete}
+						disabled={isDeleting}
 					>
-						Excluir
+						{isDeleting ? "Excluindo..." : "Excluir"}
 					</Button>
 					<DialogClose asChild>
 						<Button variant="outline">Cancel</Button>

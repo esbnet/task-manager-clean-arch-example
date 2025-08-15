@@ -1,86 +1,71 @@
 "use client";
 
+import { Edit, Plus, Trash2 } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useTags } from "@/hooks/use-tags";
 import type { Tag } from "@/types";
-import { Edit, Plus, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 export function TagsSettings() {
-	const [tags, setTags] = useState<Tag[]>([]);
+	const { tags, createTag, updateTag: updateTagContext, deleteTag: deleteTagContext } = useTags();
 	const [newTagName, setNewTagName] = useState("");
 	const [newTagColor, setNewTagColor] = useState("#3b82f6");
 	const [editingTag, setEditingTag] = useState<Tag | null>(null);
 
-	useEffect(() => {
-		fetchTags();
-	}, []);
-
-	const fetchTags = async () => {
-		const response = await fetch("/api/tags");
-		const data = await response.json();
-		setTags(data.tags || []);
-	};
-
 	const addTag = async () => {
 		if (!newTagName.trim()) return;
 
-		const response = await fetch("/api/tags", {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
+		try {
+			await createTag({
 				name: newTagName,
 				color: newTagColor,
-			}),
-		});
-
-		const data = await response.json();
-		setTags([...tags, data.tag]);
-		setNewTagName("");
-		setNewTagColor("#3b82f6");
-		toast.success("Tag criada com sucesso!");
+			});
+			setNewTagName("");
+			setNewTagColor("#3b82f6");
+			toast.success("Tag criada com sucesso!");
+		} catch (error) {
+			toast.error("Erro ao criar tag");
+		}
 	};
 
 	const updateTag = async () => {
 		if (!editingTag) return;
 
-		await fetch("/api/tags", {
-			method: "PATCH",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ tag: editingTag }),
-		});
-
-		setTags(tags.map((t) => (t.id === editingTag.id ? editingTag : t)));
-		setEditingTag(null);
-		toast.success("Tag atualizada com sucesso!");
+		try {
+			await updateTagContext(editingTag);
+			setEditingTag(null);
+			toast.success("Tag atualizada com sucesso!");
+		} catch (error) {
+			toast.error("Erro ao atualizar tag");
+		}
 	};
 
 	const deleteTag = async (id: string, name: string) => {
-		await fetch("/api/tags", {
-			method: "DELETE",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ id }),
-		});
-
-		setTags(tags.filter((t) => t.id !== id));
-		toast.success(`Tag "${name}" removida com sucesso!`);
+		try {
+			await deleteTagContext(id);
+			toast.success(`Tag "${name}" removida com sucesso!`);
+		} catch (error) {
+			toast.error("Erro ao remover tag");
+		}
 	};
 
 	return (
 		<div className="space-y-6">
 			<div>
-				<h2 className="text-2xl font-semibold mb-4">Gerenciar Tags</h2>
-				<p className="text-muted-foreground mb-6">
+				<h2 className="mb-4 font-semibold text-2xl">Gerenciar Tags</h2>
+				<p className="mb-6 text-muted-foreground">
 					Crie e gerencie tags para organizar suas tarefas, hábitos e
 					atividades diárias.
 				</p>
 			</div>
 
 			{/* Adicionar nova tag */}
-			<div className="flex gap-4 items-end">
+			<div className="flex items-end gap-4">
 				<div className="flex-1">
 					<Label htmlFor="tagName">Nome da Tag</Label>
 					<Input
@@ -109,17 +94,17 @@ export function TagsSettings() {
 
 			{/* Lista de tags */}
 			<div className="space-y-4">
-				<h3 className="text-lg font-medium">Tags Existentes</h3>
-				<div className="grid gap-2">
+				<h3 className="font-medium text-lg">Tags Existentes</h3>
+				<div className="gap-2 grid">
 					{tags.map((tag) => (
 						<div
 							key={tag.id}
-							className="flex items-center justify-between p-3 border rounded-lg"
+							className="flex justify-between items-center p-3 border rounded-lg"
 						>
-							{editingTag?.id === tag.id ? (
-								<div className="flex gap-2 items-center flex-1">
+							{editingTag?.id === tag.id && editingTag ? (
+								<div className="flex flex-1 items-center gap-2">
 									<Input
-										value={editingTag.name}
+										value={editingTag.name || ""}
 										onChange={(e) =>
 											setEditingTag({
 												...editingTag,
@@ -130,7 +115,7 @@ export function TagsSettings() {
 									/>
 									<Input
 										type="color"
-										value={editingTag.color}
+										value={editingTag.color || "#3b82f6"}
 										onChange={(e) =>
 											setEditingTag({
 												...editingTag,

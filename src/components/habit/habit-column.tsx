@@ -8,18 +8,28 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { InfoIcon } from "lucide-react";
 import { Loading } from "../ui/loading";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import AddHabitForm from "./add-habit";
 import { HabitForm } from "./habit-form";
 
-export const HabitColumn = () => {
+export function HabitColumn() {
 	return (
 		<div
-			key={"HABITS"}
-			className="flex flex-col flex-1 gap-4 bg-background/20 opacity-0 shadow-lg backdrop-blur-md p-2 rounded-lg max-h-full overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
+			className="flex flex-col flex-1 gap-4 p-2 border rounded-lg overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
 		>
-			<h2 className="top-0 sticky bg-background/30 shadow-sm p-2 rounded-lg font-semibold text-foreground/40 text-2xl text-center">
+
+			<h2 className="relative bg-background/30 p-2 border rounded-lg font-semibold text-foreground text-2xl text-center">
 				Hábitos
+				<Tooltip >
+					<TooltipTrigger asChild className="top-1 right-1 absolute">
+						<InfoIcon className="w-4 h-4 text-muted-foreground/50" />
+					</TooltipTrigger>
+					<TooltipContent className="w-32">
+						<span className="text-muted-foreground text-xs">Hábitos não tem prazo especifico. Você pode marcá-los até várias vezes ao dia.</span>
+					</TooltipContent>
+				</Tooltip>
 			</h2>
 
 			<AddHabitForm />
@@ -38,8 +48,8 @@ const Habits = () => {
 
 	if (habits.length === 0) {
 		return (
-			<div className="flex flex-1 justify-center items-center font-lg text-muted-foreground">
-				Nenhum ativo...{" "}
+			<div className="flex flex-1 justify-center items-center font-lg text-muted-foreground text-center">
+				Nenhum hábito ativo...
 			</div>
 		);
 	}

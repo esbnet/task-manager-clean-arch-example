@@ -58,7 +58,7 @@ export function DailyProvider({ children }: DailyProviderProps) {
 			setError(null);
 		} catch (err) {
 			setError("Failed to fetch daily");
-			console.error(err);
+			console.error('Daily fetch error:', err);
 		} finally {
 			setIsLoading(false);
 		}
@@ -66,6 +66,7 @@ export function DailyProvider({ children }: DailyProviderProps) {
 
 	useEffect(() => {
 		fetchDaily();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const addDaily = async (daily: Omit<Daily, "id" | "createdAt">) => {

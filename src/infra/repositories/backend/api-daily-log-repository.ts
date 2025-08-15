@@ -1,7 +1,7 @@
 import type { DailyLog } from "@/domain/entities/daily-log";
 import type { DailyLogRepository } from "@/domain/repositories/all-repository";
-import { FetchHttpClient } from "@/infra/services/http-client";
 import type { HttpClient } from "@/infra/services/http-client";
+import { FetchHttpClient } from "@/infra/services/http-client";
 
 export class ApiDailyLogRepository implements DailyLogRepository {
 	private baseUrl = "/api/daily-logs";
@@ -14,17 +14,15 @@ export class ApiDailyLogRepository implements DailyLogRepository {
 		throw new Error("Method not implemented.");
 	}
 	update(entity: DailyLog): Promise<DailyLog> {
-		console.log("update", entity);
-		throw new Error("Method not implemented.");
+
+		throw new Error("Method not implemented." + entity);
 	}
 
 	toggleComplete(id: string): Promise<DailyLog> {
-		console.log("toggleComplete", id);
-		throw new Error("Method not implemented.");
+		throw new Error("Method not implemented." + id);
 	}
 	delete(id: string): Promise<void> {
-		console.log("delete", id);
-		throw new Error("Method not implemented.");
+		throw new Error("Method not implemented." + id);
 	}
 
 	async create(data: Omit<DailyLog, "id" | "createdAt">): Promise<DailyLog> {

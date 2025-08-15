@@ -2,9 +2,10 @@ import "./globals.css";
 
 import { Kode_Mono, Lobster } from "next/font/google";
 
-import { Toaster } from "@/components/ui/sonner";
+import { Header } from "@/components/layout/header";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
+import { Toaster } from "@/components/ui/sonner";
 
 const lobster = Lobster({
 	subsets: ["latin"],
@@ -31,7 +32,7 @@ export default function RootLayout({
 	return (
 		<html lang="pt-BR" suppressHydrationWarning>
 			<body
-				className={` ${lobster.className}  ${kodeMono.className} antialiased `}
+				className={`${lobster.className}  ${kodeMono.className} antialiased flex min-h-screen flex-col`}
 			>
 				<ThemeProvider
 					attribute="class"
@@ -43,7 +44,8 @@ export default function RootLayout({
 						dark: "dark",
 					}}
 				>
-					{children}
+					<Header />
+					<main className="flex-1">{children}</main>
 					<Toaster richColors />
 				</ThemeProvider>
 			</body>

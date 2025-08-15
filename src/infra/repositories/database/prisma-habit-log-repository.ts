@@ -23,11 +23,13 @@ export class PrismaHabitLogRepository implements HabitLogRepository {
 		return this.toDomain(log);
 	}
 
-	async update(log: HabitLog): Promise<HabitLog> {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	async update(_log: HabitLog): Promise<HabitLog> {
 		throw new Error("Update not implemented for habit logs");
 	}
 
-	async toggleComplete(id: string): Promise<HabitLog> {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	async toggleComplete(_id: string): Promise<HabitLog> {
 		throw new Error("Toggle complete not implemented for habit logs");
 	}
 
@@ -35,6 +37,7 @@ export class PrismaHabitLogRepository implements HabitLogRepository {
 		await prisma.habitLog.delete({ where: { id } });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private toDomain(log: any): HabitLog {
 		return {
 			id: log.id,

@@ -23,11 +23,13 @@ export class PrismaTodoLogRepository implements TodoLogRepository {
 		return this.toDomain(log);
 	}
 
-	async update(log: TodoLog): Promise<TodoLog> {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	async update(_log: TodoLog): Promise<TodoLog> {
 		throw new Error("Update not implemented for todo logs");
 	}
 
-	async toggleComplete(id: string): Promise<TodoLog> {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	async toggleComplete(_id: string): Promise<TodoLog> {
 		throw new Error("Toggle complete not implemented for todo logs");
 	}
 
@@ -35,6 +37,7 @@ export class PrismaTodoLogRepository implements TodoLogRepository {
 		await prisma.todoLog.delete({ where: { id } });
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	private toDomain(log: any): TodoLog {
 		return {
 			id: log.id,

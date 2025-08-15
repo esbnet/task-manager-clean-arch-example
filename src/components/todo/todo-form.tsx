@@ -1,3 +1,6 @@
+'use client';
+
+import { CalendarIcon, SaveIcon, Trash2 } from "lucide-react";
 import {
 	Dialog,
 	DialogClose,
@@ -21,28 +24,27 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { format, setDefaultOptions } from "date-fns";
-import { CalendarIcon, SaveIcon, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useTodoContext } from "@/contexts/todo-context";
-import { useTags } from "@/hooks/use-tags";
-import type { TodoDifficulty } from "@/types/todo";
-import { ptBR } from "date-fns/locale";
-import { useState } from "react";
-import { toast } from "sonner";
-import type { Todo } from "../../types";
 import { MultiSelect } from "../ui/multi-select";
+import type { Todo } from "../../types";
 import { TodoCard } from "./todo-card";
+import type { TodoDifficulty } from "@/types/todo";
 import { TodoSubtaskList } from "./todo-subtask-list";
+import { ptBR } from "date-fns/locale";
+import { toast } from "sonner";
+import { useState } from "react";
+import { useTags } from "@/hooks/use-tags";
+import { useTodoContext } from "@/contexts/todo-context";
 
 setDefaultOptions({ locale: ptBR });
 
 interface TodoFormProps {
 	todo: Todo;
-	dragHandleProps?: () => void;
+	dragHandleProps?: any;
 }
 
 export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
@@ -59,12 +61,15 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 
 	// const [selectedTags, setSelectedTags] = useState<string[]>([]);
 	const [open, setOpen] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	async function handleUpdateTodo(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
 
 		if (!title.trim()) return;
+		if (isLoading) return;
 
+		setIsLoading(true);
 		try {
 			await updateTodo({
 				...todo,
@@ -80,6 +85,8 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 		} catch (error) {
 			toast.error(`Erro ao atualizar tarefa${error}`);
 			console.error("Erro ao atualizar tarefa", error);
+		} finally {
+			setIsLoading(false);
 		}
 	}
 
@@ -166,7 +173,7 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 									defaultValue={difficulty || "Fácil"}
 								>
 									<SelectItem value="Trivial">
-										Trival ⭐
+										Trivial ⭐
 									</SelectItem>
 									<SelectItem value="Fácil">
 										Fácil ⭐⭐
@@ -215,9 +222,9 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 							<DialogClose asChild>
 								<Button variant="link">Cancel</Button>
 							</DialogClose>
-							<Button type="submit" className="flex-1">
+							<Button type="submit" className="flex-1" disabled={isLoading}>
 								<SaveIcon />
-								Salvar
+								{isLoading ? "Salvando..." : "Salvar"}
 							</Button>
 						</div>
 					</form>
@@ -232,9 +239,17 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 
 function DialogConfirmDelete({ id }: { id: string }) {
 	const { deleteTodo } = useTodoContext();
+	const [isDeleting, setIsDeleting] = useState(false);
+
 	const onDelete = async () => {
-		await deleteTodo(id);
-		toast.success("Tarefa excluída com sucesso!");
+		if (isDeleting) return;
+		setIsDeleting(true);
+		try {
+			await deleteTodo(id);
+			toast.success("Tarefa excluída com sucesso!");
+		} finally {
+			setIsDeleting(false);
+		}
 	};
 
 	return (
@@ -263,8 +278,9 @@ function DialogConfirmDelete({ id }: { id: string }) {
 						type="submit"
 						variant={"destructive"}
 						onClick={onDelete}
+						disabled={isDeleting}
 					>
-						Excluir
+						{isDeleting ? "Excluindo..." : "Excluir"}
 					</Button>
 					<DialogClose asChild>
 						<Button variant="outline">Cancel</Button>
