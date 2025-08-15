@@ -1,12 +1,13 @@
 "use client";
 
+import { Edit, Plus, Trash2 } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useTags } from "@/hooks/use-tags";
 import type { Tag } from "@/types";
-import { Edit, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -56,15 +57,15 @@ export function TagsSettings() {
 	return (
 		<div className="space-y-6">
 			<div>
-				<h2 className="text-2xl font-semibold mb-4">Gerenciar Tags</h2>
-				<p className="text-muted-foreground mb-6">
+				<h2 className="mb-4 font-semibold text-2xl">Gerenciar Tags</h2>
+				<p className="mb-6 text-muted-foreground">
 					Crie e gerencie tags para organizar suas tarefas, hábitos e
 					atividades diárias.
 				</p>
 			</div>
 
 			{/* Adicionar nova tag */}
-			<div className="flex gap-4 items-end">
+			<div className="flex items-end gap-4">
 				<div className="flex-1">
 					<Label htmlFor="tagName">Nome da Tag</Label>
 					<Input
@@ -93,15 +94,15 @@ export function TagsSettings() {
 
 			{/* Lista de tags */}
 			<div className="space-y-4">
-				<h3 className="text-lg font-medium">Tags Existentes</h3>
-				<div className="grid gap-2">
+				<h3 className="font-medium text-lg">Tags Existentes</h3>
+				<div className="gap-2 grid">
 					{tags.map((tag) => (
 						<div
 							key={tag.id}
-							className="flex items-center justify-between p-3 border rounded-lg"
+							className="flex justify-between items-center p-3 border rounded-lg"
 						>
 							{editingTag?.id === tag.id && editingTag ? (
-								<div className="flex gap-2 items-center flex-1">
+								<div className="flex flex-1 items-center gap-2">
 									<Input
 										value={editingTag.name || ""}
 										onChange={(e) =>

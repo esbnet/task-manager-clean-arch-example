@@ -1,5 +1,6 @@
 'use client';
 
+import { CalendarIcon, SaveIcon, Trash2 } from "lucide-react";
 import {
 	Dialog,
 	DialogClose,
@@ -23,28 +24,27 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { format, setDefaultOptions } from "date-fns";
-import { CalendarIcon, SaveIcon, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useTodoContext } from "@/contexts/todo-context";
-import { useTags } from "@/hooks/use-tags";
-import type { TodoDifficulty } from "@/types/todo";
-import { ptBR } from "date-fns/locale";
-import { useState } from "react";
-import { toast } from "sonner";
-import type { Todo } from "../../types";
 import { MultiSelect } from "../ui/multi-select";
+import type { Todo } from "../../types";
 import { TodoCard } from "./todo-card";
+import type { TodoDifficulty } from "@/types/todo";
 import { TodoSubtaskList } from "./todo-subtask-list";
+import { ptBR } from "date-fns/locale";
+import { toast } from "sonner";
+import { useState } from "react";
+import { useTags } from "@/hooks/use-tags";
+import { useTodoContext } from "@/contexts/todo-context";
 
 setDefaultOptions({ locale: ptBR });
 
 interface TodoFormProps {
 	todo: Todo;
-	dragHandleProps?: () => void;
+	dragHandleProps?: any;
 }
 
 export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
@@ -173,7 +173,7 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 									defaultValue={difficulty || "Fácil"}
 								>
 									<SelectItem value="Trivial">
-										Trival ⭐
+										Trivial ⭐
 									</SelectItem>
 									<SelectItem value="Fácil">
 										Fácil ⭐⭐
@@ -240,7 +240,7 @@ export function TodoForm({ todo, dragHandleProps }: TodoFormProps) {
 function DialogConfirmDelete({ id }: { id: string }) {
 	const { deleteTodo } = useTodoContext();
 	const [isDeleting, setIsDeleting] = useState(false);
-	
+
 	const onDelete = async () => {
 		if (isDeleting) return;
 		setIsDeleting(true);

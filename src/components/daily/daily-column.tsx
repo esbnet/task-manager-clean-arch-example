@@ -8,18 +8,28 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { InfoIcon } from "lucide-react";
 import { Loading } from "../ui/loading";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import AddDaily from "./add-daily";
 import { DailyForm } from "./daily-form";
 
 export const DailyColumn = () => {
 	return (
 		<div
-			key={"DAILY"}
-			className="flex flex-col flex-1 gap-4 bg-background/20 opacity-0 shadow-lg backdrop-blur-md p-2 rounded-lg max-h-full overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
+			className="flex flex-col flex-1 gap-4 p-2 border rounded-lg overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
 		>
-			<h2 className="top-0 sticky bg-background/30 shadow-sm p-2 rounded-lg font-semibold text-foreground/40 text-2xl text-center">
+
+			<h2 className="relative bg-background/30 p-2 border rounded-lg font-semibold text-foreground text-2xl text-center">
 				Diárias
+				<Tooltip >
+					<TooltipTrigger asChild className="top-1 right-1 absolute">
+						<InfoIcon className="w-4 h-4 text-muted-foreground/50" />
+					</TooltipTrigger>
+					<TooltipContent className="w-32">
+						<span className="text-muted-foreground text-xs">As Diárias são repetidas em intervalos regulares. Escolha o cronograma que for mais adequado para você!</span>
+					</TooltipContent>
+				</Tooltip>
 			</h2>
 
 			<AddDaily />

@@ -1,19 +1,19 @@
-import { signIn } from "@/auth"
 import { Button } from "@/components/ui/button"
+import { signIn } from "@/auth"
 
 export default function SignIn() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-500 via-sky-500 to-emerald-500">
-      <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-8 shadow-xl">
+    <div className="flex justify-center items-center min-h-screen">
+      <div className="space-y-8 bg-gray-200 shadow-xl p-8 rounded-lg w-full max-w-md">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">
+          <h2 className="font-bold text-gray-900 text-3xl">
             Gerenciador de Tarefas
           </h2>
           <p className="mt-2 text-gray-600">
             Faça login para acessar suas tarefas
           </p>
         </div>
-        
+
         <div className="space-y-4">
           <form
             action={async () => {
@@ -25,7 +25,7 @@ export default function SignIn() {
               Entrar com Google
             </Button>
           </form>
-          
+
 
         </div>
       </div>

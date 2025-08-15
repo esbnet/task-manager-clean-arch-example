@@ -1,8 +1,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
-import { useTodoContext } from "@/contexts/todo-context";
 import { GripVertical } from "lucide-react";
-import { toast } from "sonner";
 import type { Todo } from "../../types";
+import { toast } from "sonner";
+import { useTodoContext } from "@/contexts/todo-context";
 
 type Props = {
 	todo: Todo;
@@ -31,9 +31,9 @@ function TodoItem({ todo, dragHandleProps, onEditClick }: Props) {
 	};
 
 	return (
-		<div className="flex justify-between items-center gap-2 bg-background/30 shadow-sm hover:shadow-md p-1 rounded-sm transition-all duration-200 ease-in-out">
+		<div className="flex justify-between items-center gap-2 bg-background/30 shadow-sm hover:shadow-md p-1 border-blue-300 border-l-4 rounded-sm transition-all duration-200 ease-in-out">
 			<div
-				className="hover:bg-background/10 px-1 py-2 rounded-sm cursor-grab"
+				className="hover:bg-background/10 py-2 rounded-sm cursor-grab"
 				{...dragHandleProps}
 				title="Arraste para mover a tarefa"
 			>

@@ -1,5 +1,7 @@
 'use client';
 
+import { Calendar as CalendarIcon, SaveIcon, Trash2 } from "lucide-react";
+import type { DailyDifficulty, DailyRepeatType } from "@/types/daily";
 import {
 	Dialog,
 	DialogClose,
@@ -22,23 +24,21 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import type { DailyDifficulty, DailyRepeatType } from "@/types/daily";
 import { format, setDefaultOptions } from "date-fns";
-import { Calendar as CalendarIcon, SaveIcon, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import type { Daily } from "@/types";
+import { DailyCard } from "./daily-card";
+import { DailySubtaskList } from "./daily-subtask-list";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { useDailyContext } from "@/contexts/daily-context";
-import { useTags } from "@/hooks/use-tags";
-import type { Daily } from "@/types";
 import { ptBR } from "date-fns/locale";
-import { useState } from "react";
 import { toast } from "sonner";
-import { DailyCard } from "./daily-card";
-import { DailySubtaskList } from "./daily-subtask-list";
+import { useDailyContext } from "@/contexts/daily-context";
+import { useState } from "react";
+import { useTags } from "@/hooks/use-tags";
 
 setDefaultOptions({ locale: ptBR });
 
@@ -168,7 +168,7 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 									defaultValue={difficulty}
 								>
 									<SelectItem value="Trivial">
-										Trival ⭐
+										Trivial ⭐
 									</SelectItem>
 									<SelectItem value="Fácil">
 										Fácil ⭐⭐
@@ -310,7 +310,7 @@ export function DailyForm({ daily, dragHandleProps }: DailyFormProps) {
 function DialogConfirmDelete({ id }: { id: string }) {
 	const { deleteDaily } = useDailyContext();
 	const [isDeleting, setIsDeleting] = useState(false);
-	
+
 	const onDelete = async () => {
 		if (isDeleting) return;
 		setIsDeleting(true);

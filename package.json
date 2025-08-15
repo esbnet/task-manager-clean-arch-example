@@ -14,9 +14,10 @@
 		"db:dev": "node scripts/db-config.js development",
 		"db:prod": "node scripts/db-config.js production",
 		"db:push:dev": "pnpm run db:dev && npx prisma db push",
-		"db:push:prod": "pnpm run db:prod && npx prisma db push",
+		"db:push:prod": "pnpm run db:prod && npx prisma db push ",
 		"db:studio": "npx prisma studio",
-		"db:reset:dev": "pnpm run db:dev && npx prisma db push --force-reset"
+		"db:reset:dev": "pnpm run db:dev && npx prisma db push --force-reset",
+		"postinstall": "prisma generate"
 	},
 	"dependencies": {
 		"@auth/prisma-adapter": "^2.10.0",
@@ -36,6 +37,7 @@
 		"@radix-ui/react-separator": "^1.1.7",
 		"@radix-ui/react-slot": "^1.2.0",
 		"@radix-ui/react-tabs": "^1.1.12",
+		"@radix-ui/react-tooltip": "^1.2.7",
 		"@types/recharts": "^2.0.1",
 		"@vitejs/plugin-react": "^4.4.1",
 		"class-variance-authority": "^0.7.1",

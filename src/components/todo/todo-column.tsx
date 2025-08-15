@@ -8,20 +8,29 @@ import {
 	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { InfoIcon } from "lucide-react";
 import { Loading } from "../ui/loading";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import AddTodo from "./add-todo";
 import { TodoForm } from "./todo-form";
 
 export const TodoColumn = () => {
 	return (
 		<div
-			key={"TODOS"}
-			className="flex flex-col flex-1 gap-4 bg-background/20 opacity-0 shadow-lg backdrop-blur-md p-2 rounded-lg max-h-full overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
+			className="flex flex-col flex-1 gap-4 p-2 border rounded-lg overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
 		>
-			<h2 className="top-0 sticky bg-background/30 shadow-sm p-2 rounded-lg font-semibold text-foreground/40 text-2xl text-center">
-				Afazeres
-			</h2>
 
+			<h2 className="relative bg-background/30 p-2 border rounded-lg font-semibold text-foreground text-2xl text-center">
+				Afazeres
+				<Tooltip >
+					<TooltipTrigger asChild className="top-1 right-1 absolute">
+						<InfoIcon className="w-4 h-4 text-muted-foreground/50" />
+					</TooltipTrigger>
+					<TooltipContent className="w-32">
+						<span className="text-muted-foreground text-xs">Afazeres precisam ser concluídos apenas uma vez. Adicione listas de tarefas em seus Afazeres para aumentar o valor deles.</span>
+					</TooltipContent>
+				</Tooltip>
+			</h2>
 			<AddTodo />
 
 			<Todos />

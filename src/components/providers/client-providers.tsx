@@ -1,19 +1,19 @@
 "use client"
 
+import { DailyColumn } from "@/components/daily/daily-column";
+import { HabitColumn } from "@/components/habit/habit-column";
+import { TodoColumn } from "@/components/todo/todo-column";
 import { DailyProvider } from "@/contexts/daily-context";
 import { DailySubtaskProvider } from "@/contexts/daily-subtask-context";
 import { HabitProvider } from "@/contexts/habit-context";
 import { TagsProvider } from "@/contexts/tags-context";
 import { TodoProvider } from "@/contexts/todo-context";
 import { TodoSubtaskProvider } from "@/contexts/todo-subtask-context";
-import { DailyColumn } from "@/components/daily/daily-column";
-import { HabitColumn } from "@/components/habit/habit-column";
-import { TodoColumn } from "@/components/todo/todo-column";
 
 export function ClientProviders() {
   return (
     <TagsProvider>
-      <div className="flex flex-row gap-4 h-full">
+      <div className="gap-4 grid grid-cols-1 md:grid-cols-3 h-full">
         <HabitProvider>
           <HabitColumn />
         </HabitProvider>
