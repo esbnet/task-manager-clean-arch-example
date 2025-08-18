@@ -10,12 +10,12 @@ export async function Header() {
 
   return (
     <header className="top-0 z-50 sticky bg-background/95 supports-[backdrop-filter]:bg-background/60 backdrop-blur p-2 border-b w-full">
-      <div className="flex justify-between items-center m-auto h-16 container">
+      <div className="flex md:flex-row flex-col justify-between items-center gap-2 m-auto md:p-2 h-16 container">
 
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 bg-slate-950 px-4 py-2 rounded-full text-slate-300">
           <Link href="/" className="flex items-center gap-2">
             <CheckSquare2 className="w-6 h-6" />
-            <span className="font-bold text-foreground">Task Manager</span>
+            <span className="font-bold">Task Manager</span>
           </Link>
         </div>
 

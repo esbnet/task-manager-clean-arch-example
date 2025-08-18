@@ -36,7 +36,7 @@ export function TagsProvider({ children }: TagsProviderProps) {
 		if (!force && tags.length > 0 && now - lastFetch < 5 * 60 * 1000) {
 			return;
 		}
-		
+
 		try {
 			setIsLoading(true);
 			const response = await fetch("/api/tags");
@@ -68,18 +68,27 @@ export function TagsProvider({ children }: TagsProviderProps) {
 			body: JSON.stringify(data),
 		});
 		const newTag = await response.json();
+		console.log('Context response =====> ', newTag);
 		setTags(prev => [...prev, newTag]);
+		console.log('Context tags =====> ', tags);
 		return newTag;
 	};
 
-	const updateTag = async (tag: Tag) => {
+	const updateTag = async (tagToUpdate: Tag) => {
 		const response = await fetch("/api/tags", {
 			method: "PATCH",
 			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify(tag),
+			body: JSON.stringify(tagToUpdate),
 		});
-		const updatedTag = await response.json();
-		setTags(prev => prev.map(t => t.id === tag.id ? updatedTag : t));
+		const { tag: updatedTag } = await response.json();
+		setTags(prev =>
+			prev.map(tag => {
+				if (tag.id === updatedTag.id) {
+					return updatedTag;
+				}
+				return tag;
+			}),
+		);
 		return updatedTag;
 	};
 

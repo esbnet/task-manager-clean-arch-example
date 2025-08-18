@@ -10,6 +10,7 @@ import { useTags } from "@/hooks/use-tags";
 import type { Tag } from "@/types";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Separator } from "../ui/separator";
 
 export function TagsSettings() {
 	const { tags, createTag, updateTag: updateTagContext, deleteTag: deleteTagContext } = useTags();
@@ -57,7 +58,7 @@ export function TagsSettings() {
 	return (
 		<div className="space-y-6">
 			<div>
-				<h2 className="mb-4 font-semibold text-2xl">Gerenciar Tags</h2>
+				<h2 className="mb-2 font-semibold text-2xl">Gerenciar Tags</h2>
 				<p className="mb-6 text-muted-foreground">
 					Crie e gerencie tags para organizar suas tarefas, hábitos e
 					atividades diárias.
@@ -66,7 +67,7 @@ export function TagsSettings() {
 
 			{/* Adicionar nova tag */}
 			<div className="flex items-end gap-4">
-				<div className="flex-1">
+				<div className="flex flex-col flex-1 gap-2">
 					<Label htmlFor="tagName">Nome da Tag</Label>
 					<Input
 						id="tagName"
@@ -76,7 +77,7 @@ export function TagsSettings() {
 						onKeyDown={(e) => e.key === "Enter" && addTag()}
 					/>
 				</div>
-				<div>
+				<div className="flex flex-col gap-2">
 					<Label htmlFor="tagColor">Cor</Label>
 					<Input
 						id="tagColor"
@@ -92,11 +93,13 @@ export function TagsSettings() {
 				</Button>
 			</div>
 
+			<Separator className="my-6" />
+
 			{/* Lista de tags */}
 			<div className="space-y-4">
 				<h3 className="font-medium text-lg">Tags Existentes</h3>
 				<div className="gap-2 grid">
-					{tags.map((tag) => (
+					{tags.map((tag: Tag) => (
 						<div
 							key={tag.id}
 							className="flex justify-between items-center p-3 border rounded-lg"
@@ -172,6 +175,6 @@ export function TagsSettings() {
 					))}
 				</div>
 			</div>
-		</div>
+		</div >
 	);
 }

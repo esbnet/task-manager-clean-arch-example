@@ -23,9 +23,22 @@ export async function POST(request: NextRequest) {
 }
 
 export async function PATCH(request: NextRequest) {
-	const { tag } = await request.json();
-	const updated = await tagRepo.update(tag);
-	return Response.json({ tag: updated });
+	const { id, name: tagName, color: tagColor, createdAt: tagCreatedAt } =
+		await request.json();
+
+	if (!id) {
+		return new Response("Tag not provided in the request", { status: 400 });
+	}
+
+	const tagData = {
+		id,
+		name: tagName || "New Tag",
+		color: tagColor || "#3b82f6",
+		createdAt: tagCreatedAt || new Date(),
+	};
+
+	const updatedTag = await tagRepo.update(tagData);
+	return Response.json({ tag: updatedTag });
 }
 
 export async function DELETE(request: NextRequest) {

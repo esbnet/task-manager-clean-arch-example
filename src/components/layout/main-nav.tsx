@@ -1,9 +1,8 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-import { cn } from "@/lib/utils";
 
 export function MainNav({
   className,
@@ -19,20 +18,29 @@ export function MainNav({
       <Link
         href="/"
         className={cn(
-          "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
+          "font-medium text-muted-foreground hover:text-primary text-sm transition-colors",
           pathname === "/" && "text-primary"
         )}
       >
-        Dashboard
+        Tarefas
       </Link>
       <Link
         href="/settings"
         className={cn(
-          "text-sm font-medium text-muted-foreground transition-colors hover:text-primary",
+          "font-medium text-muted-foreground hover:text-primary text-sm transition-colors",
           pathname === "/settings" && "text-primary"
         )}
       >
-        Settings
+        Config
+      </Link>
+      <Link
+        href="/profile"
+        className={cn(
+          "font-medium text-muted-foreground hover:text-primary text-sm transition-colors",
+          pathname === "/profile" && "text-primary"
+        )}
+      >
+        Perfil
       </Link>
     </nav>
   );

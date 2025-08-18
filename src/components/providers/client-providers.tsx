@@ -13,7 +13,7 @@ import { TodoSubtaskProvider } from "@/contexts/todo-subtask-context";
 export function ClientProviders() {
   return (
     <TagsProvider>
-      <div className="gap-4 grid grid-cols-1 md:grid-cols-3 h-full">
+      <div className="gap-4 grid grid-cols-1 sm-grid-cols-2 md:grid-cols-3 auto-cols-max h-full">
         <HabitProvider>
           <HabitColumn />
         </HabitProvider>

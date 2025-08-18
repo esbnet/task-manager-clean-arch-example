@@ -20,7 +20,7 @@ export const DailyColumn = () => {
 			className="flex flex-col flex-1 gap-4 p-2 border rounded-lg overflow-hidden animate-[slideUp_1s_ease-in-out_forwards]"
 		>
 
-			<h2 className="relative bg-background/30 p-2 border rounded-lg font-semibold text-foreground text-2xl text-center">
+			<h2 className="relative bg-daily p-2 border rounded-lg font-semibold text-foreground text-2xl text-center">
 				Diárias
 				<Tooltip >
 					<TooltipTrigger asChild className="top-1 right-1 absolute">
