@@ -1,14 +1,14 @@
 import type { Tag } from "@/domain/entities/tag";
 import type { TagRepository } from "@/domain/repositories/all-repository";
-import { prisma } from "@/infra/database/prisma-client";
 import { getCurrentUserId } from "@/hooks/use-current-user";
+import { prisma } from "@/infra/database/prisma-client";
 
 export class PrismaTagRepository implements TagRepository {
 	async list(): Promise<Tag[]> {
 		try {
 			const userId = await getCurrentUserId();
 			if (!userId) return [];
-			
+
 			const tags = await prisma.tag.findMany({
 				where: { userId },
 				orderBy: { name: "asc" },
@@ -24,11 +24,13 @@ export class PrismaTagRepository implements TagRepository {
 				]);
 
 				const allTags = new Set<string>();
-				[...todos, ...dailies, ...habits].forEach((item) => {
+				for (const item of [...todos, ...dailies, ...habits]) {
 					if (Array.isArray(item.tags)) {
-						item.tags.forEach((tag) => allTags.add(tag));
+						for (const tag of item.tags) {
+							allTags.add(tag);
+						}
 					}
-				});
+				}
 
 				const colors = [
 					"#3b82f6",
@@ -60,11 +62,11 @@ export class PrismaTagRepository implements TagRepository {
 					];
 
 					for (const tag of defaultTags) {
-						await prisma.tag.create({ 
-							data: { 
-								...tag, 
-								userId 
-							} 
+						await prisma.tag.create({
+							data: {
+								...tag,
+								userId,
+							},
 						});
 					}
 				}
@@ -85,14 +87,14 @@ export class PrismaTagRepository implements TagRepository {
 	async create(data: Omit<Tag, "id" | "createdAt">): Promise<Tag> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		// Verificar se o usuário existe, se não, criar
 		await prisma.user.upsert({
 			where: { id: userId },
 			update: {},
 			create: { id: userId },
 		});
-		
+
 		const tag = await prisma.tag.create({
 			data: {
 				name: data.name,
@@ -123,8 +125,12 @@ export class PrismaTagRepository implements TagRepository {
 		await prisma.tag.delete({ where: { id } });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private toDomain(tag: any): Tag {
+	private toDomain(tag: {
+		id: string;
+		name: string;
+		color: string;
+		createdAt: Date;
+	}): Tag {
 		return {
 			id: tag.id,
 			name: tag.name,

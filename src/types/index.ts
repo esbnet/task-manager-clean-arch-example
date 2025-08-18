@@ -1,4 +1,12 @@
 import type { Daily, DailyDifficulty, DailyRepeat } from "./daily";
+import type {
+	Goal,
+	GoalCategory,
+	GoalFormData,
+	GoalMilestone,
+	GoalPriority,
+	GoalStatus,
+} from "./goal";
 import type { Habit, HabitDifficulty, HabitReset } from "./habit";
 import type { Todo, TodoDifficulty } from "./todo";
 
@@ -15,6 +23,12 @@ export type {
 	DailyLog,
 	DailyRepeat,
 	DailySubtask,
+	Goal,
+	GoalCategory,
+	GoalFormData,
+	GoalMilestone,
+	GoalPriority,
+	GoalStatus,
 	Habit,
 	HabitDifficulty,
 	HabitLog,

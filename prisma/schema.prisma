@@ -3,10 +3,10 @@ generator client {
 }
 
 datasource db {
-            provider  = "postgresql"
-            url       = env("DATABASE_URL")
-            directUrl = env("DIRECT_URL")
-        }
+    provider  = "postgresql"
+    url       = env("DATABASE_URL")
+    directUrl = env("DIRECT_URL")
+}
 
 model Habit {
     id                String   @id @default(cuid())
@@ -189,6 +189,7 @@ model User {
     dailies       Daily[]
     todos         Todo[]
     tags          Tag[]
+    goals         Goal[]
 
     @@map("users")
 }
@@ -200,4 +201,40 @@ model VerificationToken {
 
     @@unique([identifier, token])
     @@map("verification_tokens")
+}
+
+model Goal {
+    id          String   @id @default(cuid())
+    title       String
+    description String   @default("")
+    targetDate  DateTime
+    status      String   @default("IN_PROGRESS") // IN_PROGRESS, COMPLETED, CANCELLED
+    priority    String   @default("MEDIUM") // LOW, MEDIUM, HIGH, URGENT
+    category    String   @default("PERSONAL") // PERSONAL, WORK, HEALTH, LEARNING
+    tags        String[]
+    userId      String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+    milestones GoalMilestone[]
+
+    @@map("goals")
+}
+
+model GoalMilestone {
+    id          String    @id @default(cuid())
+    title       String
+    description String    @default("")
+    targetDate  DateTime
+    completed   Boolean   @default(false)
+    completedAt DateTime?
+    order       Int       @default(0)
+    goalId      String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+
+    goal Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+    @@map("goal_milestones")
 }

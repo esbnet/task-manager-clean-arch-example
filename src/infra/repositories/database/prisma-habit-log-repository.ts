@@ -37,8 +37,14 @@ export class PrismaHabitLogRepository implements HabitLogRepository {
 		await prisma.habitLog.delete({ where: { id } });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private toDomain(log: any): HabitLog {
+	private toDomain(log: {
+		id: string;
+		habitId: string;
+		habitTitle: string;
+		difficulty: string;
+		tags: string[];
+		completedAt: Date;
+	}): HabitLog {
 		return {
 			id: log.id,
 			habitId: log.habitId,
@@ -46,7 +52,7 @@ export class PrismaHabitLogRepository implements HabitLogRepository {
 			difficulty: log.difficulty,
 			tags: log.tags,
 			completedAt: log.completedAt,
-			createdAt: log.createdAt,
+			createdAt: log.completedAt, // Usando completedAt como createdAt já que o schema não tem createdAt
 		};
 	}
 }

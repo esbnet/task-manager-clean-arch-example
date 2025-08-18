@@ -1,13 +1,13 @@
 import type { Todo } from "@/domain/entities/todo";
 import type { TodoRepository } from "@/domain/repositories/all-repository";
-import { prisma } from "@/infra/database/prisma-client";
 import { getCurrentUserId } from "@/hooks/use-current-user";
+import { prisma } from "@/infra/database/prisma-client";
 
 export class PrismaTodoRepository implements TodoRepository {
 	async list(): Promise<Todo[]> {
 		const userId = await getCurrentUserId();
 		if (!userId) return [];
-		
+
 		const todos = await prisma.todo.findMany({
 			where: { userId },
 			include: {
@@ -25,14 +25,14 @@ export class PrismaTodoRepository implements TodoRepository {
 	): Promise<Todo> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		// Verificar se o usuário existe, se não, criar
 		await prisma.user.upsert({
 			where: { id: userId },
 			update: {},
 			create: { id: userId },
 		});
-		
+
 		const { ...todoData } = data;
 		const todo = await prisma.todo.create({
 			data: {
@@ -47,7 +47,7 @@ export class PrismaTodoRepository implements TodoRepository {
 	async update(todo: Todo): Promise<Todo> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		const updated = await prisma.todo.update({
 			where: { id: todo.id, userId },
 			data: {
@@ -67,7 +67,7 @@ export class PrismaTodoRepository implements TodoRepository {
 	async toggleComplete(id: string): Promise<Todo> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		const todo = await prisma.todo.findUnique({ where: { id, userId } });
 		if (!todo) throw new Error("Todo not found");
 
@@ -81,26 +81,43 @@ export class PrismaTodoRepository implements TodoRepository {
 	async delete(id: string): Promise<void> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		await prisma.todo.delete({ where: { id, userId } });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private toDomain(todo: any): Todo {
+	private toDomain(todo: {
+		id: string;
+		title: string;
+		observations: string;
+		tasks: string[];
+		difficulty: string;
+		startDate: Date;
+		tags: string[];
+		order: number;
+		lastCompletedDate: string | null;
+		createdAt: Date;
+		subtasks?: Array<{
+			id: string;
+			title: string;
+			completed: boolean;
+			todoId: string;
+			order: number;
+			createdAt: Date;
+		}>;
+	}): Todo {
 		return {
 			id: todo.id,
 			title: todo.title,
 			observations: todo.observations,
 			tasks: todo.tasks,
-			difficulty: todo.difficulty,
+			difficulty: todo.difficulty as Todo["difficulty"],
 			startDate: todo.startDate,
 			tags: todo.tags,
 			order: todo.order,
-			lastCompletedDate: todo.lastCompletedDate,
+			lastCompletedDate: todo.lastCompletedDate || undefined,
 			createdAt: todo.createdAt,
 			subtasks:
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				todo.subtasks?.map((s: any) => ({
+				todo.subtasks?.map((s) => ({
 					id: s.id,
 					title: s.title,
 					completed: s.completed,

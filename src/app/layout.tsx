@@ -3,9 +3,10 @@ import "./globals.css";
 import { Kode_Mono, Lobster } from "next/font/google";
 
 import { Header } from "@/components/layout/header";
+import { Toaster } from "@/components/ui/sonner";
+import { GoalProvider } from "@/contexts/goal-context";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
-import { Toaster } from "@/components/ui/sonner";
 
 const lobster = Lobster({
 	subsets: ["latin"],
@@ -44,9 +45,11 @@ export default function RootLayout({
 						dark: "dark",
 					}}
 				>
-					<Header />
-					<main className="flex-1">{children}</main>
-					<Toaster richColors />
+					<GoalProvider>
+						<Header />
+						<main className="flex-1">{children}</main>
+						<Toaster richColors />
+					</GoalProvider>
 				</ThemeProvider>
 			</body>
 		</html>

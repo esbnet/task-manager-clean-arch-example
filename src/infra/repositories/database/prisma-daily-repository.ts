@@ -16,8 +16,8 @@ export class PrismaDailyRepository implements DailyRepository {
 			include: {
 				subtasks: {
 					orderBy: { order: "asc" },
-				}
-			}
+				},
+			},
 		});
 		return daily.map(this.toDomain);
 	}
@@ -25,14 +25,14 @@ export class PrismaDailyRepository implements DailyRepository {
 	async create(data: Omit<Daily, "id" | "createdAt">): Promise<Daily> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		// Verificar se o usuário existe, se não, criar
 		await prisma.user.upsert({
 			where: { id: userId },
 			update: {},
 			create: { id: userId },
 		});
-		
+
 		const daily = await prisma.daily.create({
 			data: {
 				title: data.title,
@@ -53,7 +53,7 @@ export class PrismaDailyRepository implements DailyRepository {
 	async update(daily: Daily): Promise<Daily> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		const updated = await prisma.daily.update({
 			where: { id: daily.id, userId },
 			data: {
@@ -75,7 +75,7 @@ export class PrismaDailyRepository implements DailyRepository {
 	async toggleComplete(id: string): Promise<Daily> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		const daily = await prisma.daily.findUnique({ where: { id, userId } });
 		if (!daily) throw new Error("Daily not found");
 
@@ -89,32 +89,50 @@ export class PrismaDailyRepository implements DailyRepository {
 	async delete(id: string): Promise<void> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		await prisma.daily.delete({ where: { id, userId } });
 	}
 
 	// Converts Prisma entity to domain entity
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private toDomain(daily: any): Daily {
+	private toDomain(daily: {
+		id: string;
+		title: string;
+		observations: string;
+		tasks: string[];
+		difficulty: string;
+		startDate: Date;
+		repeatType: string;
+		repeatFrequency: number;
+		tags: string[];
+		order: number;
+		lastCompletedDate: string | null;
+		createdAt: Date;
+		subtasks?: Array<{
+			id: string;
+			title: string;
+			completed: boolean;
+			dailyId: string;
+			order: number;
+			createdAt: Date;
+		}>;
+	}): Daily {
 		return {
 			id: daily.id,
 			title: daily.title,
 			observations: daily.observations,
 			tasks: daily.tasks,
-			difficulty: daily.difficulty,
+			difficulty: daily.difficulty as Daily["difficulty"],
 			startDate: daily.startDate,
 			repeat: {
-				type: daily.repeatType,
+				type: daily.repeatType as Daily["repeat"]["type"],
 				frequency: daily.repeatFrequency,
 			},
 			tags: daily.tags,
 			order: daily.order,
-			lastCompletedDate: daily.lastCompletedDate,
+			lastCompletedDate: daily.lastCompletedDate || undefined,
 			createdAt: daily.createdAt,
 			subtasks:
-				// eslint-disable-next-line @typescript-eslint/no-explicit-any
-				daily.subtasks?.map((s: any) => ({
+				daily.subtasks?.map((s) => ({
 					id: s.id,
 					title: s.title,
 					completed: s.completed,

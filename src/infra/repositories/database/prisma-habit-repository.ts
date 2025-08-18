@@ -1,13 +1,13 @@
 import type { Habit } from "@/domain/entities/habit";
 import type { HabitRepository } from "@/domain/repositories/all-repository";
-import { prisma } from "@/infra/database/prisma-client";
 import { getCurrentUserId } from "@/hooks/use-current-user";
+import { prisma } from "@/infra/database/prisma-client";
 
 export class PrismaHabitRepository implements HabitRepository {
 	async list(): Promise<Habit[]> {
 		const userId = await getCurrentUserId();
 		if (!userId) return [];
-		
+
 		const habits = await prisma.habit.findMany({
 			where: { userId },
 			orderBy: { order: "asc" },
@@ -18,14 +18,14 @@ export class PrismaHabitRepository implements HabitRepository {
 	async create(data: Omit<Habit, "id" | "createdAt">): Promise<Habit> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		// Verificar se o usuário existe, se não, criar
 		await prisma.user.upsert({
 			where: { id: userId },
 			update: {},
 			create: { id: userId },
 		});
-		
+
 		const habit = await prisma.habit.create({
 			data: {
 				title: data.title,
@@ -43,7 +43,7 @@ export class PrismaHabitRepository implements HabitRepository {
 	async update(habit: Habit): Promise<Habit> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		const updated = await prisma.habit.update({
 			where: { id: habit.id, userId },
 			data: {
@@ -62,7 +62,7 @@ export class PrismaHabitRepository implements HabitRepository {
 	async toggleComplete(id: string): Promise<Habit> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		const habit = await prisma.habit.findUnique({ where: { id, userId } });
 		if (!habit) throw new Error("Habit not found");
 
@@ -76,21 +76,30 @@ export class PrismaHabitRepository implements HabitRepository {
 	async delete(id: string): Promise<void> {
 		const userId = await getCurrentUserId();
 		if (!userId) throw new Error("User not authenticated");
-		
+
 		await prisma.habit.delete({ where: { id, userId } });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private toDomain(habit: any): Habit {
+	private toDomain(habit: {
+		id: string;
+		title: string;
+		observations: string;
+		difficulty: string;
+		tags: string[];
+		reset: string;
+		order: number;
+		lastCompletedDate: string | null;
+		createdAt: Date;
+	}): Habit {
 		return {
 			id: habit.id,
 			title: habit.title,
 			observations: habit.observations,
-			difficulty: habit.difficulty,
+			difficulty: habit.difficulty as Habit["difficulty"],
 			tags: habit.tags,
-			reset: habit.reset,
+			reset: habit.reset as Habit["reset"],
 			order: habit.order,
-			lastCompletedDate: habit.lastCompletedDate,
+			lastCompletedDate: habit.lastCompletedDate || undefined,
 			createdAt: habit.createdAt,
 		};
 	}

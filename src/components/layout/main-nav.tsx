@@ -5,43 +5,55 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export function MainNav({
-  className,
-  ...props
+	className,
+	...props
 }: React.HTMLAttributes<HTMLElement>) {
-  const pathname = usePathname();
+	const pathname = usePathname();
 
-  return (
-    <nav
-      className={cn("flex items-center space-x-4 lg:space-x-6", className)}
-      {...props}
-    >
-      <Link
-        href="/"
-        className={cn(
-          "font-medium text-muted-foreground hover:text-primary text-sm transition-colors",
-          pathname === "/" && "text-primary"
-        )}
-      >
-        Tarefas
-      </Link>
-      <Link
-        href="/settings"
-        className={cn(
-          "font-medium text-muted-foreground hover:text-primary text-sm transition-colors",
-          pathname === "/settings" && "text-primary"
-        )}
-      >
-        Config
-      </Link>
-      <Link
-        href="/profile"
-        className={cn(
-          "font-medium text-muted-foreground hover:text-primary text-sm transition-colors",
-          pathname === "/profile" && "text-primary"
-        )}
-      >
-        Perfil
-      </Link>
-    </nav>
-  );
+	return (
+		<nav
+			className={cn(
+				"flex items-center space-x-4 lg:space-x-6",
+				className,
+			)}
+			{...props}
+		>
+			<Link
+				href="/"
+				className={cn(
+					"font-medium text-muted-foreground hover:text-primary text-sm transition-colors",
+					pathname === "/" && "text-primary",
+				)}
+			>
+				Tarefas
+			</Link>
+			<Link
+				href="/settings"
+				className={cn(
+					"font-medium text-muted-foreground hover:text-primary text-sm transition-colors",
+					pathname === "/settings" && "text-primary",
+				)}
+			>
+				Config
+			</Link>
+			<Link
+				href="/analytics"
+				className={cn(
+					"font-medium text-muted-foreground hover:text-primary text-sm transition-colors",
+					pathname === "/analytics" && "text-primary",
+				)}
+			>
+				Analytics
+			</Link>
+			<Link
+				href="/profile"
+				className={cn(
+					"font-medium text-muted-foreground hover:text-primary text-sm transition-colors",
+					pathname === "/profile" && "text-primary",
+				)}
+			>
+				Perfil
+			</Link>
+		</nav>
+	);
 }

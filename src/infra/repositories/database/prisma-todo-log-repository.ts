@@ -37,8 +37,14 @@ export class PrismaTodoLogRepository implements TodoLogRepository {
 		await prisma.todoLog.delete({ where: { id } });
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private toDomain(log: any): TodoLog {
+	private toDomain(log: {
+		id: string;
+		todoId: string;
+		todoTitle: string;
+		difficulty: string;
+		tags: string[];
+		completedAt: Date;
+	}): TodoLog {
 		return {
 			id: log.id,
 			todoId: log.todoId,
@@ -46,7 +52,7 @@ export class PrismaTodoLogRepository implements TodoLogRepository {
 			difficulty: log.difficulty,
 			tags: log.tags,
 			completedAt: log.completedAt,
-			createdAt: log.createdAt,
+			createdAt: log.completedAt, // Usando completedAt como createdAt já que o schema não tem createdAt
 		};
 	}
 }
